@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# legacy / archive
+_legacy_backup/
+
+# cloudflare pages
+.vercel
+.wrangler
+.open-next/
