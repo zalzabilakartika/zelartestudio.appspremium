@@ -1,0 +1,40 @@
+import { type NextRequest } from "next/server";
+
+export async function POST(request: NextRequest): Promise<Response> {
+  const apiKey = process.env.SAYABAYAR_API_KEY;
+
+  if (!apiKey) {
+    return Response.json(
+      { error: "Payment service is not configured." },
+      { status: 500 }
+    );
+  }
+
+  const { name, email, whatsapp, product_name, amount } = await request.json();
+
+  const upstream = await fetch("https://api.sayabayar.com/v1/invoices", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-API-Key": apiKey,
+    },
+    body: JSON.stringify({
+      customer_name: name,
+      customer_email: email,
+      amount,
+      description: `Order: ${product_name} | WA: ${whatsapp}`,
+    }),
+  });
+
+  if (!upstream.ok) {
+    const errorBody = await upstream.text();
+    return Response.json(
+      { error: "Upstream payment error.", detail: errorBody },
+      { status: upstream.status }
+    );
+  }
+
+  const data = await upstream.json();
+
+  return Response.json({ id: data.id, payment_url: data.payment_url });
+}

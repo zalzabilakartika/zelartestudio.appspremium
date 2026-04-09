@@ -1,16 +1,24 @@
 @import "tailwindcss";
 
+@utility no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
 @theme {
-  --color-offwhite: #F8F8F8;
-  --color-charcoal: #1A1A1A;
-  --color-rose: #F472B6;
-  --font-serif: var(--font-serif);
-  --font-sans: var(--font-sans);
+    --color-offwhite: #f8f8f8;
+    --color-charcoal: #1a1a1a;
+    --color-rose: #f472b6;
+    --font-serif: var(--font-serif);
+    --font-sans: var(--font-sans);
 }
 
 @layer base {
-  body {
-    background-color: var(--color-offwhite);
-    color: var(--color-charcoal);
-  }
+    body {
+        background-color: var(--color-offwhite);
+        color: var(--color-charcoal);
+    }
 }
