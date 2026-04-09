@@ -351,19 +351,7 @@ export default function Home() {
     <main
       className={`relative ${!hasEntered ? "h-screen overflow-hidden" : "min-h-screen overflow-x-hidden"}`}
     >
-      {/* Minimalist Top Nav */}
-      <button
-        onClick={() =>
-          document
-            .getElementById("intro")
-            ?.scrollIntoView({ behavior: "smooth" })
-        }
-        className="absolute top-6 left-6 z-[95] text-left group"
-      >
-        <h2 className="font-sans text-[0.60rem] tracking-[0.25em] text-[#1A1A1A]/40 group-hover:text-[#1A1A1A] group-active:text-[#1A1A1A] uppercase font-medium transition-colors duration-300">
-          Zelarte Studio
-        </h2>
-      </button>
+      {/* Minimalist Top Nav removed — moved into FloatingTracker */}
 
       <SplashMist />
       <FloatingTracker isVisible={hasEntered} />
@@ -379,15 +367,15 @@ export default function Home() {
           transition={{ duration: 1.4, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="text-center w-full px-4"
         >
-          <h1 className="font-serif text-3xl md:text-5xl lg:text-[3vw] xl:text-[3vw] tracking-[0.10em] md:tracking-[0.15em] lg:tracking-[0.2em] xl:tracking-[0.25em] text-[#1A1A1A] font-light uppercase leading-[1.3] md:leading-[1.4]">
+          <h1 className="font-serif text-3xl md:text-5xl lg:text-[3vw] xl:text-[3vw] tracking-[0.10em] md:tracking-[0.15em] lg:tracking-[0.2em] xl:tracking-[0.25em] text-[#1A1A1A] dark:text-white font-light uppercase leading-[1.3] md:leading-[1.4]">
             <span className="block whitespace-nowrap">READY FOR YOUR</span>
             <span className="block whitespace-nowrap mt-1 md:mt-2">
               PREMIUM APPS TODAY?
             </span>
           </h1>
 
-          <p className="mt-8 md:mt-12 text-[0.55rem] md:text-[0.65rem] text-gray-400 tracking-[0.3em] font-sans uppercase">
-            Explore The Collection <span className="ml-1 text-gray-300">✦</span>
+          <p className="mt-8 md:mt-12 text-[0.55rem] md:text-[0.65rem] text-gray-400 dark:text-gray-300 tracking-[0.3em] font-sans uppercase">
+            Explore The Collection <span className="ml-1 text-gray-300 dark:text-gray-400">✦</span>
           </p>
 
           <div className="flex flex-col md:flex-row items-center justify-center gap-6 mt-16 md:mt-24">
@@ -396,19 +384,19 @@ export default function Home() {
               className={`px-10 py-3 text-[0.65rem] tracking-[0.25em] font-medium uppercase border transition-colors duration-500 ${
                 showClosedError
                   ? "border-[#1A1A1A]/20 text-[#1A1A1A]/40 cursor-not-allowed bg-transparent"
-                  : "border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white cursor-pointer"
+                  : "border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white dark:border-white/20 dark:text-white dark:hover:bg-white/10 cursor-pointer"
               }`}
             >
               {showClosedError ? "CLOSED" : "OPEN"}
             </button>
-            <span className="text-[0.65rem] text-gray-400 tracking-widest font-sans uppercase">
+            <span className="text-[0.65rem] text-gray-400 dark:text-gray-300 tracking-widest font-sans uppercase">
               11.00 AM — 09.00 PM
             </span>
           </div>
         </motion.div>
       </section>
 
-      <div className="relative z-10 bg-[#F8F8F8] shadow-[0_-20px_60px_rgba(0,0,0,0.03)]">
+      <div className="relative z-10 bg-[#F8F8F8] dark:bg-[#090909] shadow-[0_-20px_60px_rgba(0,0,0,0.03)] dark:shadow-[0_-20px_60px_rgba(255,255,255,0.04)]">
         {/* ========== THE GUIDE (PHASE 2 & 3) ========== */}
         <section
           id="rules"
@@ -420,7 +408,7 @@ export default function Home() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.8 }}
-              className="font-serif font-light text-xl md:text-2xl tracking-[0.25em] text-center mb-20 text-[#1A1A1A] uppercase"
+              className="font-serif font-light text-xl md:text-2xl tracking-[0.25em] text-center mb-20 text-[#1A1A1A] dark:text-white uppercase"
             >
               The Guide
             </motion.h2>
@@ -452,7 +440,7 @@ export default function Home() {
               ].map((note, i) => (
                 <div
                   key={i}
-                  className="p-5 text-[0.65rem] md:text-xs flex flex-col items-center text-center gap-3 text-[#1A1A1A] tracking-wider font-light bg-[#F8F8F8]"
+                  className="p-5 text-[0.65rem] md:text-xs flex flex-col items-center text-center gap-3 text-[#1A1A1A] dark:text-[#F8F8F8] tracking-wider font-light bg-[#F8F8F8] dark:bg-[#111]"
                 >
                   <span className="opacity-50">{note.icon}</span>
                   {note.text}
@@ -465,7 +453,7 @@ export default function Home() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 1, delay: 0.2 }}
-              className="text-center font-sans text-[0.60rem] md:text-xs font-semibold tracking-widest text-[#1A1A1A] mb-20 uppercase border-y border-[#1A1A1A]/10 py-5 w-fit mx-auto px-8"
+              className="text-center font-sans text-[0.60rem] md:text-xs font-semibold tracking-widest text-[#1A1A1A] dark:text-[#f8f8f8] mb-20 uppercase border-y border-[#1A1A1A]/10 dark:border-[#ffffff10] py-5 w-fit mx-auto px-8"
             >
               PROSES OTOMATIS: Pesanan diproses setelah bukti transfer dikirim.
               Estimasi: 1 - 120 menit.
@@ -501,15 +489,15 @@ export default function Home() {
                   key={i}
                   className="flex-1 flex flex-col items-center text-center z-10 w-full relative group"
                 >
-                  <div className="w-16 h-16 rounded-full bg-[#F8F8F8] border border-[#1A1A1A]/10 flex items-center justify-center mb-8 transition-transform duration-500 hover:scale-105">
-                    <span className="text-[#1A1A1A] opacity-60">
+                  <div className="w-16 h-16 rounded-full bg-[#F8F8F8] dark:bg-[#111] border border-[#1A1A1A]/10 dark:border-[#ffffff10] flex items-center justify-center mb-8 transition-transform duration-500 hover:scale-105">
+                    <span className="text-[#1A1A1A] dark:text-[#f8f8f8] opacity-60">
                       {step.icon}
                     </span>
                   </div>
-                  <h3 className="font-serif font-light uppercase tracking-[0.2em] text-lg text-[#1A1A1A] mb-3">
+                  <h3 className="font-serif font-light uppercase tracking-[0.2em] text-lg text-[#1A1A1A] dark:text-white mb-3">
                     {step.title}
                   </h3>
-                  <p className="font-sans text-[0.70rem] text-gray-500 leading-[1.8] max-w-[220px] font-light">
+                  <p className="font-sans text-[0.70rem] text-gray-500 dark:text-gray-300 leading-[1.8] max-w-[220px] font-light">
                     {step.desc}
                   </p>
                 </div>
@@ -521,9 +509,10 @@ export default function Home() {
         {/* ========== THE LOOKBOOK GRID (PHASE 4) ========== */}
         <section
           id="catalog"
-          className="min-h-screen px-6 py-24 max-w-[1200px] mx-auto border-t border-[#1A1A1A]/5"
+          className="min-h-screen px-6 py-24 border-t border-[#1A1A1A]/5 flex items-center justify-center"
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16">
+          <div className="max-w-4xl w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16">
             {PRODUCTS.map((prod, i) => (
               <motion.article
                 key={i}
@@ -531,7 +520,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.8, delay: i * 0.1 }}
-                className="w-full h-[460px] flex flex-col bg-white border border-[#E5E7EB]/70 transition-all duration-500 group relative"
+                className="w-full h-[460px] flex flex-col bg-white dark:bg-[#111] border border-[#E5E7EB]/70 dark:border-[#333] transition-all duration-500 group relative"
               >
                 {/* Invisible overlay button over the image area */}
                 <button
@@ -541,7 +530,7 @@ export default function Home() {
 
                 {/* Logo Container */}
                 <div
-                  className={`w-full h-[220px] relative shrink-0 ${prod.bg} flex items-center justify-center bg-[#F8F8F8] border-b border-[#E5E7EB]/50 overflow-hidden`}
+                  className={`w-full h-[220px] relative shrink-0 ${prod.bg} flex items-center justify-center bg-[#F8F8F8] dark:bg-[#111] border-b border-[#E5E7EB]/50 dark:border-[#333] overflow-hidden`}
                 >
                   <img
                     src={prod.logoUrl}
@@ -555,13 +544,13 @@ export default function Home() {
 
                 <div className="p-8 flex-1 flex flex-col items-center justify-between text-center relative z-10">
                   <div>
-                    <h3 className="font-serif text-sm md:text-base tracking-[0.25em] mb-4 uppercase text-black font-medium">
+                    <h3 className="font-serif text-sm md:text-base tracking-[0.25em] mb-4 uppercase text-black dark:text-white font-medium">
                       {prod.name}
                     </h3>
-                    <div className="font-sans text-[0.65rem] md:text-xs mb-6 flex items-center justify-center gap-2 text-black tracking-[0.2em] uppercase font-medium">
+                    <div className="font-sans text-[0.65rem] md:text-xs mb-6 flex items-center justify-center gap-2 text-black dark:text-gray-300 tracking-[0.2em] uppercase font-medium">
                       {prod.price}{" "}
                       {prod.hot && (
-                        <span className="text-black text-[0.60rem]">✦</span>
+                        <span className="text-black dark:text-gray-300 text-[0.60rem]">✦</span>
                       )}
                     </div>
                   </div>
@@ -569,14 +558,14 @@ export default function Home() {
                   <div className="w-full flex-col flex items-center gap-5 mt-auto">
                     <button
                       onClick={() => openProductModal(prod)}
-                      className="text-[0.55rem] tracking-[0.25em] uppercase font-sans text-gray-400 hover:text-black transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-[1px] after:bg-black/20 hover:after:bg-black"
+                      className="text-[0.55rem] tracking-[0.25em] uppercase font-sans text-gray-400 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-[1px] after:bg-black/20 dark:after:bg-white/20 hover:after:bg-black"
                     >
                       VIEW DETAILS
                     </button>
 
                     <button
                       onClick={() => openProductModal(prod)}
-                      className="w-full py-3 border border-[#1A1A1A] text-[#1A1A1A] text-[0.65rem] tracking-[0.2em] font-medium hover:bg-[#1A1A1A] hover:text-white transition-colors duration-500 uppercase"
+                      className="w-full py-3 border border-[#1A1A1A] text-[#1A1A1A] dark:border-[#ffffff30] dark:text-white text-[0.65rem] tracking-[0.2em] font-medium hover:bg-[#1A1A1A] dark:hover:bg-white/10 hover:text-white transition-colors duration-500 uppercase"
                     >
                       CONFIRM PAYMENT
                     </button>
@@ -584,68 +573,11 @@ export default function Home() {
                 </div>
               </motion.article>
             ))}
-          </div>
-        </section>
-
-        {/* ========== LUXURY PAYMENT (PHASE 5) ========== */}
-        <section
-          id="checkout"
-          className="min-h-screen pt-24 pb-6 px-6 flex flex-col items-center border-t border-[#1A1A1A]/5"
-        >
-          <div className="w-full max-w-[600px] mb-20 relative z-10">
-            <h2 className="font-serif font-light text-xl tracking-[0.25em] text-center mb-16 uppercase text-[#1A1A1A]">
-              Checkout
-            </h2>
-
-            <div className="flex flex-col">
-              {[
-                { name: "SEABANK", num: "901031210535", id: "seab" },
-                { name: "SHOPEEPAY", num: "085643485811", id: "shop" },
-                { name: "GOPAY", num: "085353669369", id: "go" },
-              ].map((bank) => (
-                <div
-                  key={bank.id}
-                  className="flex items-center justify-between py-6 border-b border-[#1A1A1A]/10"
-                >
-                  <span className="font-serif text-xs md:text-sm tracking-[0.1em] w-24 md:w-32 uppercase text-[#1A1A1A]">
-                    {bank.name}
-                  </span>
-                  <span className="font-sans font-light text-sm md:text-base text-gray-500 flex-1 pl-4 md:pl-8 tracking-[0.1em]">
-                    {bank.num}
-                  </span>
-                  <button
-                    onClick={() => handleCopy(bank.num, bank.id)}
-                    className="relative flex items-center text-[0.60rem] tracking-[0.2em] text-[#1A1A1A] hover:text-gray-400 transition-colors uppercase font-medium underline underline-offset-4 decoration-[#1A1A1A]/30 hover:decoration-[#1A1A1A]"
-                  >
-                    {copiedId === bank.id ? (
-                      <>
-                        <span className="text-gray-400 no-underline">
-                          COPIED
-                        </span>
-                        <motion.span
-                          initial={{ opacity: 1, y: 0 }}
-                          animate={{ opacity: 0, y: -20 }}
-                          transition={{ duration: 0.8 }}
-                          className="absolute -top-3 text-gray-400 text-sm pointer-events-none"
-                        >
-                          ✦
-                        </motion.span>
-                      </>
-                    ) : (
-                      "COPY"
-                    )}
-                  </button>
-                </div>
-              ))}
             </div>
           </div>
-
-          <div className="text-center w-full mt-auto mb-2 relative z-10">
-            <p className="font-sans text-[0.60rem] tracking-[0.25em] text-[#1A1A1A]/30 font-medium uppercase">
-              © 2026 ZELARTE STUDIO
-            </p>
-          </div>
         </section>
+
+        {/* Checkout hero removed as requested */}
       </div>
 
       {/* ========== PRODUCT DETAILS MODAL ========== */}
@@ -659,8 +591,7 @@ export default function Home() {
             className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6"
           >
             {/* Backdrop */}
-            <div
-              className="absolute inset-0 bg-white/70 backdrop-blur-md"
+            <div className="absolute inset-0 bg-white/70 dark:bg-black/60 backdrop-blur-md"
               onClick={() => setSelectedProduct(null)}
             />
 
@@ -670,17 +601,17 @@ export default function Home() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full max-w-xl bg-white border border-[#1A1A1A]/10 shadow-[0_40px_100px_rgba(0,0,0,0.05)] p-0 max-h-[90vh] overflow-y-auto no-scrollbar flex flex-col"
+              className="relative w-full max-w-xl bg-white dark:bg-[#111] border border-[#1A1A1A]/10 dark:border-[#333] shadow-[0_40px_100px_rgba(0,0,0,0.05)] dark:shadow-[0_40px_100px_rgba(255,255,255,0.05)] p-0 max-h-[90vh] overflow-y-auto no-scrollbar flex flex-col"
             >
               <button
                 onClick={() => setSelectedProduct(null)}
-                className="absolute top-6 right-6 text-[#1A1A1A]/40 hover:text-[#1A1A1A] hover:rotate-90 hover:opacity-70 transition-all duration-300 z-10"
+                className="absolute top-6 right-6 text-[#1A1A1A]/40 dark:text-[#f8f8f8]/40 hover:text-[#1A1A1A] dark:hover:text-white hover:rotate-90 hover:opacity-70 transition-all duration-300 z-10"
               >
                 <X strokeWidth={0.5} size={36} />
               </button>
 
               {/* App Logo */}
-              <div className="w-full flex items-center justify-center border-b border-[#1A1A1A]/5 py-12 bg-[#F8F8F8]">
+              <div className="w-full flex items-center justify-center border-b border-[#1A1A1A]/5 dark:border-[#333] py-12 bg-[#F8F8F8] dark:bg-[#111]">
                 <img
                   src={selectedProduct.logoUrl}
                   alt={selectedProduct.name}
@@ -691,10 +622,10 @@ export default function Home() {
               <div className="px-8 md:px-14 py-12">
                 {/* Header */}
                 <div className="text-center mb-10">
-                  <h2 className="font-serif font-light text-2xl md:text-3xl tracking-[0.15em] text-[#1A1A1A] uppercase mb-4">
+                  <h2 className="font-serif font-light text-2xl md:text-3xl tracking-[0.15em] text-[#1A1A1A] dark:text-white uppercase mb-4">
                     {selectedProduct.name}
                   </h2>
-                  <div className="font-sans text-[0.65rem] text-[#1A1A1A]/50 tracking-[0.25em] uppercase font-medium">
+                  <div className="font-sans text-[0.65rem] text-[#1A1A1A]/50 dark:text-[#d4d4d4] tracking-[0.25em] uppercase font-medium">
                     {selectedProduct.modal.subtitle.replace(" ✦", "")}
                   </div>
                 </div>
@@ -710,7 +641,7 @@ export default function Home() {
                       {selectedProduct.modal.packages.map((pkg, idx) => (
                         <div
                           key={idx}
-                          className="font-sans font-light text-[0.8rem] md:text-sm text-[#1A1A1A] bg-[#FBFBFB] border border-[#1A1A1A]/10 px-5 py-4"
+                          className="font-sans font-light text-[0.8rem] md:text-sm text-[#1A1A1A] dark:text-[#f8f8f8] bg-[#FBFBFB] dark:bg-[#111] border border-[#1A1A1A]/10 dark:border-[#333] px-5 py-4"
                         >
                           {pkg}
                         </div>
@@ -725,9 +656,9 @@ export default function Home() {
                       <Check
                         size={16}
                         strokeWidth={1}
-                        className="text-[#1A1A1A]/50 mt-[0.1rem] shrink-0"
+                        className="text-[#1A1A1A]/50 dark:text-[#f8f8f8]/60 mt-[0.1rem] shrink-0"
                       />
-                      <span className="font-sans font-light text-sm text-[#1A1A1A] leading-relaxed tracking-[0.05em]">
+                      <span className="font-sans font-light text-sm text-[#1A1A1A] dark:text-[#f8f8f8] leading-relaxed tracking-[0.05em]">
                         {benefit}
                       </span>
                     </div>
@@ -737,11 +668,11 @@ export default function Home() {
                 {/* Notes */}
                 {selectedProduct.modal.notes &&
                   selectedProduct.modal.notes.length > 0 && (
-                    <div className="border border-[#1A1A1A]/10 px-6 py-5 mb-10 bg-[#FBFBFB]">
+                    <div className="border border-[#1A1A1A]/10 dark:border-[#333] px-6 py-5 mb-10 bg-[#FBFBFB] dark:bg-[#111]">
                       {selectedProduct.modal.notes.map((note, idx) => (
                         <div
                           key={idx}
-                          className="font-sans font-light text-[0.75rem] text-[#1A1A1A]/80 tracking-wider mb-2 last:mb-0 leading-relaxed"
+                          className="font-sans font-light text-[0.75rem] text-[#1A1A1A]/80 dark:text-[#d4d4d4] tracking-wider mb-2 last:mb-0 leading-relaxed"
                         >
                           {note}
                         </div>
@@ -751,8 +682,8 @@ export default function Home() {
 
                 {/* Warning */}
                 {selectedProduct.modal.warning && (
-                  <div className="border border-[#1A1A1A] p-4 text-center mb-10">
-                    <p className="font-sans font-bold text-[0.60rem] tracking-[0.25em] text-[#1A1A1A] uppercase">
+                  <div className="border border-[#1A1A1A] dark:border-[#444] p-4 text-center mb-10">
+                    <p className="font-sans font-bold text-[0.60rem] tracking-[0.25em] text-[#1A1A1A] dark:text-[#f8f8f8] uppercase">
                       {selectedProduct.modal.warning
                         .replace("‼️ PENTING: ", "")
                         .replace("‼️ Warning: ", "")
@@ -765,7 +696,7 @@ export default function Home() {
                 {selectedProduct.variants &&
                   selectedProduct.variants.length > 0 && (
                     <div className="mb-8">
-                      <p className="font-serif text-[0.60rem] tracking-[0.25em] uppercase text-[#1A1A1A]/50 mb-5">
+                      <p className="font-serif text-[0.60rem] tracking-[0.25em] uppercase text-[#1A1A1A]/50 dark:text-[#d4d4d4] mb-5">
                         SELECT OPTION
                       </p>
                       <div className="flex flex-wrap gap-2.5">
@@ -776,7 +707,7 @@ export default function Home() {
                             className={`px-5 py-2.5 text-[0.58rem] tracking-[0.2em] font-sans font-medium uppercase border transition-colors duration-200 ${
                               selectedVariantIdx === idx
                                 ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
-                                : "bg-white text-[#1A1A1A] border-[#1A1A1A]/30 hover:border-[#1A1A1A]"
+                                : "bg-white text-[#1A1A1A] dark:bg-[#111] dark:text-[#f8f8f8] border-[#1A1A1A]/30 dark:border-[#333] hover:border-[#1A1A1A]"
                             }`}
                           >
                             {v.label}
@@ -788,7 +719,7 @@ export default function Home() {
 
                 {/* ——— DYNAMIC PRICE DISPLAY ——— */}
                 <div className="border-y border-[#1A1A1A]/10 py-6 mb-8 text-center">
-                  <p className="font-sans text-[0.48rem] tracking-[0.35em] text-[#1A1A1A]/35 uppercase mb-2">
+                  <p className="font-sans text-[0.48rem] tracking-[0.35em] text-[#1A1A1A]/35 dark:text-[#d4d4d4] uppercase mb-2">
                     TOTAL
                   </p>
                   <motion.p
@@ -796,7 +727,7 @@ export default function Home() {
                     initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.25 }}
-                    className="font-serif text-3xl md:text-4xl tracking-[0.08em] text-[#1A1A1A] font-light"
+                    className="font-serif text-3xl md:text-4xl tracking-[0.08em] text-[#1A1A1A] dark:text-white font-light"
                   >
                     Rp {currentVariantPrice.toLocaleString("id-ID")}
                   </motion.p>
@@ -817,16 +748,16 @@ export default function Home() {
                 </button>
 
                 {/* Footer Guarantee */}
-                <div className="border-t border-[#1A1A1A]/10 pt-10 text-center">
-                  <p className="font-serif text-[0.75rem] tracking-[0.25em] uppercase text-[#1A1A1A] mb-3">
+                <div className="border-t border-[#1A1A1A]/10 dark:border-[#333] pt-10 text-center">
+                  <p className="font-serif text-[0.75rem] tracking-[0.25em] uppercase text-[#1A1A1A] dark:text-white mb-3">
                     Guaranteed Excellence
                   </p>
-                  <p className="font-sans font-light text-[0.70rem] text-[#1A1A1A]/60 tracking-widest">
+                  <p className="font-sans font-light text-[0.70rem] text-[#1A1A1A]/60 dark:text-[#d4d4d4] tracking-widest">
                     {selectedProduct.modal.guarantee}
                   </p>
 
                   {selectedProduct.modal.definition && (
-                    <p className="font-serif italic text-[0.65rem] text-[#1A1A1A]/40 tracking-wider mt-8">
+                    <p className="font-serif italic text-[0.65rem] text-[#1A1A1A]/40 dark:text-[#d4d4d4]/70 tracking-wider mt-8">
                       — {selectedProduct.modal.definition}
                     </p>
                   )}

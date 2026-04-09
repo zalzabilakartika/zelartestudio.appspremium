@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @utility no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -14,11 +16,31 @@
     --color-rose: #f472b6;
     --font-serif: var(--font-serif);
     --font-sans: var(--font-sans);
+    --bg: var(--color-offwhite);
+    --text: var(--color-charcoal);
+    --surface: #ffffff;
+    --surface-strong: #f8f8f8;
+}
+
+:root {
+    color-scheme: light;
+}
+
+.dark {
+    --bg: #111111;
+    --text: #f8f8f8;
+    --surface: #1a1a1a;
+    --surface-strong: #111111;
+    color-scheme: dark;
 }
 
 @layer base {
     body {
-        background-color: var(--color-offwhite);
-        color: var(--color-charcoal);
+        background-color: var(--bg);
+        color: var(--text);
+    }
+    html.dark body {
+        background-color: var(--bg);
+        color: var(--text);
     }
 }
