@@ -28,8 +28,18 @@ export async function POST(request: NextRequest): Promise<Response> {
 
   if (!upstream.ok) {
     const errorBody = await upstream.text();
+    let parsedDetail: string = errorBody;
+
+    try {
+      const json = JSON.parse(errorBody);
+      parsedDetail =
+        json.message ?? json.error ?? JSON.stringify(json) ?? errorBody;
+    } catch {
+      // keep raw text when response is not JSON
+    }
+
     return Response.json(
-      { error: "Upstream payment error.", detail: errorBody },
+      { error: "Upstream payment error.", detail: parsedDetail },
       { status: upstream.status }
     );
   }

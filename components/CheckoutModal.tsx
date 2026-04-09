@@ -100,7 +100,12 @@ export default function CheckoutModal({
         }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Something went wrong.");
+      if (!res.ok) {
+        const errorMessage = data.detail
+          ? `${data.error ?? "Upstream payment error."} ${data.detail}`
+          : data.error || "Something went wrong.";
+        throw new Error(errorMessage);
+      }
       setInvoiceId(data.id);
       setPaymentUrl(data.payment_url);
       setStep(2);
