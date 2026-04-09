@@ -36,5 +36,5 @@ export async function GET(request: NextRequest): Promise<Response> {
 
   const data = await upstream.json();
 
-  return Response.json({ status: data.status });
+  return Response.json({ status: data.data?.status });
 }

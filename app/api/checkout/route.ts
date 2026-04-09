@@ -36,5 +36,8 @@ export async function POST(request: NextRequest): Promise<Response> {
 
   const data = await upstream.json();
 
-  return Response.json({ id: data.id, payment_url: data.payment_url });
+  return Response.json({
+    id: data.data?.id,
+    payment_url: data.data?.payment_url,
+  });
 }
