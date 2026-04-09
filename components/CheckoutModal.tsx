@@ -101,9 +101,18 @@ export default function CheckoutModal({
       });
       const data = await res.json();
       if (!res.ok) {
-        const errorMessage = data.detail
-          ? `${data.error ?? "Upstream payment error."} ${data.detail}`
-          : data.error || "Something went wrong.";
+        const errorText =
+          typeof data.error === "string"
+            ? data.error
+            : JSON.stringify(data.error);
+        const detailText =
+          typeof data.detail === "string"
+            ? data.detail
+            : JSON.stringify(data.detail);
+
+        const errorMessage = detailText
+          ? `${errorText || "Upstream payment error."} ${detailText}`
+          : errorText || "Something went wrong.";
         throw new Error(errorMessage);
       }
       setInvoiceId(data.id);

@@ -32,8 +32,18 @@ export async function POST(request: NextRequest): Promise<Response> {
 
     try {
       const json = JSON.parse(errorBody);
-      parsedDetail =
-        json.message ?? json.error ?? JSON.stringify(json) ?? errorBody;
+      if (typeof json === "string") {
+        parsedDetail = json;
+      } else if (json?.message) {
+        parsedDetail = String(json.message);
+      } else if (json?.error) {
+        parsedDetail =
+          typeof json.error === "string"
+            ? json.error
+            : JSON.stringify(json.error);
+      } else {
+        parsedDetail = JSON.stringify(json);
+      }
     } catch {
       // keep raw text when response is not JSON
     }
