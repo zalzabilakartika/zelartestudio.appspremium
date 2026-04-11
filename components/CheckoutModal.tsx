@@ -79,68 +79,109 @@ export default function CheckoutModal({
   const [error, setError] = useState("");
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // ── Step 1 → 2: Generate invoice ────────────────────────────────────────────
   const handleGenerateInvoice = async () => {
     if (!name.trim() || !email.trim() || !whatsapp.trim()) {
-      setError("Please fill in all fields.");
+      setError("Mohon lengkapi semua field.");
       return;
     }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      setError("Format email tidak valid.");
+      return;
+    }
+
     setError("");
     setIsLoading(true);
+
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name,
-          email,
-          whatsapp,
+          name: name.trim(),
+          email: email.trim(),
+          whatsapp: whatsapp.trim(),
           product_name: productName,
           amount: price,
         }),
       });
-      const data = await res.json();
-      if (!res.ok) {
-        const errorText =
-          typeof data.error === "string"
-            ? data.error
-            : JSON.stringify(data.error);
-        const detailText =
-          typeof data.detail === "string"
-            ? data.detail
-            : JSON.stringify(data.detail);
 
-        const errorMessage = detailText
-          ? `${errorText || "Upstream payment error."} ${detailText}`
-          : errorText || "Something went wrong.";
-        throw new Error(errorMessage);
+      let data: Record<string, unknown>;
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error("Server mengembalikan response tidak valid.");
       }
+
+      if (!res.ok) {
+        const detail =
+          typeof data.detail === "string" ? data.detail : "";
+        const msg =
+          typeof data.error === "string" ? data.error : "Terjadi kesalahan.";
+        throw new Error(detail ? `${msg} — ${detail}` : msg);
+      }
+
+      if (
+        typeof data.id !== "string" ||
+        typeof data.payment_url !== "string"
+      ) {
+        throw new Error("Response tidak lengkap dari payment service.");
+      }
+
       setInvoiceId(data.id);
       setPaymentUrl(data.payment_url);
       setStep(2);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred.");
+      setError(
+        err instanceof Error ? err.message : "Terjadi kesalahan, coba lagi."
+      );
     } finally {
       setIsLoading(false);
     }
   };
 
-  // ── Step 2: Poll for payment confirmation ───────────────────────────────────
+  const [pollStatus, setPollStatus] = useState<string>("");
+  const failCountRef = useRef(0);
+
   useEffect(() => {
     if (step !== 2 || !invoiceId) return;
 
+    failCountRef.current = 0;
+    const maxConsecutiveFailures = 10;
+
     pollingRef.current = setInterval(async () => {
       try {
-        const res = await fetch(`/api/checkout/status?id=${invoiceId}`);
+        const res = await fetch(
+          `/api/checkout/status?id=${encodeURIComponent(invoiceId)}`
+        );
+        if (!res.ok) {
+          failCountRef.current++;
+          if (failCountRef.current >= maxConsecutiveFailures) {
+            if (pollingRef.current) clearInterval(pollingRef.current);
+            setPollStatus("error");
+          }
+          return;
+        }
+
         const data = await res.json();
+        failCountRef.current = 0;
+
         if (data.status === "paid") {
           if (pollingRef.current) clearInterval(pollingRef.current);
           setStep(3);
+        } else if (data.status === "expired") {
+          if (pollingRef.current) clearInterval(pollingRef.current);
+          setPollStatus("expired");
         }
       } catch {
-        // silently ignore transient polling errors
+        failCountRef.current++;
+        if (failCountRef.current >= maxConsecutiveFailures) {
+          if (pollingRef.current) clearInterval(pollingRef.current);
+          setPollStatus("error");
+        }
       }
-    }, 3000);
+    }, 4000);
 
     return () => {
       if (pollingRef.current) clearInterval(pollingRef.current);
@@ -308,17 +349,27 @@ export default function CheckoutModal({
               </a>
 
               {/* Pulsing status */}
-              <motion.p
-                animate={{ opacity: [0.4, 1, 0.4] }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="font-sans text-[0.58rem] tracking-[0.2em] text-[#1A1A1A]/50 uppercase text-center"
-              >
-                Awaiting payment confirmation...
-              </motion.p>
+              {pollStatus === "expired" ? (
+                <p className="font-sans text-[0.58rem] tracking-[0.2em] text-red-500 uppercase text-center">
+                  Invoice expired. Silakan buat ulang.
+                </p>
+              ) : pollStatus === "error" ? (
+                <p className="font-sans text-[0.58rem] tracking-[0.2em] text-red-500 uppercase text-center">
+                  Gagal mengecek status. Coba refresh halaman.
+                </p>
+              ) : (
+                <motion.p
+                  animate={{ opacity: [0.4, 1, 0.4] }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="font-sans text-[0.58rem] tracking-[0.2em] text-[#1A1A1A]/50 uppercase text-center"
+                >
+                  Menunggu konfirmasi pembayaran...
+                </motion.p>
+              )}
             </motion.div>
           )}
 
