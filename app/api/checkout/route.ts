@@ -1,4 +1,8 @@
 import { type NextRequest } from "next/server";
+import {
+  extractPaymentPresentation,
+  parseSayabayarErrorMessage,
+} from "@/lib/payment-extract";
 
 export const dynamic = "force-dynamic";
 
@@ -44,6 +48,9 @@ export async function POST(request: NextRequest): Promise<Response> {
     );
   }
 
+  const channelPreference =
+    process.env.SAYABAYAR_CHANNEL_PREFERENCE?.trim() || "platform";
+
   let upstream: globalThis.Response;
   try {
     upstream = await fetch("https://api.sayabayar.com/v1/invoices", {
@@ -58,7 +65,7 @@ export async function POST(request: NextRequest): Promise<Response> {
         customer_email: email.trim(),
         amount,
         description: `Order: ${product_name ?? "Product"} | WA: ${whatsapp.trim()}`,
-        channel_preference: "platform",
+        channel_preference: channelPreference,
       }),
     });
   } catch (err) {
@@ -68,45 +75,80 @@ export async function POST(request: NextRequest): Promise<Response> {
     );
   }
 
+  const errorBody = await upstream.text();
+
   if (!upstream.ok) {
-    const errorBody = await upstream.text();
-    let parsedDetail: string = errorBody;
-
-    try {
-      const json = JSON.parse(errorBody);
-      if (typeof json === "string") {
-        parsedDetail = json;
-      } else if (json?.message) {
-        parsedDetail = String(json.message);
-      } else if (json?.error) {
-        parsedDetail =
-          typeof json.error === "string"
-            ? json.error
-            : JSON.stringify(json.error);
-      } else {
-        parsedDetail = JSON.stringify(json);
-      }
-    } catch {
-      // keep raw text when response is not JSON
-    }
-
+    const parsedDetail = parseSayabayarErrorMessage(errorBody);
     return Response.json(
       { error: "Upstream payment error.", detail: parsedDetail },
       { status: upstream.status }
     );
   }
 
-  const data = await upstream.json();
-
-  const id = data.data?.id;
-  const paymentUrl = data.data?.payment_url;
-
-  if (!id || !paymentUrl) {
+  let data: Record<string, unknown>;
+  try {
+    data = JSON.parse(errorBody) as Record<string, unknown>;
+  } catch {
     return Response.json(
-      { error: "Unexpected response from payment service.", detail: JSON.stringify(data) },
+      { error: "Invalid JSON from payment service.", detail: errorBody },
       { status: 502 }
     );
   }
 
-  return Response.json({ id, payment_url: paymentUrl }, { status: 201 });
+  const id =
+    typeof data.data === "object" &&
+    data.data !== null &&
+    typeof (data.data as Record<string, unknown>).id === "string"
+      ? (data.data as Record<string, unknown>).id
+      : undefined;
+
+  const paymentUrl =
+    typeof data.data === "object" &&
+    data.data !== null &&
+    typeof (data.data as Record<string, unknown>).payment_url === "string"
+      ? (data.data as Record<string, unknown>).payment_url
+      : undefined;
+
+  const invoiceNumber =
+    typeof data.data === "object" &&
+    data.data !== null &&
+    typeof (data.data as Record<string, unknown>).invoice_number === "string"
+      ? (data.data as Record<string, unknown>).invoice_number
+      : undefined;
+
+  const amountUnique =
+    typeof data.data === "object" &&
+    data.data !== null &&
+    typeof (data.data as Record<string, unknown>).amount_unique === "number"
+      ? (data.data as Record<string, unknown>).amount_unique
+      : undefined;
+
+  const { qrString, qrImageUrl } = extractPaymentPresentation(data);
+
+  const hasPayPath =
+    typeof paymentUrl === "string" ||
+    typeof qrString === "string" ||
+    typeof qrImageUrl === "string";
+
+  if (typeof id !== "string" || !hasPayPath) {
+    return Response.json(
+      {
+        error: "Unexpected response from payment service.",
+        detail: JSON.stringify(data),
+      },
+      { status: 502 }
+    );
+  }
+
+  return Response.json(
+    {
+      id,
+      payment_url: paymentUrl ?? null,
+      invoice_number: invoiceNumber ?? null,
+      amount_unique: amountUnique ?? null,
+      qr_string: qrString ?? null,
+      qr_image_url: qrImageUrl ?? null,
+    },
+    { status: 201 }
+  );
 }

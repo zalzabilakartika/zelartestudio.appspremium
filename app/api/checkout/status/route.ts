@@ -1,4 +1,5 @@
 import { type NextRequest } from "next/server";
+import { extractPaymentPresentation, parseSayabayarErrorMessage } from "@/lib/payment-extract";
 
 export const dynamic = "force-dynamic";
 
@@ -41,29 +42,45 @@ export async function GET(request: NextRequest): Promise<Response> {
     );
   }
 
+  const text = await upstream.text();
+
   if (!upstream.ok) {
-    const errorBody = await upstream.text();
-    let parsedDetail: string = errorBody;
-
-    try {
-      const json = JSON.parse(errorBody);
-      parsedDetail = json?.message ?? json?.error ?? errorBody;
-    } catch {
-      // keep raw text
-    }
-
+    const parsedDetail = parseSayabayarErrorMessage(text);
     return Response.json(
       { error: "Upstream payment error.", detail: parsedDetail },
       { status: upstream.status }
     );
   }
 
-  const data = await upstream.json();
+  let data: Record<string, unknown>;
+  try {
+    data = JSON.parse(text) as Record<string, unknown>;
+  } catch {
+    return Response.json(
+      { error: "Invalid JSON from payment service.", detail: text },
+      { status: 502 }
+    );
+  }
+
+  const d =
+    typeof data.data === "object" && data.data !== null
+      ? (data.data as Record<string, unknown>)
+      : {};
+
+  const { qrString, qrImageUrl } = extractPaymentPresentation(data);
 
   return Response.json({
-    status: data.data?.status ?? "unknown",
-    invoice_number: data.data?.invoice_number,
-    amount: data.data?.amount,
-    expired_at: data.data?.expired_at,
+    status: typeof d.status === "string" ? d.status : "unknown",
+    invoice_number: typeof d.invoice_number === "string" ? d.invoice_number : null,
+    amount: typeof d.amount === "number" ? d.amount : null,
+    amount_unique: typeof d.amount_unique === "number" ? d.amount_unique : null,
+    expired_at: typeof d.expired_at === "string" ? d.expired_at : null,
+    paid_at: typeof d.paid_at === "string" ? d.paid_at : null,
+    customer_name: typeof d.customer_name === "string" ? d.customer_name : null,
+    customer_email: typeof d.customer_email === "string" ? d.customer_email : null,
+    description: typeof d.description === "string" ? d.description : null,
+    payment_url: typeof d.payment_url === "string" ? d.payment_url : null,
+    qr_string: qrString ?? null,
+    qr_image_url: qrImageUrl ?? null,
   });
 }
