@@ -4,6 +4,8 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Check, ExternalLink, MessageCircle } from "lucide-react";
 
+type PaymentProvider = "sayabayar" | "qrispy";
+
 // ─── FloatingInput ─────────────────────────────────────────────────────────────
 
 type FloatingInputProps = {
@@ -72,41 +74,17 @@ export default function CheckoutModal({
   const [email, setEmail] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [invoiceId, setInvoiceId] = useState("");
+  const [paymentProvider, setPaymentProvider] =
+    useState<PaymentProvider | null>(null);
+  const [payId, setPayId] = useState("");
   const [invoiceNumber, setInvoiceNumber] = useState<string | null>(null);
-  const [amountUnique, setAmountUnique] = useState<number | null>(null);
+  const [amountDisplay, setAmountDisplay] = useState<number>(price);
   const [paymentUrl, setPaymentUrl] = useState<string | null>(null);
-  const [qrString, setQrString] = useState<string | null>(null);
-  const [qrImageUrl, setQrImageUrl] = useState<string | null>(null);
-  const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
+  const [qrisImageSrc, setQrisImageSrc] = useState<string | null>(null);
+  const [qrisExpiresAt, setQrisExpiresAt] = useState<string | null>(null);
   const [error, setError] = useState("");
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const sheetsLoggedRef = useRef(false);
-
-  useEffect(() => {
-    if (!qrString) {
-      setQrDataUrl(null);
-      return;
-    }
-    let cancelled = false;
-    import("qrcode")
-      .then((QR) =>
-        QR.default.toDataURL(qrString, {
-          width: 260,
-          margin: 2,
-          color: { dark: "#1a1a1a", light: "#ffffff" },
-        })
-      )
-      .then((url) => {
-        if (!cancelled) setQrDataUrl(url);
-      })
-      .catch(() => {
-        if (!cancelled) setQrDataUrl(null);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [qrString]);
 
   const handleGenerateInvoice = async () => {
     if (!name.trim() || !email.trim() || !whatsapp.trim()) {
@@ -151,31 +129,54 @@ export default function CheckoutModal({
         throw new Error(detail ? `${msg} — ${detail}` : msg);
       }
 
-      if (typeof data.id !== "string") {
+      const provider = data.provider === "qrispy" ? "qrispy" : "sayabayar";
+      const id = typeof data.id === "string" ? data.id : "";
+      if (!id) {
         throw new Error("Response tidak lengkap dari payment service.");
       }
 
-      const pUrl =
-        typeof data.payment_url === "string" ? data.payment_url : null;
-      const qStr =
-        typeof data.qr_string === "string" ? data.qr_string : null;
-      const qImg =
-        typeof data.qr_image_url === "string" ? data.qr_image_url : null;
+      setPaymentProvider(provider);
+      setPayId(id);
 
-      if (!pUrl && !qStr && !qImg) {
-        throw new Error("Tidak ada tautan pembayaran atau QR dari payment service.");
+      if (provider === "sayabayar") {
+        const pUrl =
+          typeof data.payment_url === "string" ? data.payment_url : null;
+        if (!pUrl) {
+          throw new Error("Tidak ada tautan pembayaran dari payment service.");
+        }
+        setPaymentUrl(pUrl);
+        setQrisImageSrc(null);
+        setInvoiceNumber(
+          typeof data.invoice_number === "string" ? data.invoice_number : null
+        );
+        const au = data.amount_unique;
+        setAmountDisplay(
+          typeof au === "number" ? au : price
+        );
+        setQrisExpiresAt(null);
+      } else {
+        const b64 =
+          typeof data.qris_image_base64 === "string"
+            ? data.qris_image_base64
+            : null;
+        const url =
+          typeof data.qris_image_url === "string"
+            ? data.qris_image_url
+            : null;
+        const src = b64?.startsWith("data:") ? b64 : b64 ? `data:image/png;base64,${b64}` : url;
+        if (!src) {
+          throw new Error("Qrispy tidak mengembalikan gambar QR.");
+        }
+        setQrisImageSrc(src);
+        setPaymentUrl(null);
+        setInvoiceNumber(null);
+        const am = data.amount;
+        setAmountDisplay(typeof am === "number" ? am : price);
+        setQrisExpiresAt(
+          typeof data.expired_at === "string" ? data.expired_at : null
+        );
       }
 
-      setInvoiceId(data.id);
-      setPaymentUrl(pUrl);
-      setQrString(qStr);
-      setQrImageUrl(qImg);
-      setInvoiceNumber(
-        typeof data.invoice_number === "string" ? data.invoice_number : null
-      );
-      setAmountUnique(
-        typeof data.amount_unique === "number" ? data.amount_unique : null
-      );
       setStep(2);
     } catch (err) {
       setError(
@@ -189,63 +190,39 @@ export default function CheckoutModal({
   const [pollStatus, setPollStatus] = useState<string>("");
   const failCountRef = useRef(0);
 
-  useEffect(() => {
-    if (step !== 2 || !invoiceId) return;
-
-    let cancelled = false;
-    (async () => {
-      try {
-        const res = await fetch(
-          `/api/checkout/status?id=${encodeURIComponent(invoiceId)}`
-        );
-        if (!res.ok || cancelled) return;
-        const d = (await res.json()) as Record<string, unknown>;
-        if (cancelled) return;
-        if (typeof d.qr_string === "string" && d.qr_string.length > 0) {
-          setQrString((prev) => prev ?? d.qr_string as string);
-        }
-        if (typeof d.qr_image_url === "string" && d.qr_image_url.length > 0) {
-          setQrImageUrl((prev) => prev ?? (d.qr_image_url as string));
-        }
-        if (typeof d.payment_url === "string" && d.payment_url.length > 0) {
-          setPaymentUrl((prev) => prev ?? (d.payment_url as string));
-        }
-      } catch {
-        /* ignore enrichment errors */
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [step, invoiceId]);
-
-  const logPaidToSheets = useCallback((id: string) => {
-    if (sheetsLoggedRef.current) return;
-    sheetsLoggedRef.current = true;
-    void fetch("/api/checkout/log-paid", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        invoice_id: id,
-        product_name: productName,
-      }),
-    }).catch(() => {
-      sheetsLoggedRef.current = false;
-    });
-  }, [productName]);
+  const logPaidToSheets = useCallback(
+    (id: string, provider: PaymentProvider) => {
+      if (sheetsLoggedRef.current) return;
+      sheetsLoggedRef.current = true;
+      void fetch("/api/checkout/log-paid", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          provider,
+          invoice_id: id,
+          product_name: productName,
+          customer_name: name.trim(),
+          customer_email: email.trim(),
+          customer_whatsapp: whatsapp.trim(),
+        }),
+      }).catch(() => {
+        sheetsLoggedRef.current = false;
+      });
+    },
+    [productName, name, email, whatsapp]
+  );
 
   useEffect(() => {
-    if (step !== 2 || !invoiceId) return;
+    if (step !== 2 || !payId || !paymentProvider) return;
 
     failCountRef.current = 0;
     const maxConsecutiveFailures = 10;
 
+    const qs = `id=${encodeURIComponent(payId)}&provider=${encodeURIComponent(paymentProvider)}`;
+
     pollingRef.current = setInterval(async () => {
       try {
-        const res = await fetch(
-          `/api/checkout/status?id=${encodeURIComponent(invoiceId)}`
-        );
+        const res = await fetch(`/api/checkout/status?${qs}`);
         if (!res.ok) {
           failCountRef.current++;
           if (failCountRef.current >= maxConsecutiveFailures) {
@@ -260,7 +237,7 @@ export default function CheckoutModal({
 
         if (data.status === "paid") {
           if (pollingRef.current) clearInterval(pollingRef.current);
-          logPaidToSheets(invoiceId);
+          logPaidToSheets(payId, paymentProvider);
           setStep(3);
         } else if (data.status === "expired") {
           if (pollingRef.current) clearInterval(pollingRef.current);
@@ -278,7 +255,7 @@ export default function CheckoutModal({
     return () => {
       if (pollingRef.current) clearInterval(pollingRef.current);
     };
-  }, [step, invoiceId, logPaidToSheets]);
+  }, [step, payId, paymentProvider, logPaidToSheets]);
 
   const stepVariants = {
     initial: { opacity: 0, x: 20 },
@@ -292,9 +269,8 @@ export default function CheckoutModal({
     exit: { opacity: 0, x: -20 },
   };
 
-  const hasInlineQr = Boolean(qrDataUrl || qrImageUrl);
-  const displayAmount =
-    amountUnique != null ? amountUnique : price;
+  const refLabel =
+    paymentProvider === "qrispy" ? "QRIS ID" : invoiceNumber ? "Invoice" : "Reference";
 
   return (
     <motion.div
@@ -410,76 +386,65 @@ export default function CheckoutModal({
 
               <div className="border border-[#1A1A1A]/10 dark:border-[#333] p-6 mb-6 text-center bg-[#FBFBFB] dark:bg-[#1a1a1a]">
                 <p className="font-sans text-[0.48rem] tracking-[0.3em] text-[#1A1A1A]/40 dark:text-white/40 uppercase mb-2">
-                  {invoiceNumber ? "Invoice" : "Reference"}
+                  {refLabel}
                 </p>
                 <p className="font-sans text-sm tracking-[0.1em] text-[#1A1A1A] dark:text-white break-all">
-                  {invoiceNumber ?? invoiceId}
+                  {invoiceNumber ?? payId}
                 </p>
                 <p className="font-sans text-[0.55rem] tracking-[0.2em] text-[#1A1A1A]/50 dark:text-white/45 uppercase mt-4">
                   Total bayar
                 </p>
                 <p className="font-serif text-xl tracking-[0.08em] text-[#1A1A1A] dark:text-white font-light mt-1">
-                  Rp {displayAmount.toLocaleString("id-ID")}
+                  Rp {amountDisplay.toLocaleString("id-ID")}
                 </p>
+                {qrisExpiresAt && paymentProvider === "qrispy" && (
+                  <p className="font-sans text-[0.52rem] text-[#1A1A1A]/45 dark:text-white/40 mt-3 tracking-wider">
+                    Berlaku hingga {qrisExpiresAt}
+                  </p>
+                )}
               </div>
 
-              {hasInlineQr && (
+              {paymentProvider === "qrispy" && qrisImageSrc && (
                 <div className="mb-6 flex flex-col items-center">
                   <p className="font-sans text-[0.52rem] tracking-[0.25em] text-[#1A1A1A]/45 dark:text-white/45 uppercase mb-4 text-center">
                     Scan QRIS
                   </p>
                   <div className="rounded-lg border border-[#1A1A1A]/10 dark:border-[#333] bg-white p-4 shadow-sm">
-                    {qrDataUrl ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={qrDataUrl}
-                        alt="QRIS"
-                        width={260}
-                        height={260}
-                        className="w-[220px] h-[220px] md:w-[260px] md:h-[260px]"
-                      />
-                    ) : qrImageUrl ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={qrImageUrl}
-                        alt="QRIS"
-                        width={260}
-                        height={260}
-                        className="w-[220px] h-[220px] md:w-[260px] md:h-[260px] object-contain"
-                      />
-                    ) : null}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={qrisImageSrc}
+                      alt="QRIS"
+                      width={260}
+                      height={260}
+                      className="w-[220px] h-[220px] md:w-[260px] md:h-[260px] object-contain"
+                    />
                   </div>
                   <p className="font-sans text-[0.55rem] text-[#1A1A1A]/50 dark:text-white/50 text-center mt-4 leading-relaxed max-w-[280px]">
-                    Gunakan aplikasi e-wallet atau m-banking yang mendukung QRIS.
+                    Gunakan e-wallet atau m-banking yang mendukung QRIS.
                   </p>
                 </div>
               )}
 
-              {!hasInlineQr && (
-                <p className="font-sans text-[0.58rem] text-[#1A1A1A]/55 dark:text-white/50 text-center mb-6 leading-relaxed">
-                  API belum mengembalikan data QR. Buka halaman pembayaran untuk scan QRIS atau pilih metode lain.
-                </p>
+              {paymentProvider === "sayabayar" && paymentUrl && (
+                <>
+                  <p className="font-sans text-[0.58rem] text-[#1A1A1A]/55 dark:text-white/50 text-center mb-6 leading-relaxed">
+                    Lanjutkan di halaman payment gateway untuk scan QRIS atau pilih metode bayar lain.
+                  </p>
+                  <a
+                    href={paymentUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-full py-4 border border-[#1A1A1A] dark:border-white/30 text-[#1A1A1A] dark:text-white text-[0.60rem] tracking-[0.3em] font-sans font-medium uppercase hover:bg-[#1A1A1A] hover:text-white dark:hover:bg-white/10 transition-all duration-500 flex items-center justify-center gap-3 mb-10"
+                  >
+                    <ExternalLink size={12} strokeWidth={1.5} />
+                    Open Payment Gateway
+                  </a>
+                </>
               )}
-
-              {paymentUrl ? (
-                <a
-                  href={paymentUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={`w-full py-4 border border-[#1A1A1A] dark:border-white/30 text-[#1A1A1A] dark:text-white text-[0.60rem] tracking-[0.3em] font-sans font-medium uppercase hover:bg-[#1A1A1A] hover:text-white dark:hover:bg-white/10 transition-all duration-500 flex items-center justify-center gap-3 ${
-                    hasInlineQr ? "mb-4" : "mb-10"
-                  }`}
-                >
-                  <ExternalLink size={12} strokeWidth={1.5} />
-                  {hasInlineQr
-                    ? "Atau buka halaman pembayaran"
-                    : "Open Payment Gateway"}
-                </a>
-              ) : null}
 
               {pollStatus === "expired" ? (
                 <p className="font-sans text-[0.58rem] tracking-[0.2em] text-red-500 uppercase text-center">
-                  Invoice expired. Silakan buat ulang.
+                  Pembayaran kedaluwarsa. Silakan buat ulang.
                 </p>
               ) : pollStatus === "error" ? (
                 <p className="font-sans text-[0.58rem] tracking-[0.2em] text-red-500 uppercase text-center">
@@ -534,8 +499,8 @@ export default function CheckoutModal({
 
               <a
                 href={`https://wa.me/6285353669369?text=${encodeURIComponent(
-                  "Halo Admin Zelarte, saya sudah membayar invoice " +
-                    (invoiceNumber ?? invoiceId) +
+                  "Halo Admin Zelarte, saya sudah membayar " +
+                    (invoiceNumber ?? payId) +
                     " untuk produk " +
                     productName +
                     ". Mohon diproses!",

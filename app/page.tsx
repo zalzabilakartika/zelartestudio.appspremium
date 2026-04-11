@@ -314,16 +314,9 @@ export default function Home() {
                       <div className="w-full flex-col flex items-center gap-5 mt-auto">
                         <button
                           onClick={() => openProductModal(prod)}
-                          className="text-[0.55rem] tracking-[0.25em] uppercase font-sans text-gray-400 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-[1px] after:bg-black/20 dark:after:bg-white/20 hover:after:bg-black"
-                        >
-                          VIEW DETAILS
-                        </button>
-
-                        <button
-                          onClick={() => openProductModal(prod)}
                           className="w-full py-3 border border-[#1A1A1A] text-[#1A1A1A] dark:border-[#ffffff30] dark:text-white text-[0.65rem] tracking-[0.2em] font-medium hover:bg-[#1A1A1A] dark:hover:bg-white/10 hover:text-white transition-colors duration-500 uppercase"
                         >
-                          CONFIRM PAYMENT
+                          VIEW DETAILS
                         </button>
                       </div>
                     </div>

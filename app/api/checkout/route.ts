@@ -1,21 +1,13 @@
 import { type NextRequest } from "next/server";
+import { getPaymentProvider, getQrispyBaseUrl } from "@/lib/payment-config";
 import {
-  extractPaymentPresentation,
+  parseQrispyErrorMessage,
   parseSayabayarErrorMessage,
-} from "@/lib/payment-extract";
+} from "@/lib/payment-errors";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest): Promise<Response> {
-  const apiKey = process.env.SAYABAYAR_API_KEY;
-
-  if (!apiKey) {
-    return Response.json(
-      { error: "Payment service is not configured." },
-      { status: 500 }
-    );
-  }
-
   let body: Record<string, unknown>;
   try {
     body = await request.json();
@@ -42,9 +34,43 @@ export async function POST(request: NextRequest): Promise<Response> {
   }
 
   if (typeof amount !== "number" || amount <= 0) {
+    return Response.json({ error: "Invalid amount." }, { status: 422 });
+  }
+
+  const provider = getPaymentProvider();
+
+  if (provider === "qrispy") {
+    return createQrispyCheckout({
+      name: name.trim(),
+      email: email.trim(),
+      whatsapp: whatsapp.trim(),
+      product_name: product_name ?? "Product",
+      amount,
+    });
+  }
+
+  return createSayabayarCheckout({
+    name: name.trim(),
+    email: email.trim(),
+    whatsapp: whatsapp.trim(),
+    product_name: product_name ?? "Product",
+    amount,
+  });
+}
+
+async function createSayabayarCheckout(args: {
+  name: string;
+  email: string;
+  whatsapp: string;
+  product_name: string;
+  amount: number;
+}): Promise<Response> {
+  const apiKey = process.env.SAYABAYAR_API_KEY;
+
+  if (!apiKey) {
     return Response.json(
-      { error: "Invalid amount." },
-      { status: 422 }
+      { error: "Payment service is not configured (SAYABAYAR_API_KEY)." },
+      { status: 500 }
     );
   }
 
@@ -61,10 +87,10 @@ export async function POST(request: NextRequest): Promise<Response> {
       },
       cache: "no-store",
       body: JSON.stringify({
-        customer_name: name.trim(),
-        customer_email: email.trim(),
-        amount,
-        description: `Order: ${product_name ?? "Product"} | WA: ${whatsapp.trim()}`,
+        customer_name: args.name,
+        customer_email: args.email,
+        amount: args.amount,
+        description: `Order: ${args.product_name} | WA: ${args.whatsapp}`,
         channel_preference: channelPreference,
       }),
     });
@@ -78,9 +104,8 @@ export async function POST(request: NextRequest): Promise<Response> {
   const errorBody = await upstream.text();
 
   if (!upstream.ok) {
-    const parsedDetail = parseSayabayarErrorMessage(errorBody);
     return Response.json(
-      { error: "Upstream payment error.", detail: parsedDetail },
+      { error: "Upstream payment error.", detail: parseSayabayarErrorMessage(errorBody) },
       { status: upstream.status }
     );
   }
@@ -95,42 +120,19 @@ export async function POST(request: NextRequest): Promise<Response> {
     );
   }
 
-  const id =
-    typeof data.data === "object" &&
-    data.data !== null &&
-    typeof (data.data as Record<string, unknown>).id === "string"
-      ? (data.data as Record<string, unknown>).id
-      : undefined;
+  const d =
+    typeof data.data === "object" && data.data !== null
+      ? (data.data as Record<string, unknown>)
+      : {};
 
-  const paymentUrl =
-    typeof data.data === "object" &&
-    data.data !== null &&
-    typeof (data.data as Record<string, unknown>).payment_url === "string"
-      ? (data.data as Record<string, unknown>).payment_url
-      : undefined;
-
+  const id = typeof d.id === "string" ? d.id : undefined;
+  const paymentUrl = typeof d.payment_url === "string" ? d.payment_url : undefined;
   const invoiceNumber =
-    typeof data.data === "object" &&
-    data.data !== null &&
-    typeof (data.data as Record<string, unknown>).invoice_number === "string"
-      ? (data.data as Record<string, unknown>).invoice_number
-      : undefined;
-
+    typeof d.invoice_number === "string" ? d.invoice_number : null;
   const amountUnique =
-    typeof data.data === "object" &&
-    data.data !== null &&
-    typeof (data.data as Record<string, unknown>).amount_unique === "number"
-      ? (data.data as Record<string, unknown>).amount_unique
-      : undefined;
+    typeof d.amount_unique === "number" ? d.amount_unique : null;
 
-  const { qrString, qrImageUrl } = extractPaymentPresentation(data);
-
-  const hasPayPath =
-    typeof paymentUrl === "string" ||
-    typeof qrString === "string" ||
-    typeof qrImageUrl === "string";
-
-  if (typeof id !== "string" || !hasPayPath) {
+  if (typeof id !== "string" || typeof paymentUrl !== "string") {
     return Response.json(
       {
         error: "Unexpected response from payment service.",
@@ -142,12 +144,134 @@ export async function POST(request: NextRequest): Promise<Response> {
 
   return Response.json(
     {
+      provider: "sayabayar" as const,
       id,
-      payment_url: paymentUrl ?? null,
-      invoice_number: invoiceNumber ?? null,
-      amount_unique: amountUnique ?? null,
-      qr_string: qrString ?? null,
-      qr_image_url: qrImageUrl ?? null,
+      payment_url: paymentUrl,
+      invoice_number: invoiceNumber,
+      amount_unique: amountUnique,
+    },
+    { status: 201 }
+  );
+}
+
+async function createQrispyCheckout(args: {
+  name: string;
+  email: string;
+  whatsapp: string;
+  product_name: string;
+  amount: number;
+}): Promise<Response> {
+  const token = process.env.QRISPY_API_TOKEN?.trim();
+
+  if (!token) {
+    return Response.json(
+      { error: "Payment service is not configured (QRISPY_API_TOKEN)." },
+      { status: 500 }
+    );
+  }
+
+  const base = getQrispyBaseUrl();
+  const paymentRef = [
+    args.product_name,
+    args.name,
+    args.whatsapp,
+    args.email,
+  ]
+    .join(" | ")
+    .slice(0, 240);
+
+  const payload: Record<string, unknown> = {
+    amount: Math.round(args.amount),
+    payment_reference: paymentRef,
+  };
+
+  const returnUrl = process.env.QRISPY_RETURN_URL?.trim();
+  if (returnUrl) {
+    payload.return_url = returnUrl;
+  }
+
+  let upstream: globalThis.Response;
+  try {
+    upstream = await fetch(`${base}/api/payment/qris/generate`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-API-Token": token,
+      },
+      cache: "no-store",
+      body: JSON.stringify(payload),
+    });
+  } catch (err) {
+    return Response.json(
+      { error: "Failed to connect to Qrispy.", detail: String(err) },
+      { status: 502 }
+    );
+  }
+
+  const text = await upstream.text();
+
+  if (!upstream.ok) {
+    return Response.json(
+      { error: "Qrispy error.", detail: parseQrispyErrorMessage(text) },
+      { status: upstream.status >= 400 ? upstream.status : 502 }
+    );
+  }
+
+  let parsed: Record<string, unknown>;
+  try {
+    parsed = JSON.parse(text) as Record<string, unknown>;
+  } catch {
+    return Response.json(
+      { error: "Invalid JSON from Qrispy.", detail: text },
+      { status: 502 }
+    );
+  }
+
+  if (parsed.status !== "success") {
+    return Response.json(
+      {
+        error: "Qrispy did not return success.",
+        detail: parseQrispyErrorMessage(text),
+      },
+      { status: 502 }
+    );
+  }
+
+  const d =
+    typeof parsed.data === "object" && parsed.data !== null
+      ? (parsed.data as Record<string, unknown>)
+      : {};
+
+  const qrisId = typeof d.qris_id === "string" ? d.qris_id : undefined;
+  const qrisImageUrl =
+    typeof d.qris_image_url === "string" ? d.qris_image_url : null;
+  const qrisImageBase64 =
+    typeof d.qris_image_base64 === "string" ? d.qris_image_base64 : null;
+  const respAmount = typeof d.amount === "number" ? d.amount : args.amount;
+  const expiredAt = typeof d.expired_at === "string" ? d.expired_at : null;
+
+  if (!qrisId || (!qrisImageUrl && !qrisImageBase64)) {
+    return Response.json(
+      {
+        error: "Unexpected response from Qrispy.",
+        detail: JSON.stringify(parsed),
+      },
+      { status: 502 }
+    );
+  }
+
+  return Response.json(
+    {
+      provider: "qrispy" as const,
+      id: qrisId,
+      qris_id: qrisId,
+      qris_image_url: qrisImageUrl,
+      qris_image_base64: qrisImageBase64,
+      amount: respAmount,
+      expired_at: expiredAt,
+      payment_url: null,
+      invoice_number: null,
+      amount_unique: null,
     },
     { status: 201 }
   );

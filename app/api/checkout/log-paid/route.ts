@@ -1,43 +1,40 @@
 import { type NextRequest } from "next/server";
-import { parseSayabayarErrorMessage } from "@/lib/payment-extract";
+import { getQrispyBaseUrl } from "@/lib/payment-config";
+import {
+  parseQrispyErrorMessage,
+  parseSayabayarErrorMessage,
+} from "@/lib/payment-errors";
 
 export const dynamic = "force-dynamic";
 
-/**
- * Verifies invoice is paid with Sayabayar, then POSTs one row payload to a Google Apps Script
- * Web App URL (GOOGLE_SHEETS_WEB_APP_URL). Set that URL in env; if unset, returns ok with skipped: true.
- *
- * Apps Script minimal example:
- *   function doPost(e) {
- *     const row = JSON.parse(e.postData.contents);
- *     const sh = SpreadsheetApp.openById('YOUR_SHEET_ID').getSheetByName('Orders');
- *     sh.appendRow([
- *       new Date(), row.invoice_id, row.invoice_number, row.customer_name,
- *       row.customer_email, row.amount_unique, row.product_name, row.paid_at
- *     ]);
- *     return ContentService.createTextOutput(JSON.stringify({ ok: true }));
- *   }
- */
+type Provider = "sayabayar" | "qrispy";
+
+function normalizeProvider(v: unknown): Provider {
+  if (typeof v === "string" && v.toLowerCase() === "qrispy") return "qrispy";
+  return "sayabayar";
+}
 
 export async function POST(request: NextRequest): Promise<Response> {
-  const apiKey = process.env.SAYABAYAR_API_KEY;
   const webhookUrl = process.env.GOOGLE_SHEETS_WEB_APP_URL?.trim();
 
-  if (!apiKey) {
-    return Response.json(
-      { error: "Payment service is not configured." },
-      { status: 500 }
-    );
-  }
+  let body: {
+    provider?: string;
+    invoice_id?: string;
+    product_name?: string;
+    customer_name?: string;
+    customer_email?: string;
+    customer_whatsapp?: string;
+  };
 
-  let body: { invoice_id?: string; product_name?: string };
   try {
     body = await request.json();
   } catch {
     return Response.json({ error: "Invalid request body." }, { status: 400 });
   }
 
-  const invoiceId = typeof body.invoice_id === "string" ? body.invoice_id.trim() : "";
+  const provider = normalizeProvider(body.provider);
+  const invoiceId =
+    typeof body.invoice_id === "string" ? body.invoice_id.trim() : "";
   if (!invoiceId) {
     return Response.json(
       { error: "Missing required field: invoice_id." },
@@ -47,11 +44,51 @@ export async function POST(request: NextRequest): Promise<Response> {
 
   const productName =
     typeof body.product_name === "string" ? body.product_name.trim() : "";
+  const customerName =
+    typeof body.customer_name === "string" ? body.customer_name.trim() : "";
+  const customerEmail =
+    typeof body.customer_email === "string" ? body.customer_email.trim() : "";
+  const customerWhatsapp =
+    typeof body.customer_whatsapp === "string"
+      ? body.customer_whatsapp.trim()
+      : "";
+
+  if (provider === "qrispy") {
+    return logQrispyPaid({
+      qrisId: invoiceId,
+      productName,
+      customerName,
+      customerEmail,
+      customerWhatsapp,
+      webhookUrl,
+    });
+  }
+
+  return logSayabayarPaid({
+    invoiceId,
+    productName,
+    webhookUrl,
+  });
+}
+
+async function logSayabayarPaid(args: {
+  invoiceId: string;
+  productName: string;
+  webhookUrl: string | undefined;
+}): Promise<Response> {
+  const apiKey = process.env.SAYABAYAR_API_KEY;
+
+  if (!apiKey) {
+    return Response.json(
+      { error: "Payment service is not configured." },
+      { status: 500 }
+    );
+  }
 
   let upstream: globalThis.Response;
   try {
     upstream = await fetch(
-      `https://api.sayabayar.com/v1/invoices/${encodeURIComponent(invoiceId)}`,
+      `https://api.sayabayar.com/v1/invoices/${encodeURIComponent(args.invoiceId)}`,
       {
         method: "GET",
         headers: {
@@ -103,7 +140,7 @@ export async function POST(request: NextRequest): Promise<Response> {
     );
   }
 
-  if (!webhookUrl) {
+  if (!args.webhookUrl) {
     return Response.json({
       ok: true,
       skipped: true,
@@ -113,18 +150,129 @@ export async function POST(request: NextRequest): Promise<Response> {
 
   const payload = {
     event: "invoice.paid",
-    invoice_id: typeof d.id === "string" ? d.id : invoiceId,
-    invoice_number: typeof d.invoice_number === "string" ? d.invoice_number : null,
+    provider: "sayabayar" as const,
+    invoice_id: typeof d.id === "string" ? d.id : args.invoiceId,
+    invoice_number:
+      typeof d.invoice_number === "string" ? d.invoice_number : null,
     customer_name: typeof d.customer_name === "string" ? d.customer_name : null,
-    customer_email: typeof d.customer_email === "string" ? d.customer_email : null,
+    customer_email:
+      typeof d.customer_email === "string" ? d.customer_email : null,
     amount: typeof d.amount === "number" ? d.amount : null,
-    amount_unique: typeof d.amount_unique === "number" ? d.amount_unique : null,
+    amount_unique:
+      typeof d.amount_unique === "number" ? d.amount_unique : null,
     unique_code: typeof d.unique_code === "number" ? d.unique_code : null,
     description: typeof d.description === "string" ? d.description : null,
     paid_at: typeof d.paid_at === "string" ? d.paid_at : null,
-    product_name: productName || null,
+    product_name: args.productName || null,
   };
 
+  return postToSheets(payload, args.webhookUrl);
+}
+
+async function logQrispyPaid(args: {
+  qrisId: string;
+  productName: string;
+  customerName: string;
+  customerEmail: string;
+  customerWhatsapp: string;
+  webhookUrl: string | undefined;
+}): Promise<Response> {
+  const token = process.env.QRISPY_API_TOKEN?.trim();
+
+  if (!token) {
+    return Response.json(
+      { error: "Payment service is not configured." },
+      { status: 500 }
+    );
+  }
+
+  const base = getQrispyBaseUrl();
+
+  let upstream: globalThis.Response;
+  try {
+    upstream = await fetch(
+      `${base}/api/payment/qris/${encodeURIComponent(args.qrisId)}/status`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-API-Token": token,
+        },
+        cache: "no-store",
+      }
+    );
+  } catch (err) {
+    return Response.json(
+      { error: "Failed to connect to Qrispy.", detail: String(err) },
+      { status: 502 }
+    );
+  }
+
+  const text = await upstream.text();
+
+  if (!upstream.ok) {
+    return Response.json(
+      {
+        error: "Could not load QRIS status.",
+        detail: parseQrispyErrorMessage(text),
+      },
+      { status: upstream.status }
+    );
+  }
+
+  let parsed: Record<string, unknown>;
+  try {
+    parsed = JSON.parse(text) as Record<string, unknown>;
+  } catch {
+    return Response.json({ error: "Invalid JSON from Qrispy." }, { status: 502 });
+  }
+
+  const d =
+    typeof parsed.data === "object" && parsed.data !== null
+      ? (parsed.data as Record<string, unknown>)
+      : parsed;
+
+  const status = typeof d.status === "string" ? d.status : "";
+  if (status !== "paid") {
+    return Response.json(
+      { error: "QRIS is not paid yet.", status },
+      { status: 409 }
+    );
+  }
+
+  if (!args.webhookUrl) {
+    return Response.json({
+      ok: true,
+      skipped: true,
+      reason: "GOOGLE_SHEETS_WEB_APP_URL is not configured.",
+    });
+  }
+
+  const payload = {
+    event: "qris.paid",
+    provider: "qrispy" as const,
+    qris_id: args.qrisId,
+    invoice_id: args.qrisId,
+    invoice_number: null,
+    customer_name: args.customerName || null,
+    customer_email: args.customerEmail || null,
+    customer_whatsapp: args.customerWhatsapp || null,
+    amount: typeof d.amount === "number" ? d.amount : null,
+    amount_unique: typeof d.amount === "number" ? d.amount : null,
+    paid_at: typeof d.paid_at === "string" ? d.paid_at : null,
+    expired_at: typeof d.expired_at === "string" ? d.expired_at : null,
+    payment_reference:
+      typeof d.payment_reference === "string" ? d.payment_reference : null,
+    product_name: args.productName || null,
+  };
+
+  return postToSheets(payload, args.webhookUrl);
+}
+
+async function postToSheets(
+  payload: Record<string, unknown>,
+  webhookUrl: string
+): Promise<Response> {
   const secret = process.env.GOOGLE_SHEETS_WEBHOOK_SECRET?.trim();
 
   let wh: globalThis.Response;
