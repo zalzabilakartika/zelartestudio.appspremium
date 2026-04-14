@@ -247,7 +247,7 @@ async function createQrispyCheckout(args: {
     typeof d.qris_image_url === "string" ? d.qris_image_url : null;
   const qrisImageBase64 =
     typeof d.qris_image_base64 === "string" ? d.qris_image_base64 : null;
-  const respAmount = typeof d.amount === "number" ? d.amount : args.amount;
+  let respAmount = typeof d.amount === "number" ? d.amount : args.amount;
   const expiredAt = typeof d.expired_at === "string" ? d.expired_at : null;
 
   if (!qrisId || (!qrisImageUrl && !qrisImageBase64)) {
@@ -258,6 +258,33 @@ async function createQrispyCheckout(args: {
       },
       { status: 502 }
     );
+  }
+
+  // Fetch actual amount from status endpoint (may include unique code/fee)
+  try {
+    const statusRes = await fetch(
+      `${base}/api/payment/qris/${encodeURIComponent(qrisId)}/status`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-API-Token": token,
+        },
+        cache: "no-store",
+      }
+    );
+    if (statusRes.ok) {
+      const statusParsed = (await statusRes.json()) as Record<string, unknown>;
+      const sd =
+        typeof statusParsed.data === "object" && statusParsed.data !== null
+          ? (statusParsed.data as Record<string, unknown>)
+          : statusParsed;
+      if (typeof sd.amount === "number") {
+        respAmount = sd.amount;
+      }
+    }
+  } catch {
+    // Non-critical — fall back to generate response amount
   }
 
   return Response.json(
@@ -271,7 +298,7 @@ async function createQrispyCheckout(args: {
       expired_at: expiredAt,
       payment_url: null,
       invoice_number: null,
-      amount_unique: null,
+      amount_unique: respAmount !== args.amount ? respAmount : null,
     },
     { status: 201 }
   );

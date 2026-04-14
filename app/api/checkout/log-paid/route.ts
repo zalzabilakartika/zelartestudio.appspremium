@@ -17,6 +17,13 @@ function normalizeProvider(v: unknown): Provider {
 export async function POST(request: NextRequest): Promise<Response> {
   const webhookUrl = process.env.GOOGLE_SHEETS_WEB_APP_URL?.trim();
 
+  if (!webhookUrl) {
+    return Response.json(
+      { error: "Google Sheets logging is not configured (GOOGLE_SHEETS_WEB_APP_URL)." },
+      { status: 500 }
+    );
+  }
+
   let body: {
     provider?: string;
     invoice_id?: string;
@@ -74,7 +81,7 @@ export async function POST(request: NextRequest): Promise<Response> {
 async function logSayabayarPaid(args: {
   invoiceId: string;
   productName: string;
-  webhookUrl: string | undefined;
+  webhookUrl: string;
 }): Promise<Response> {
   const apiKey = process.env.SAYABAYAR_API_KEY;
 
@@ -140,14 +147,6 @@ async function logSayabayarPaid(args: {
     );
   }
 
-  if (!args.webhookUrl) {
-    return Response.json({
-      ok: true,
-      skipped: true,
-      reason: "GOOGLE_SHEETS_WEB_APP_URL is not configured.",
-    });
-  }
-
   const payload = {
     event: "invoice.paid",
     provider: "sayabayar" as const,
@@ -175,7 +174,7 @@ async function logQrispyPaid(args: {
   customerName: string;
   customerEmail: string;
   customerWhatsapp: string;
-  webhookUrl: string | undefined;
+  webhookUrl: string;
 }): Promise<Response> {
   const token = process.env.QRISPY_API_TOKEN?.trim();
 
@@ -240,14 +239,6 @@ async function logQrispyPaid(args: {
     );
   }
 
-  if (!args.webhookUrl) {
-    return Response.json({
-      ok: true,
-      skipped: true,
-      reason: "GOOGLE_SHEETS_WEB_APP_URL is not configured.",
-    });
-  }
-
   const payload = {
     event: "qris.paid",
     provider: "qrispy" as const,
@@ -273,16 +264,11 @@ async function postToSheets(
   payload: Record<string, unknown>,
   webhookUrl: string
 ): Promise<Response> {
-  const secret = process.env.GOOGLE_SHEETS_WEBHOOK_SECRET?.trim();
-
   let wh: globalThis.Response;
   try {
     wh = await fetch(webhookUrl, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(secret ? { "X-Webhook-Secret": secret } : {}),
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
   } catch (err) {

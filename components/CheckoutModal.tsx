@@ -170,8 +170,11 @@ export default function CheckoutModal({
         setQrisImageSrc(src);
         setPaymentUrl(null);
         setInvoiceNumber(null);
+        const au = data.amount_unique;
         const am = data.amount;
-        setAmountDisplay(typeof am === "number" ? am : price);
+        setAmountDisplay(
+          typeof au === "number" ? au : typeof am === "number" ? am : price
+        );
         setQrisExpiresAt(
           typeof data.expired_at === "string" ? data.expired_at : null
         );
@@ -234,6 +237,11 @@ export default function CheckoutModal({
 
         const data = await res.json();
         failCountRef.current = 0;
+
+        const liveAmount = data.amount_unique ?? data.amount;
+        if (typeof liveAmount === "number" && liveAmount !== amountDisplay) {
+          setAmountDisplay(liveAmount);
+        }
 
         if (data.status === "paid") {
           if (pollingRef.current) clearInterval(pollingRef.current);

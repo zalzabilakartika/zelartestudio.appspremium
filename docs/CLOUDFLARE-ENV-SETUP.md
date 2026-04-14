@@ -114,29 +114,18 @@ URL yang akan dikunjungi pembeli setelah selesai bayar QRIS. Kalau tidak di-set,
 | | |
 |---|---|
 | **Tipe** | Text |
-| **Wajib?** | Tidak (opsional, tapi direkomendasikan) |
-| **Default** | — (logging dilewati kalau kosong) |
+| **Wajib?** | **Ya** |
+| **Default** | — (tidak ada) |
 | **Contoh nilai** | `https://script.google.com/macros/s/AKfyc.../exec` |
 
 **Penjelasan:**
-URL Google Apps Script Web App untuk mencatat data pembayaran yang sukses ke Google Sheets. Kalau tidak di-set, pencatatan dilewati (tidak error, hanya skip).
+URL Google Apps Script Web App untuk mencatat data pembayaran yang sukses ke Google Sheets. **Tanpa ini, logging pembayaran akan gagal (error 500).**
 
 **Cara dapat:**
-Buka Google Sheets → Extensions → Apps Script → Deploy as Web App → Copy URL.
-
----
-
-### 8. `GOOGLE_SHEETS_WEBHOOK_SECRET` 🔒
-
-| | |
-|---|---|
-| **Tipe** | Secret |
-| **Wajib?** | Tidak (opsional) |
-| **Default** | — (header tidak dikirim kalau kosong) |
-| **Contoh nilai** | `rahasia-webhook-123` |
-
-**Penjelasan:**
-Secret key yang dikirim sebagai header `X-Webhook-Secret` ke Google Sheets webhook. Berguna untuk memverifikasi bahwa request benar-benar datang dari aplikasi kita, bukan pihak lain. Kalau tidak di-set, header tidak dikirim.
+1. Buka Google Sheets → Extensions → Apps Script
+2. Buat script untuk menerima POST data (lihat contoh di bawah)
+3. Deploy as Web App (Execute as: Me, Who has access: Anyone)
+4. Copy URL yang digenerate
 
 ---
 
@@ -151,8 +140,7 @@ Tabel ini merangkum semua variable berdasarkan skenario:
 | `PAYMENT_PROVIDER` | Tidak (kosongkan saja) | Text |
 | `SAYABAYAR_API_KEY` | **Ya** | Secret |
 | `SAYABAYAR_CHANNEL_PREFERENCE` | Tidak | Text |
-| `GOOGLE_SHEETS_WEB_APP_URL` | Tidak (tapi recommended) | Text |
-| `GOOGLE_SHEETS_WEBHOOK_SECRET` | Tidak | Secret |
+| `GOOGLE_SHEETS_WEB_APP_URL` | **Ya** | Text |
 
 ### Kalau pakai **Qrispy**:
 
@@ -162,8 +150,7 @@ Tabel ini merangkum semua variable berdasarkan skenario:
 | `QRISPY_API_TOKEN` | **Ya** | Secret |
 | `QRISPY_API_BASE_URL` | Tidak | Text |
 | `QRISPY_RETURN_URL` | Tidak | Text |
-| `GOOGLE_SHEETS_WEB_APP_URL` | Tidak (tapi recommended) | Text |
-| `GOOGLE_SHEETS_WEBHOOK_SECRET` | Tidak | Secret |
+| `GOOGLE_SHEETS_WEB_APP_URL` | **Ya** | Text |
 
 ---
 
@@ -172,8 +159,7 @@ Tabel ini merangkum semua variable berdasarkan skenario:
 - [ ] Tentukan provider: Sayabayar atau Qrispy?
 - [ ] Set `PAYMENT_PROVIDER` kalau pakai Qrispy
 - [ ] Set API key/token sesuai provider yang dipilih
-- [ ] (Opsional) Set `GOOGLE_SHEETS_WEB_APP_URL` kalau mau log ke Sheets
-- [ ] (Opsional) Set `GOOGLE_SHEETS_WEBHOOK_SECRET` kalau webhook pakai secret
+- [ ] Set `GOOGLE_SHEETS_WEB_APP_URL` (wajib — URL Apps Script Web App)
 - [ ] (Opsional) Set `QRISPY_RETURN_URL` kalau pakai Qrispy
 - [ ] Deploy: `npm run deploy`
 - [ ] Test checkout di production
@@ -181,9 +167,7 @@ Tabel ini merangkum semua variable berdasarkan skenario:
 ---
 
 ## Catatan
-b
+
 - Semua variable ini **hanya dipakai di server** (API routes). Tidak ada yang terekspos ke browser.
 - Kalau ada variable Secret yang salah, checkout akan return error 500 — cek logs di Cloudflare dashboard.
 - Untuk melihat logs: Workers & Pages → zelarte-appspremium → Logs → Real-time.
-blontang
-blontang2
