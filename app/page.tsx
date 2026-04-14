@@ -92,7 +92,7 @@ export default function Home() {
           transition={{ duration: 1.4, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="text-center w-full px-4"
         >
-          <h1 className="font-serif text-3xl md:text-5xl lg:text-[3vw] xl:text-[3vw] tracking-[0.10em] md:tracking-[0.15em] lg:tracking-[0.2em] xl:tracking-[0.25em] text-[#1A1A1A] dark:text-white font-light uppercase leading-[1.3] md:leading-[1.4]">
+          <h1 className="font-serif text-[clamp(1.3rem,6.5vw,2.5rem)] md:text-5xl lg:text-[3vw] tracking-[0.10em] md:tracking-[0.15em] lg:tracking-[0.2em] xl:tracking-[0.25em] text-[#1A1A1A] dark:text-white font-light uppercase leading-[1.3] md:leading-[1.4]">
             <span className="block whitespace-nowrap">READY FOR YOUR</span>
             <span className="block whitespace-nowrap mt-1 md:mt-2">
               PREMIUM APPS TODAY?
