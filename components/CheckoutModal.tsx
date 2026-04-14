@@ -239,8 +239,8 @@ export default function CheckoutModal({
         failCountRef.current = 0;
 
         const liveAmount = data.amount_unique ?? data.amount;
-        if (typeof liveAmount === "number" && liveAmount !== amountDisplay) {
-          setAmountDisplay(liveAmount);
+        if (typeof liveAmount === "number") {
+          setAmountDisplay((prev) => (liveAmount !== prev ? liveAmount : prev));
         }
 
         if (data.status === "paid") {

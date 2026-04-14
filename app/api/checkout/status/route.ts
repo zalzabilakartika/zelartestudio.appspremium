@@ -160,12 +160,38 @@ async function getQrispyStatus(qrisId: string): Promise<Response> {
         ? d.payment_status
         : "unknown";
 
+  let realAmount = typeof d.amount === "number" ? d.amount : null;
+
+  // Coba ambil amount asli dari transactions (karena /status kadang tidak return unique code)
+  try {
+    const txRes = await fetch(
+      `${base}/api/payment/transactions?limit=50`,
+      {
+        method: "GET",
+        headers: { "X-API-Token": token },
+        cache: "no-store",
+      }
+    );
+    if (txRes.ok) {
+      const txParsed = (await txRes.json()) as Record<string, unknown>;
+      const txList = Array.isArray(txParsed.data) ? txParsed.data : [];
+      const match = (txList as Record<string, unknown>[]).find(
+        (tx) => tx.qris_id === qrisId
+      );
+      if (match && typeof match.amount === "number") {
+        realAmount = match.amount;
+      }
+    }
+  } catch {
+    // Abaikan jika gagal
+  }
+
   return Response.json({
     provider: "qrispy" as const,
     status: rawStatus,
     invoice_number: null,
-    amount: typeof d.amount === "number" ? d.amount : null,
-    amount_unique: typeof d.amount === "number" ? d.amount : null,
+    amount: realAmount,
+    amount_unique: realAmount,
     expired_at: typeof d.expired_at === "string" ? d.expired_at : null,
     paid_at: typeof d.paid_at === "string" ? d.paid_at : null,
   });

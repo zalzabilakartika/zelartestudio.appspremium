@@ -260,18 +260,18 @@ async function createQrispyCheckout(args: {
     );
   }
 
-  // Fetch actual amount from transactions endpoint (includes unique code/fee added by Qrispy)
-  try {
-    const txRes = await fetch(
-      `${base}/api/payment/transactions?status=pending&limit=20`,
-      {
-        method: "GET",
-        headers: {
-          "X-API-Token": token,
-        },
-        cache: "no-store",
-      }
-    );
+      // Fetch actual amount from transactions endpoint (includes unique code/fee added by Qrispy)
+      try {
+        const txRes = await fetch(
+          `${base}/api/payment/transactions?limit=50`,
+          {
+            method: "GET",
+            headers: {
+              "X-API-Token": token,
+            },
+            cache: "no-store",
+          }
+        );
     if (txRes.ok) {
       const txParsed = (await txRes.json()) as Record<string, unknown>;
       const txList = Array.isArray(txParsed.data) ? txParsed.data : [];
