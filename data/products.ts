@@ -303,7 +303,7 @@ const CREATIVE: Product[] = [
     },
   },
   {
-    name: "Meitu Private Account-Limited Stock",
+    name: "Meitu Private Account",
     price: "Rp 20.000",
     basePrice: 20000,
     hot: true,
@@ -322,24 +322,26 @@ const CREATIVE: Product[] = [
     },
   },
   {
-    name: "Meitu Private Account-Limited Stock",
-    price: "Rp 1.000",
-    basePrice: 1000,
+    name: "Discord Nitro",
+    price: "Rp 18.000",
+    basePrice: 18000,
     hot: true,
     outOfStock: false,
-    logoUrl: "https://upload.wikimedia.org/wikipedia/en/c/c3/Meitu.svg",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/fr/4/4f/Discord_Logo_sans_texte.svg",
     bg: "bg-[#F8F8F8]",
     category: "creative",
     modal: {
-      subtitle: "Meitu Private 21 Days ✦",
+      subtitle: "Discord Nitro Code 2 Bulan ✦",
       benefits: [
-        "Akun Private dari kami",
-        "Login 1 device",
-        "Unlocked VIP+Package",
+        "Bentuk link redeem code resmi dari Discord.",
+        "Animated Avatar & Custom Banner.",
+        "Upload File 500MB & HD Share Screen up to 4K 60fps.",
+        "Termasuk gratis 2x Server Boosts."
       ],
+      notes: ["Note: Pastikan kamu sudah login ke akun Discord di browser (Chrome/Safari/etc)."],
       guarantee: "Full Garansi.",
     },
-  },
+  }
 ];
 
 // ─── CATEGORY CONFIG ────────────────────────────────────────────────────────────
