@@ -69,10 +69,22 @@ export default function Home() {
       <SplashMist />
       <FloatingTracker />
 
+      {/* ========== MOBILE STICKY HEADER ========== */}
+      <header className="md:hidden fixed top-0 left-0 w-full z-[100] bg-[#F8F8F8]/80 backdrop-blur-md dark:bg-[#090909]/80 border-b border-[#1A1A1A]/10 dark:border-white/10">
+        <div className="h-16 flex items-center justify-center">
+          <button
+            onClick={() => document.getElementById('intro')?.scrollIntoView({ behavior: 'smooth' })}
+            className="font-sans text-[0.60rem] tracking-[0.3em] text-[#1A1A1A]/70 dark:text-white/70 uppercase font-medium"
+          >
+            ZELARTE STUDIO
+          </button>
+        </div>
+      </header>
+
       {/* ========== ENTRANCE (PHASE 1) ========== */}
       <section
         id="intro"
-        className="min-h-[100dvh] flex flex-col items-center justify-center relative px-6"
+        className="min-h-[100dvh] flex flex-col items-center justify-center relative px-6 pt-28 md:pt-0"
       >
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -353,6 +365,11 @@ export default function Home() {
           </div>
         </section>
       </div>
+
+      {/* ========== FOOTER ========== */}
+      <footer className="w-full py-10 mt-20 text-center text-[0.55rem] tracking-[0.3em] font-sans uppercase text-[#1A1A1A]/40 dark:text-white/40 border-t border-[#1A1A1A]/10 dark:border-white/10">
+        © 2026 ZELARTE STUDIO. ALL RIGHTS RESERVED.
+      </footer>
 
       {/* ========== PRODUCT DETAILS MODAL ========== */}
       <AnimatePresence>

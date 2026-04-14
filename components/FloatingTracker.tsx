@@ -63,7 +63,7 @@ export default function FloatingTracker() {
   return (
     <>
       <nav
-        className="fixed top-6 left-6 z-90 w-20 md:w-32 flex flex-col items-start gap-8 transition-all duration-500 ease-out"
+        className="hidden md:flex fixed top-6 left-6 z-90 w-20 md:w-32 flex-col items-start gap-8 transition-all duration-500 ease-out"
       >
         <button
           onClick={() => document.getElementById("intro")?.scrollIntoView({ behavior: 'smooth' })}
@@ -103,7 +103,7 @@ export default function FloatingTracker() {
         <button
           onClick={toggleTheme}
           aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
-          className="fixed left-6 bottom-6 z-90 bg-white text-[#1A1A1A] border border-[#1A1A1A]/10 rounded-full p-2.5 transition-all duration-300 shadow-lg dark:bg-[#1a1a1a] dark:text-white dark:border-white/15 flex items-center justify-center hover:scale-110 active:scale-95"
+          className="fixed right-6 bottom-6 md:left-6 md:right-auto z-[90] bg-white text-[#1A1A1A] border border-[#1A1A1A]/10 rounded-full p-2.5 transition-all duration-300 shadow-lg dark:bg-[#1a1a1a] dark:text-white dark:border-white/15 flex items-center justify-center hover:scale-110 active:scale-95"
         >
           {theme === 'light' ? (
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-5 h-5">
