@@ -440,8 +440,11 @@ export default function CheckoutModal({
 
               {paymentProvider === "qrispy" && qrisImageSrc && (
                 <div className="mb-6 flex flex-col items-center">
-                  <p className="font-sans text-[0.52rem] tracking-[0.25em] text-[#1A1A1A]/45 dark:text-white/45 uppercase mb-4 text-center">
+                  <p className="font-sans text-[0.52rem] tracking-[0.25em] text-[#1A1A1A]/45 dark:text-white/45 uppercase text-center">
                     Scan QRIS
+                  </p>
+                  <p className="text-[0.55rem] tracking-[0.2em] font-sans uppercase text-[#1A1A1A]/50 dark:text-white/50 mt-1 mb-4 text-center">
+                    Merchant Name: Sozmed Id, BKS UTARA
                   </p>
                   <div className="rounded-lg border border-[#1A1A1A]/10 dark:border-[#333] bg-white p-4 shadow-sm">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
