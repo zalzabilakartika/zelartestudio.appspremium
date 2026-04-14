@@ -252,11 +252,10 @@ export default function Home() {
             <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4 mb-16">
               <button
                 onClick={() => setActiveCategory("all")}
-                className={`px-5 py-2 text-[0.55rem] md:text-[0.60rem] tracking-[0.25em] font-sans font-medium uppercase border transition-all duration-300 ${
-                  activeCategory === "all"
-                    ? "bg-[#1A1A1A] text-white border-[#1A1A1A] dark:bg-white dark:text-black dark:border-white"
-                    : "bg-transparent text-[#1A1A1A]/60 dark:text-white/60 border-[#1A1A1A]/15 dark:border-white/15 hover:border-[#1A1A1A]/40 dark:hover:border-white/40"
-                }`}
+                className={`px-5 py-2 text-[0.55rem] md:text-[0.60rem] tracking-[0.25em] font-sans font-medium uppercase border transition-all duration-300 ${activeCategory === "all"
+                  ? "bg-[#1A1A1A] text-white border-[#1A1A1A] dark:bg-white dark:text-black dark:border-white"
+                  : "bg-transparent text-[#1A1A1A]/60 dark:text-white/60 border-[#1A1A1A]/15 dark:border-white/15 hover:border-[#1A1A1A]/40 dark:hover:border-white/40"
+                  }`}
               >
                 All
               </button>
@@ -264,11 +263,10 @@ export default function Home() {
                 <button
                   key={cat.key}
                   onClick={() => setActiveCategory(cat.key)}
-                  className={`px-5 py-2 text-[0.55rem] md:text-[0.60rem] tracking-[0.25em] font-sans font-medium uppercase border transition-all duration-300 ${
-                    activeCategory === cat.key
-                      ? "bg-[#1A1A1A] text-white border-[#1A1A1A] dark:bg-white dark:text-black dark:border-white"
-                      : "bg-transparent text-[#1A1A1A]/60 dark:text-white/60 border-[#1A1A1A]/15 dark:border-white/15 hover:border-[#1A1A1A]/40 dark:hover:border-white/40"
-                  }`}
+                  className={`px-5 py-2 text-[0.55rem] md:text-[0.60rem] tracking-[0.25em] font-sans font-medium uppercase border transition-all duration-300 ${activeCategory === cat.key
+                    ? "bg-[#1A1A1A] text-white border-[#1A1A1A] dark:bg-white dark:text-black dark:border-white"
+                    : "bg-transparent text-[#1A1A1A]/60 dark:text-white/60 border-[#1A1A1A]/15 dark:border-white/15 hover:border-[#1A1A1A]/40 dark:hover:border-white/40"
+                    }`}
                 >
                   {cat.label}
                 </button>
@@ -288,11 +286,10 @@ export default function Home() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.4 }}
-                    className={`w-full h-[460px] flex flex-col bg-white dark:bg-[#111] border border-[#E5E7EB]/70 dark:border-[#333] transition-all duration-500 relative ${
-                      prod.outOfStock
-                        ? "opacity-60 grayscale pointer-events-none"
-                        : "group"
-                    }`}
+                    className={`w-full h-[460px] flex flex-col bg-white dark:bg-[#111] border border-[#E5E7EB]/70 dark:border-[#333] transition-all duration-500 relative ${prod.outOfStock
+                      ? "opacity-60 grayscale pointer-events-none"
+                      : "group"
+                      }`}
                   >
                     {!prod.outOfStock && (
                       <button
@@ -348,11 +345,10 @@ export default function Home() {
                         <button
                           disabled={prod.outOfStock}
                           onClick={() => !prod.outOfStock && openProductModal(prod)}
-                          className={`w-full py-3 border text-[0.65rem] tracking-[0.2em] font-medium transition-colors duration-500 uppercase ${
-                            prod.outOfStock
-                              ? "border-[#1A1A1A]/15 text-[#1A1A1A]/30 dark:border-white/15 dark:text-white/30 cursor-not-allowed"
-                              : "border-[#1A1A1A] text-[#1A1A1A] dark:border-[#ffffff30] dark:text-white hover:bg-[#1A1A1A] dark:hover:bg-white/10 hover:text-white"
-                          }`}
+                          className={`w-full py-3 border text-[0.65rem] tracking-[0.2em] font-medium transition-colors duration-500 uppercase ${prod.outOfStock
+                            ? "border-[#1A1A1A]/15 text-[#1A1A1A]/30 dark:border-white/15 dark:text-white/30 cursor-not-allowed"
+                            : "border-[#1A1A1A] text-[#1A1A1A] dark:border-[#ffffff30] dark:text-white hover:bg-[#1A1A1A] dark:hover:bg-white/10 hover:text-white"
+                            }`}
                         >
                           {prod.outOfStock ? "OUT OF STOCK" : "VIEW DETAILS"}
                         </button>
@@ -367,8 +363,8 @@ export default function Home() {
       </div>
 
       {/* ========== FOOTER ========== */}
-      <footer className="w-full py-10 mt-20 text-center text-[0.55rem] tracking-[0.3em] font-sans uppercase text-[#1A1A1A]/40 dark:text-white/40 border-t border-[#1A1A1A]/10 dark:border-white/10">
-        © 2026 ZELARTE STUDIO. ALL RIGHTS RESERVED.
+      <footer className="w-full py-5 mt-5 text-center text-[0.55rem] tracking-[0.3em] font-sans uppercase text-[#1A1A1A]/40 dark:text-white/40 border-t border-[#1A1A1A]/10 dark:border-white/10">
+        © 2026 ZELARTE STUDIO
       </footer>
 
       {/* ========== PRODUCT DETAILS MODAL ========== */}
@@ -487,11 +483,10 @@ export default function Home() {
                           <button
                             key={idx}
                             onClick={() => setSelectedVariantIdx(idx)}
-                            className={`px-5 py-2.5 text-[0.58rem] tracking-[0.2em] font-sans font-medium uppercase border transition-colors duration-200 ${
-                              selectedVariantIdx === idx
-                                ? "bg-[#1A1A1A] text-white border-[#1A1A1A] dark:bg-white dark:text-black dark:border-white"
-                                : "bg-white text-[#1A1A1A] dark:bg-[#111] dark:text-[#f8f8f8] border-[#1A1A1A]/30 dark:border-[#333] hover:border-[#1A1A1A] dark:hover:border-white/50"
-                            }`}
+                            className={`px-5 py-2.5 text-[0.58rem] tracking-[0.2em] font-sans font-medium uppercase border transition-colors duration-200 ${selectedVariantIdx === idx
+                              ? "bg-[#1A1A1A] text-white border-[#1A1A1A] dark:bg-white dark:text-black dark:border-white"
+                              : "bg-white text-[#1A1A1A] dark:bg-[#111] dark:text-[#f8f8f8] border-[#1A1A1A]/30 dark:border-[#333] hover:border-[#1A1A1A] dark:hover:border-white/50"
+                              }`}
                           >
                             {v.label}
                           </button>
@@ -525,11 +520,10 @@ export default function Home() {
                     });
                     setSelectedProduct(null);
                   }}
-                  className={`w-full py-4 text-[0.60rem] tracking-[0.3em] font-sans font-medium uppercase transition-colors duration-300 mb-10 ${
-                    selectedProduct.outOfStock
-                      ? "bg-[#1A1A1A]/20 dark:bg-white/20 text-[#1A1A1A]/40 dark:text-white/40 cursor-not-allowed"
-                      : "bg-[#1A1A1A] dark:bg-white text-white dark:text-black hover:bg-black/80 dark:hover:bg-white/90"
-                  }`}
+                  className={`w-full py-4 text-[0.60rem] tracking-[0.3em] font-sans font-medium uppercase transition-colors duration-300 mb-10 ${selectedProduct.outOfStock
+                    ? "bg-[#1A1A1A]/20 dark:bg-white/20 text-[#1A1A1A]/40 dark:text-white/40 cursor-not-allowed"
+                    : "bg-[#1A1A1A] dark:bg-white text-white dark:text-black hover:bg-black/80 dark:hover:bg-white/90"
+                    }`}
                 >
                   {selectedProduct.outOfStock ? "OUT OF STOCK" : "CONFIRM PAYMENT"}
                 </button>

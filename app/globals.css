@@ -44,3 +44,11 @@
         color: var(--text);
     }
 }
+
+/* ── Mobile layout safety net ── */
+/* Force-hide desktop sidebar below md (768px) */
+@media (max-width: 767px) {
+    nav.desktop-sidebar {
+        display: none !important;
+    }
+}

@@ -233,7 +233,7 @@ const PRODUCTIVITY: Product[] = [
     outOfStock: true,
     logoUrl: "https://upload.wikimedia.org/wikipedia/fr/4/4f/Discord_Logo_sans_texte.svg",
     bg: "bg-[#F8F8F8]",
-    category: "creative",
+    category: "productivity",
     modal: {
       subtitle: "Discord Nitro Code 2 Bulan ✦",
       benefits: [
