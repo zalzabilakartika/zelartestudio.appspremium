@@ -229,12 +229,46 @@ async function logQrispyPaid(args: {
       ? (parsed.data as Record<string, unknown>)
       : parsed;
 
-  const status = typeof d.status === "string" ? d.status : "";
-  if (status !== "paid") {
+  console.log("[log-paid][qrispy] status response data:", JSON.stringify(d));
+
+  const qrisStatus =
+    typeof d.status === "string" && d.status !== "success"
+      ? d.status
+      : typeof d.payment_status === "string"
+        ? d.payment_status
+        : "unknown";
+
+  if (qrisStatus !== "paid") {
     return Response.json(
-      { error: "QRIS is not paid yet.", status },
+      { error: "QRIS is not paid yet.", status: qrisStatus },
       { status: 409 }
     );
+  }
+
+  // Get real amount from transactions endpoint (includes unique code/fee)
+  let realAmount = typeof d.amount === "number" ? d.amount : null;
+  try {
+    const txRes = await fetch(
+      `${base}/api/payment/transactions?limit=50`,
+      {
+        method: "GET",
+        headers: { "X-API-Token": token },
+        cache: "no-store",
+      }
+    );
+    if (txRes.ok) {
+      const txParsed = (await txRes.json()) as Record<string, unknown>;
+      const txList = Array.isArray(txParsed.data) ? txParsed.data : [];
+      const match = (txList as Record<string, unknown>[]).find(
+        (tx) => tx.qris_id === args.qrisId
+      );
+      console.log("[log-paid][qrispy] tx match:", JSON.stringify(match ?? null));
+      if (match && typeof match.amount === "number") {
+        realAmount = match.amount;
+      }
+    }
+  } catch {
+    // Non-critical
   }
 
   const payload = {
@@ -246,8 +280,8 @@ async function logQrispyPaid(args: {
     customer_name: args.customerName || null,
     customer_email: args.customerEmail || null,
     customer_whatsapp: args.customerWhatsapp || null,
-    amount: typeof d.amount === "number" ? d.amount : null,
-    amount_unique: typeof d.amount === "number" ? d.amount : null,
+    amount: realAmount,
+    amount_unique: realAmount,
     paid_at: typeof d.paid_at === "string" ? d.paid_at : null,
     expired_at: typeof d.expired_at === "string" ? d.expired_at : null,
     payment_reference:

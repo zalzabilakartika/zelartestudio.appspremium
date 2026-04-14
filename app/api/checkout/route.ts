@@ -278,12 +278,15 @@ async function createQrispyCheckout(args: {
       const match = (txList as Record<string, unknown>[]).find(
         (tx) => tx.qris_id === qrisId
       );
+      console.log("[checkout] qrisId:", qrisId, "tx match:", JSON.stringify(match ?? null));
       if (match && typeof match.amount === "number") {
         respAmount = match.amount;
       }
+    } else {
+      console.log("[checkout] transactions fetch failed:", txRes.status);
     }
-  } catch {
-    // Non-critical — fall back to generate response amount
+  } catch (err) {
+    console.log("[checkout] transactions fetch error:", String(err));
   }
 
   return Response.json(
