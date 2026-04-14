@@ -26,6 +26,6 @@
 	},
 	"vars": {
 		"PAYMENT_PROVIDER": "qrispy",
-		"GOOGLE_SHEETS_WEB_APP_URL": "https://script.google.com/macros/s/AKfycbyJtjJB7pelPlYFzzLPjKDZoI4b6ZpaHD7dErT6r82_bbHl-zUQvb816yvXWoP1Vapw/exec"
+		"GOOGLE_SHEETS_WEB_APP_URL": "https://script.google.com/macros/s/AKfycbzFEQCwQS91k8fvvqZGJB5XjTTq9NJo30IGYXeg30dxWxXvzZ91Cy3zfKoZH-qgmDBJ/exec"
 	}
 }
