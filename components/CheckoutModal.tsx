@@ -28,8 +28,8 @@ function FloatingInput({
     <div className="relative pb-1 mb-8">
       <label
         className={`absolute left-0 font-sans tracking-[0.2em] uppercase transition-all duration-300 pointer-events-none ${isFloating
-            ? "top-0 text-[0.48rem] text-[#1A1A1A]/50 dark:text-white/50"
-            : "top-4 text-[0.62rem] text-[#1A1A1A]/35 dark:text-white/35"
+          ? "top-0 text-[0.48rem] text-[#1A1A1A]/50 dark:text-white/50"
+          : "top-4 text-[0.62rem] text-[#1A1A1A]/35 dark:text-white/35"
           }`}
       >
         {label}
