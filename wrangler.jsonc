@@ -25,6 +25,8 @@
 		"binding": "IMAGES"
 	},
 	"vars": {
-		"PAYMENT_PROVIDER": "qrispy"
+		"PAYMENT_PROVIDER": "qrispy",
+		"QRISPY_RETURN_URL": "https://zelarte.com/",
+		"GOOGLE_SHEETS_WEB_APP_URL": "https://script.google.com/macros/s/AKfycbyJtjJB7pelPlYFzzLPjKDZoI4b6ZpaHD7dErT6r82_bbHl-zUQvb816yvXWoP1Vapw/exec"
 	}
 }
