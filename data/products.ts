@@ -148,7 +148,7 @@ const STREAMING: Product[] = [
     basePrice: 10000,
     hot: false,
     logoUrl:
-      "https://commons.wikimedia.org/wiki/Special:FilePath/Apple_Music_logo.svg",
+      "https://upload.wikimedia.org/wikipedia/commons/5/5f/Apple_Music_icon.svg",
     bg: "bg-[#F8F8F8]",
     category: "streaming",
     modal: {
@@ -216,6 +216,7 @@ const PRODUCTIVITY: Product[] = [
       guarantee: "Full Garansi.",
     },
   },
+  
 ];
 
 // ─── CREATIVE ───────────────────────────────────────────────────────────────────
@@ -272,7 +273,7 @@ const CREATIVE: Product[] = [
     price: "Mulai Rp 10.000",
     basePrice: 10000,
     hot: true,
-    logoUrl: "https://id.wikipedia.org/wiki/Special:FilePath/CapCut_logo.png",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/0/0c/Capcut-icon.png",
     bg: "bg-[#F8F8F8]",
     category: "creative",
     variants: [
@@ -285,6 +286,42 @@ const CREATIVE: Product[] = [
         "Akses semua fitur, efek, & font Pro.",
         "Android/Desktop bisa login 2-3 device",
         "IOS hanya bisa login 1 device, jangan login di device lain, nanti kenak limit",
+      ],
+      guarantee: "Full Garansi.",
+    },
+  },
+  {
+    name: "Meitu Private Account-Limited Stock",
+    price: "Rp 20.000",
+    basePrice: 20000,
+    hot: true,
+    logoUrl: "https://upload.wikimedia.org/wikipedia/en/c/c3/Meitu.svg",
+    bg: "bg-[#F8F8F8]",
+    category: "creative",
+    modal: {
+      subtitle: "Meitu Private 21 Days ✦",
+      benefits: [
+        "Akun Private dari kami",
+        "Login 1 device",
+        "Unlocked VIP+Package",
+      ],
+      guarantee: "Full Garansi.",
+    },
+  },
+  {
+    name: "Meitu Private Account-Limited Stock",
+    price: "Rp 1.000",
+    basePrice: 1000,
+    hot: true,
+    logoUrl: "https://upload.wikimedia.org/wikipedia/en/c/c3/Meitu.svg",
+    bg: "bg-[#F8F8F8]",
+    category: "creative",
+    modal: {
+      subtitle: "Meitu Private 21 Days ✦",
+      benefits: [
+        "Akun Private dari kami",
+        "Login 1 device",
+        "Unlocked VIP+Package",
       ],
       guarantee: "Full Garansi.",
     },
