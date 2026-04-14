@@ -181,8 +181,9 @@ Tabel ini merangkum semua variable berdasarkan skenario:
 ---
 
 ## Catatan
-
+b
 - Semua variable ini **hanya dipakai di server** (API routes). Tidak ada yang terekspos ke browser.
 - Kalau ada variable Secret yang salah, checkout akan return error 500 — cek logs di Cloudflare dashboard.
 - Untuk melihat logs: Workers & Pages → zelarte-appspremium → Logs → Real-time.
 blontang
+blontang2
