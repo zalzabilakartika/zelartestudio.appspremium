@@ -99,7 +99,6 @@ async function logSayabayarPaid(args: {
       {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
           "X-API-Key": apiKey,
         },
         cache: "no-store",
@@ -194,7 +193,6 @@ async function logQrispyPaid(args: {
       {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
           "X-API-Token": token,
         },
         cache: "no-store",

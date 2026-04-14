@@ -260,14 +260,13 @@ async function createQrispyCheckout(args: {
     );
   }
 
-  // Fetch actual amount from transactions endpoint (includes unique code/fee)
+  // Fetch actual amount from transactions endpoint (includes unique code/fee added by Qrispy)
   try {
     const txRes = await fetch(
       `${base}/api/payment/transactions?status=pending&limit=20`,
       {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
           "X-API-Token": token,
         },
         cache: "no-store",
@@ -276,8 +275,8 @@ async function createQrispyCheckout(args: {
     if (txRes.ok) {
       const txParsed = (await txRes.json()) as Record<string, unknown>;
       const txList = Array.isArray(txParsed.data) ? txParsed.data : [];
-      const match = txList.find(
-        (tx: Record<string, unknown>) => tx.qris_id === qrisId
+      const match = (txList as Record<string, unknown>[]).find(
+        (tx) => tx.qris_id === qrisId
       );
       if (match && typeof match.amount === "number") {
         respAmount = match.amount;

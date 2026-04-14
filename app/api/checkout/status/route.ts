@@ -49,7 +49,6 @@ async function getSayabayarStatus(id: string): Promise<Response> {
       {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
           "X-API-Key": apiKey,
         },
         cache: "no-store",
@@ -116,7 +115,6 @@ async function getQrispyStatus(qrisId: string): Promise<Response> {
       {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
           "X-API-Token": token,
         },
         cache: "no-store",
@@ -148,16 +146,18 @@ async function getQrispyStatus(qrisId: string): Promise<Response> {
     );
   }
 
+  // data may be nested under parsed.data or at root level
   const d =
     typeof parsed.data === "object" && parsed.data !== null
       ? (parsed.data as Record<string, unknown>)
       : parsed;
 
+  // Only use status from the data object, never from the API wrapper (parsed.status = "success")
   const rawStatus =
-    typeof d.status === "string"
+    typeof d.status === "string" && d.status !== "success"
       ? d.status
-      : typeof (parsed as { status?: string }).status === "string"
-        ? (parsed as { status: string }).status
+      : typeof d.payment_status === "string"
+        ? d.payment_status
         : "unknown";
 
   return Response.json({
