@@ -7,6 +7,15 @@ import {
 
 export const dynamic = "force-dynamic";
 
+function toNum(v: unknown): number | null {
+  if (typeof v === "number") return isNaN(v) ? null : v;
+  if (typeof v === "string") {
+    const n = parseFloat(v);
+    return isNaN(n) ? null : n;
+  }
+  return null;
+}
+
 type Provider = "sayabayar" | "qrispy";
 
 function normalizeProvider(v: unknown): Provider {
@@ -155,10 +164,9 @@ async function logSayabayarPaid(args: {
     customer_name: typeof d.customer_name === "string" ? d.customer_name : null,
     customer_email:
       typeof d.customer_email === "string" ? d.customer_email : null,
-    amount: typeof d.amount === "number" ? d.amount : null,
-    amount_unique:
-      typeof d.amount_unique === "number" ? d.amount_unique : null,
-    unique_code: typeof d.unique_code === "number" ? d.unique_code : null,
+    amount: toNum(d.amount),
+    amount_unique: toNum(d.amount_unique),
+    unique_code: toNum(d.unique_code),
     description: typeof d.description === "string" ? d.description : null,
     paid_at: typeof d.paid_at === "string" ? d.paid_at : null,
     product_name: args.productName || null,
@@ -246,7 +254,7 @@ async function logQrispyPaid(args: {
   }
 
   // Get real amount from transactions endpoint (includes unique code/fee)
-  let realAmount = typeof d.amount === "number" ? d.amount : null;
+  let realAmount = toNum(d.amount);
   try {
     const txRes = await fetch(
       `${base}/api/payment/transactions?limit=50`,
@@ -262,9 +270,9 @@ async function logQrispyPaid(args: {
       const match = (txList as Record<string, unknown>[]).find(
         (tx) => tx.qris_id === args.qrisId
       );
-      console.log("[log-paid][qrispy] tx match:", JSON.stringify(match ?? null));
-      if (match && typeof match.amount === "number") {
-        realAmount = match.amount;
+      const txAmount = match ? toNum(match.amount) : null;
+      if (txAmount !== null) {
+        realAmount = txAmount;
       }
     }
   } catch {

@@ -7,6 +7,15 @@ import {
 
 export const dynamic = "force-dynamic";
 
+function toNum(v: unknown): number | null {
+  if (typeof v === "number") return isNaN(v) ? null : v;
+  if (typeof v === "string") {
+    const n = parseFloat(v);
+    return isNaN(n) ? null : n;
+  }
+  return null;
+}
+
 export async function POST(request: NextRequest): Promise<Response> {
   let body: Record<string, unknown>;
   try {
@@ -129,8 +138,7 @@ async function createSayabayarCheckout(args: {
   const paymentUrl = typeof d.payment_url === "string" ? d.payment_url : undefined;
   const invoiceNumber =
     typeof d.invoice_number === "string" ? d.invoice_number : null;
-  const amountUnique =
-    typeof d.amount_unique === "number" ? d.amount_unique : null;
+  const amountUnique = toNum(d.amount_unique);
 
   if (typeof id !== "string" || typeof paymentUrl !== "string") {
     return Response.json(
@@ -247,7 +255,7 @@ async function createQrispyCheckout(args: {
     typeof d.qris_image_url === "string" ? d.qris_image_url : null;
   const qrisImageBase64 =
     typeof d.qris_image_base64 === "string" ? d.qris_image_base64 : null;
-  let respAmount = typeof d.amount === "number" ? d.amount : args.amount;
+  let respAmount = toNum(d.amount) ?? args.amount;
   const expiredAt = typeof d.expired_at === "string" ? d.expired_at : null;
 
   if (!qrisId || (!qrisImageUrl && !qrisImageBase64)) {
@@ -278,9 +286,9 @@ async function createQrispyCheckout(args: {
       const match = (txList as Record<string, unknown>[]).find(
         (tx) => tx.qris_id === qrisId
       );
-      console.log("[checkout] qrisId:", qrisId, "tx match:", JSON.stringify(match ?? null));
-      if (match && typeof match.amount === "number") {
-        respAmount = match.amount;
+      const txAmount = match ? toNum(match.amount) : null;
+      if (txAmount !== null) {
+        respAmount = txAmount;
       }
     } else {
       console.log("[checkout] transactions fetch failed:", txRes.status);
@@ -296,11 +304,11 @@ async function createQrispyCheckout(args: {
       qris_id: qrisId,
       qris_image_url: qrisImageUrl,
       qris_image_base64: qrisImageBase64,
-      amount: respAmount,
+      amount: Math.round(respAmount),
       expired_at: expiredAt,
       payment_url: null,
       invoice_number: null,
-      amount_unique: respAmount !== args.amount ? respAmount : null,
+      amount_unique: respAmount !== args.amount ? Math.round(respAmount) : null,
     },
     { status: 201 }
   );

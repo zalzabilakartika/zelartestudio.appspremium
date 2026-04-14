@@ -7,6 +7,15 @@ import {
 
 export const dynamic = "force-dynamic";
 
+function toNum(v: unknown): number | null {
+  if (typeof v === "number") return isNaN(v) ? null : v;
+  if (typeof v === "string") {
+    const n = parseFloat(v);
+    return isNaN(n) ? null : n;
+  }
+  return null;
+}
+
 type Provider = "sayabayar" | "qrispy";
 
 function normalizeProvider(v: string | null): Provider {
@@ -89,8 +98,8 @@ async function getSayabayarStatus(id: string): Promise<Response> {
     provider: "sayabayar" as const,
     status: typeof d.status === "string" ? d.status : "unknown",
     invoice_number: typeof d.invoice_number === "string" ? d.invoice_number : null,
-    amount: typeof d.amount === "number" ? d.amount : null,
-    amount_unique: typeof d.amount_unique === "number" ? d.amount_unique : null,
+    amount: toNum(d.amount),
+    amount_unique: toNum(d.amount_unique),
     expired_at: typeof d.expired_at === "string" ? d.expired_at : null,
     paid_at: typeof d.paid_at === "string" ? d.paid_at : null,
   });
@@ -160,9 +169,9 @@ async function getQrispyStatus(qrisId: string): Promise<Response> {
         ? d.payment_status
         : "unknown";
 
-  let realAmount = typeof d.amount === "number" ? d.amount : null;
+  let realAmount = toNum(d.amount);
 
-  // Coba ambil amount asli dari transactions (karena /status kadang tidak return unique code)
+  // Ambil amount asli dari transactions (includes unique code/fee)
   try {
     const txRes = await fetch(
       `${base}/api/payment/transactions?limit=50`,
@@ -178,12 +187,13 @@ async function getQrispyStatus(qrisId: string): Promise<Response> {
       const match = (txList as Record<string, unknown>[]).find(
         (tx) => tx.qris_id === qrisId
       );
-      if (match && typeof match.amount === "number") {
-        realAmount = match.amount;
+      const txAmount = match ? toNum(match.amount) : null;
+      if (txAmount !== null) {
+        realAmount = txAmount;
       }
     }
   } catch {
-    // Abaikan jika gagal
+    // Non-critical
   }
 
   return Response.json({
