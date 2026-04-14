@@ -104,7 +104,7 @@ export default function Home() {
               EXPLORE
             </button>
             <span className="text-[0.65rem] text-gray-400 dark:text-gray-300 tracking-widest font-sans uppercase">
-              11.00 AM — 09.00 PM
+              11.00 AM — 08.00 PM
             </span>
           </div>
         </motion.div>
@@ -145,7 +145,7 @@ export default function Home() {
                 },
                 {
                   icon: <Zap size={14} strokeWidth={1} />,
-                  text: "1 - 15 Menit Process",
+                  text: "1 - 120 Menit Process",
                 },
                 {
                   icon: <ShieldCheck size={14} strokeWidth={1} />,
@@ -169,7 +169,7 @@ export default function Home() {
               transition={{ duration: 1, delay: 0.2 }}
               className="text-center font-sans text-[0.60rem] md:text-xs font-semibold tracking-widest text-[#1A1A1A] dark:text-[#f8f8f8] mb-20 uppercase border-y border-[#1A1A1A]/10 dark:border-[#ffffff10] py-5 w-fit mx-auto px-8"
             >
-              PROSES OTOMATIS: Pesanan diproses setelah bukti transfer dikirim.
+              PROSES OTOMATIS: Pesanan diproses setelah bukti pembayaran dikirim.
               Estimasi: 1 - 120 menit.
             </motion.div>
 
@@ -186,17 +186,17 @@ export default function Home() {
                 {
                   icon: <ShoppingBag size={24} strokeWidth={0.5} />,
                   title: "1. Select",
-                  desc: "Pilih layanan digital premium favoritmu di katalog kami.",
+                  desc: "Pilih premium apps favoritmu dari katalog kami. Tentukan durasi subscription yang kamu inginkan.",
                 },
                 {
                   icon: <CreditCard size={24} strokeWidth={0.5} />,
                   title: "2. Payment",
-                  desc: "Selesaikan pembayaran melalui payment gateway kami yang aman.",
+                  desc: "Selesaikan transaksi via automated payment gateway. Proses instan tanpa perlu konfirmasi manual.",
                 },
                 {
                   icon: <MessageSquare size={24} strokeWidth={0.5} />,
-                  title: "3. Confirm",
-                  desc: "Kirim bukti ke WhatsApp. Akses premium akan siap dalam 1-15 menit.",
+                  title: "3. Claim",
+                  desc: "Pembayaran terverifikasi secara real-time. Klik tautan WhatsApp untuk mengklaim akses akunmu.",
                 },
               ].map((step, i) => (
                 <div
