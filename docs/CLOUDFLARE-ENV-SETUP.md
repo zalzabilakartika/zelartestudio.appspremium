@@ -109,17 +109,17 @@ URL yang akan dikunjungi pembeli setelah selesai bayar QRIS. Kalau tidak di-set,
 
 ---
 
-### 7. `GOOGLE_SHEETS_WEB_APP_URL`
+### 7. `GOOGLE_SHEETS_WEB_APP_URL` 🔒
 
 | | |
 |---|---|
-| **Tipe** | Text |
+| **Tipe** | Secret |
 | **Wajib?** | **Ya** |
 | **Default** | — (tidak ada) |
 | **Contoh nilai** | `https://script.google.com/macros/s/AKfyc.../exec` |
 
 **Penjelasan:**
-URL Google Apps Script Web App untuk mencatat data pembayaran yang sukses ke Google Sheets. **Tanpa ini, logging pembayaran akan gagal (error 500).**
+URL Google Apps Script Web App untuk mencatat data pembayaran yang sukses ke Google Sheets. **Tanpa ini, logging pembayaran akan gagal (error 500).** Disimpan sebagai Secret agar URL ini tidak terlihat oleh public/developer lain (mencegah spam data palsu ke sheet kamu).
 
 **Cara dapat:**
 1. Buka Google Sheets → Extensions → Apps Script
@@ -140,7 +140,7 @@ Tabel ini merangkum semua variable berdasarkan skenario:
 | `PAYMENT_PROVIDER` | Tidak (kosongkan saja) | Text |
 | `SAYABAYAR_API_KEY` | **Ya** | Secret |
 | `SAYABAYAR_CHANNEL_PREFERENCE` | Tidak | Text |
-| `GOOGLE_SHEETS_WEB_APP_URL` | **Ya** | Text |
+| `GOOGLE_SHEETS_WEB_APP_URL` | **Ya** | Secret |
 
 ### Kalau pakai **Qrispy**:
 
@@ -150,7 +150,7 @@ Tabel ini merangkum semua variable berdasarkan skenario:
 | `QRISPY_API_TOKEN` | **Ya** | Secret |
 | `QRISPY_API_BASE_URL` | Tidak | Text |
 | `QRISPY_RETURN_URL` | Tidak | Text |
-| `GOOGLE_SHEETS_WEB_APP_URL` | **Ya** | Text |
+| `GOOGLE_SHEETS_WEB_APP_URL` | **Ya** | Secret |
 
 ---
 
