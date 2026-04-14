@@ -304,7 +304,7 @@ export default function Home() {
                       <img
                         src={prod.logoUrl}
                         alt={prod.name}
-                        className="w-[50%] h-[50%] object-contain opacity-70 grayscale transition-all duration-700 group-hover:scale-105 group-hover:opacity-100 group-hover:grayscale-0"
+                        className="w-[50%] h-[50%] object-contain transition-all duration-700 opacity-100 grayscale-0 md:opacity-70 md:grayscale md:group-hover:scale-105 md:group-hover:opacity-100 md:group-hover:grayscale-0"
                         onError={(e) => {
                           e.currentTarget.style.display = "none";
                         }}
