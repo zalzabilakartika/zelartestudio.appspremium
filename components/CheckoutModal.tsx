@@ -27,11 +27,10 @@ function FloatingInput({
   return (
     <div className="relative pb-1 mb-8">
       <label
-        className={`absolute left-0 font-sans tracking-[0.2em] uppercase transition-all duration-300 pointer-events-none ${
-          isFloating
+        className={`absolute left-0 font-sans tracking-[0.2em] uppercase transition-all duration-300 pointer-events-none ${isFloating
             ? "top-0 text-[0.48rem] text-[#1A1A1A]/50 dark:text-white/50"
             : "top-4 text-[0.62rem] text-[#1A1A1A]/35 dark:text-white/35"
-        }`}
+          }`}
       >
         {label}
       </label>
@@ -47,9 +46,8 @@ function FloatingInput({
 
       <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-[#1A1A1A]/15 dark:bg-white/15">
         <div
-          className={`h-full bg-[#1A1A1A] dark:bg-white transition-transform duration-300 origin-left ${
-            isFocused ? "scale-x-100" : "scale-x-0"
-          }`}
+          className={`h-full bg-[#1A1A1A] dark:bg-white transition-transform duration-300 origin-left ${isFocused ? "scale-x-100" : "scale-x-0"
+            }`}
         />
       </div>
     </div>
@@ -415,7 +413,7 @@ export default function CheckoutModal({
                   {amountDisplay !== price && (
                     <div className="flex items-center justify-between">
                       <span className="font-sans text-[0.58rem] tracking-[0.15em] text-[#1A1A1A]/55 dark:text-white/50 uppercase">
-                        Biaya layanan
+                        Kode Unik
                       </span>
                       <span className="font-sans text-[0.62rem] tracking-[0.08em] text-[#1A1A1A]/70 dark:text-white/60">
                         Rp {(amountDisplay - price).toLocaleString("id-ID")}
@@ -536,10 +534,10 @@ export default function CheckoutModal({
               <a
                 href={`https://wa.me/6285353669369?text=${encodeURIComponent(
                   "Halo Admin Zelarte, saya sudah membayar " +
-                    (invoiceNumber ?? payId) +
-                    " untuk produk " +
-                    productName +
-                    ". Mohon diproses!",
+                  (invoiceNumber ?? payId) +
+                  " untuk produk " +
+                  productName +
+                  ". Mohon diproses!",
                 )}`}
                 target="_blank"
                 rel="noreferrer"
