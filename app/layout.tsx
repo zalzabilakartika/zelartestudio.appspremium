@@ -11,8 +11,8 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Zelarte Studio — Premium Digital Collection",
-  description: "A high-end digital agency collection.",
+  title: "Zelarte Studio",
+  description: "Ready For Your Premium Apps Today?",
 };
 
 export default function RootLayout({
