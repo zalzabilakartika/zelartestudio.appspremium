@@ -384,21 +384,49 @@ export default function CheckoutModal({
                 Complete Your Payment
               </h2>
 
-              <div className="border border-[#1A1A1A]/10 dark:border-[#333] p-6 mb-6 text-center bg-[#FBFBFB] dark:bg-[#1a1a1a]">
-                <p className="font-sans text-[0.48rem] tracking-[0.3em] text-[#1A1A1A]/40 dark:text-white/40 uppercase mb-2">
-                  {refLabel}
-                </p>
-                <p className="font-sans text-sm tracking-[0.1em] text-[#1A1A1A] dark:text-white break-all">
-                  {invoiceNumber ?? payId}
-                </p>
-                <p className="font-sans text-[0.55rem] tracking-[0.2em] text-[#1A1A1A]/50 dark:text-white/45 uppercase mt-4">
-                  Total bayar
-                </p>
-                <p className="font-serif text-xl tracking-[0.08em] text-[#1A1A1A] dark:text-white font-light mt-1">
-                  Rp {amountDisplay.toLocaleString("id-ID")}
-                </p>
+              <div className="border border-[#1A1A1A]/10 dark:border-[#333] p-6 mb-6 bg-[#FBFBFB] dark:bg-[#1a1a1a]">
+                <div className="text-center mb-5">
+                  <p className="font-sans text-[0.48rem] tracking-[0.3em] text-[#1A1A1A]/40 dark:text-white/40 uppercase mb-2">
+                    {refLabel}
+                  </p>
+                  <p className="font-sans text-sm tracking-[0.1em] text-[#1A1A1A] dark:text-white break-all">
+                    {invoiceNumber ?? payId}
+                  </p>
+                </div>
+
+                <div className="border-t border-[#1A1A1A]/8 dark:border-white/10 pt-4 space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <span className="font-sans text-[0.58rem] tracking-[0.15em] text-[#1A1A1A]/55 dark:text-white/50 uppercase">
+                      Harga produk
+                    </span>
+                    <span className="font-sans text-[0.62rem] tracking-[0.08em] text-[#1A1A1A]/70 dark:text-white/60">
+                      Rp {price.toLocaleString("id-ID")}
+                    </span>
+                  </div>
+
+                  {amountDisplay !== price && (
+                    <div className="flex items-center justify-between">
+                      <span className="font-sans text-[0.58rem] tracking-[0.15em] text-[#1A1A1A]/55 dark:text-white/50 uppercase">
+                        Biaya layanan
+                      </span>
+                      <span className="font-sans text-[0.62rem] tracking-[0.08em] text-[#1A1A1A]/70 dark:text-white/60">
+                        Rp {(amountDisplay - price).toLocaleString("id-ID")}
+                      </span>
+                    </div>
+                  )}
+
+                  <div className="border-t border-[#1A1A1A]/8 dark:border-white/10 pt-3 mt-3 flex items-center justify-between">
+                    <span className="font-sans text-[0.55rem] tracking-[0.2em] text-[#1A1A1A]/70 dark:text-white/60 uppercase font-medium">
+                      Total bayar
+                    </span>
+                    <span className="font-serif text-xl tracking-[0.08em] text-[#1A1A1A] dark:text-white font-light">
+                      Rp {amountDisplay.toLocaleString("id-ID")}
+                    </span>
+                  </div>
+                </div>
+
                 {qrisExpiresAt && paymentProvider === "qrispy" && (
-                  <p className="font-sans text-[0.52rem] text-[#1A1A1A]/45 dark:text-white/40 mt-3 tracking-wider">
+                  <p className="font-sans text-[0.52rem] text-[#1A1A1A]/45 dark:text-white/40 mt-4 tracking-wider text-center">
                     Berlaku hingga {qrisExpiresAt}
                   </p>
                 )}

@@ -276,12 +276,18 @@ export default function Home() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.4 }}
-                    className="w-full h-[460px] flex flex-col bg-white dark:bg-[#111] border border-[#E5E7EB]/70 dark:border-[#333] transition-all duration-500 group relative"
+                    className={`w-full h-[460px] flex flex-col bg-white dark:bg-[#111] border border-[#E5E7EB]/70 dark:border-[#333] transition-all duration-500 relative ${
+                      prod.outOfStock
+                        ? "opacity-60 grayscale pointer-events-none"
+                        : "group"
+                    }`}
                   >
-                    <button
-                      onClick={() => openProductModal(prod)}
-                      className="absolute inset-0 w-full h-[300px] z-20 cursor-pointer"
-                    />
+                    {!prod.outOfStock && (
+                      <button
+                        onClick={() => openProductModal(prod)}
+                        className="absolute inset-0 w-full h-[300px] z-20 cursor-pointer"
+                      />
+                    )}
 
                     <div
                       className={`w-full h-[220px] relative shrink-0 flex items-center justify-center bg-[#F8F8F8] dark:bg-[#111] border-b border-[#E5E7EB]/50 dark:border-[#333] overflow-hidden`}
@@ -294,6 +300,13 @@ export default function Home() {
                           e.currentTarget.style.display = "none";
                         }}
                       />
+                      {prod.outOfStock && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-white/60 dark:bg-black/50">
+                          <span className="font-sans text-[0.65rem] tracking-[0.3em] font-semibold uppercase text-[#1A1A1A]/70 dark:text-white/70 border border-[#1A1A1A]/30 dark:border-white/30 px-5 py-2 bg-white/80 dark:bg-black/60 backdrop-blur-sm">
+                            OUT OF STOCK
+                          </span>
+                        </div>
+                      )}
                     </div>
 
                     <div className="p-8 flex-1 flex flex-col items-center justify-between text-center relative z-10">
@@ -302,21 +315,34 @@ export default function Home() {
                           {prod.name}
                         </h3>
                         <div className="font-sans text-[0.65rem] md:text-xs mb-6 flex items-center justify-center gap-2 text-black dark:text-gray-300 tracking-[0.2em] uppercase font-medium">
-                          {prod.price}{" "}
-                          {prod.hot && (
-                            <span className="text-black dark:text-gray-300 text-[0.60rem]">
-                              ✦
+                          {prod.outOfStock ? (
+                            <span className="text-[#1A1A1A]/40 dark:text-white/40 line-through">
+                              {prod.price}
                             </span>
+                          ) : (
+                            <>
+                              {prod.price}{" "}
+                              {prod.hot && (
+                                <span className="text-black dark:text-gray-300 text-[0.60rem]">
+                                  ✦
+                                </span>
+                              )}
+                            </>
                           )}
                         </div>
                       </div>
 
                       <div className="w-full flex-col flex items-center gap-5 mt-auto">
                         <button
-                          onClick={() => openProductModal(prod)}
-                          className="w-full py-3 border border-[#1A1A1A] text-[#1A1A1A] dark:border-[#ffffff30] dark:text-white text-[0.65rem] tracking-[0.2em] font-medium hover:bg-[#1A1A1A] dark:hover:bg-white/10 hover:text-white transition-colors duration-500 uppercase"
+                          disabled={prod.outOfStock}
+                          onClick={() => !prod.outOfStock && openProductModal(prod)}
+                          className={`w-full py-3 border text-[0.65rem] tracking-[0.2em] font-medium transition-colors duration-500 uppercase ${
+                            prod.outOfStock
+                              ? "border-[#1A1A1A]/15 text-[#1A1A1A]/30 dark:border-white/15 dark:text-white/30 cursor-not-allowed"
+                              : "border-[#1A1A1A] text-[#1A1A1A] dark:border-[#ffffff30] dark:text-white hover:bg-[#1A1A1A] dark:hover:bg-white/10 hover:text-white"
+                          }`}
                         >
-                          VIEW DETAILS
+                          {prod.outOfStock ? "OUT OF STOCK" : "VIEW DETAILS"}
                         </button>
                       </div>
                     </div>
@@ -473,16 +499,22 @@ export default function Home() {
                 </div>
 
                 <button
+                  disabled={selectedProduct.outOfStock}
                   onClick={() => {
+                    if (selectedProduct.outOfStock) return;
                     setCheckoutData({
                       name: currentProductName,
                       price: currentVariantPrice,
                     });
                     setSelectedProduct(null);
                   }}
-                  className="w-full py-4 bg-[#1A1A1A] dark:bg-white text-white dark:text-black text-[0.60rem] tracking-[0.3em] font-sans font-medium uppercase hover:bg-black/80 dark:hover:bg-white/90 transition-colors duration-300 mb-10"
+                  className={`w-full py-4 text-[0.60rem] tracking-[0.3em] font-sans font-medium uppercase transition-colors duration-300 mb-10 ${
+                    selectedProduct.outOfStock
+                      ? "bg-[#1A1A1A]/20 dark:bg-white/20 text-[#1A1A1A]/40 dark:text-white/40 cursor-not-allowed"
+                      : "bg-[#1A1A1A] dark:bg-white text-white dark:text-black hover:bg-black/80 dark:hover:bg-white/90"
+                  }`}
                 >
-                  CONFIRM PAYMENT
+                  {selectedProduct.outOfStock ? "OUT OF STOCK" : "CONFIRM PAYMENT"}
                 </button>
 
                 <div className="border-t border-[#1A1A1A]/10 dark:border-[#333] pt-10 text-center">

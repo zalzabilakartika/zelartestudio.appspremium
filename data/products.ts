@@ -18,6 +18,7 @@ export type Product = {
   price: string;
   basePrice: number;
   hot: boolean;
+  outOfStock?: boolean;
   logoUrl: string;
   bg: string;
   category: "streaming" | "productivity" | "creative";
@@ -33,6 +34,7 @@ const STREAMING: Product[] = [
     price: "Rp 35.000",
     basePrice: 35000,
     hot: true,
+    outOfStock: false,
     logoUrl:
       "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg",
     bg: "bg-[#F8F8F8]",
@@ -54,6 +56,7 @@ const STREAMING: Product[] = [
     price: "Mulai Rp 25.000",
     basePrice: 48000,
     hot: true,
+    outOfStock: false,
     logoUrl: "https://id.wikipedia.org/wiki/Special:FilePath/Logo_Vidio.png",
     bg: "bg-[#F8F8F8]",
     category: "streaming",
@@ -83,6 +86,7 @@ const STREAMING: Product[] = [
     price: "Rp 10.000",
     basePrice: 10000,
     hot: true,
+    outOfStock: false,
     logoUrl:
       "https://id.wikipedia.org/wiki/Special:FilePath/YouTube_Logo_2017.svg",
     bg: "bg-[#F8F8F8]",
@@ -108,6 +112,7 @@ const STREAMING: Product[] = [
     price: "Rp 10.000",
     basePrice: 10000,
     hot: false,
+    outOfStock: false,
     logoUrl:
       "https://upload.wikimedia.org/wikipedia/commons/1/11/Amazon_Prime_Video_logo.svg",
     bg: "bg-[#F8F8F8]",
@@ -127,6 +132,7 @@ const STREAMING: Product[] = [
     price: "Rp 28.000",
     basePrice: 28000,
     hot: false,
+    outOfStock: false,
     logoUrl:
       "https://commons.wikimedia.org/wiki/Special:FilePath/Disney%2B_Hotstar_2024.svg",
     bg: "bg-[#F8F8F8]",
@@ -147,6 +153,7 @@ const STREAMING: Product[] = [
     price: "Rp 10.000",
     basePrice: 10000,
     hot: false,
+    outOfStock: false,
     logoUrl:
       "https://upload.wikimedia.org/wikipedia/commons/5/5f/Apple_Music_icon.svg",
     bg: "bg-[#F8F8F8]",
@@ -172,6 +179,7 @@ const PRODUCTIVITY: Product[] = [
     price: "Rp 28.000",
     basePrice: 28000,
     hot: true,
+    outOfStock: false,
     logoUrl:
       "https://id.wikipedia.org/wiki/Special:FilePath/Google_One_logo.svg",
     bg: "bg-[#F8F8F8]",
@@ -199,6 +207,7 @@ const PRODUCTIVITY: Product[] = [
     price: "Rp 10.000",
     basePrice: 10000,
     hot: false,
+    outOfStock: false,
     logoUrl:
       "https://commons.wikimedia.org/wiki/Special:FilePath/Microsoft_365_(2022).svg",
     bg: "bg-[#F8F8F8]",
@@ -227,6 +236,7 @@ const CREATIVE: Product[] = [
     price: "Rp 3.000",
     basePrice: 3000,
     hot: true,
+    outOfStock: false,
     logoUrl: "https://en.wikipedia.org/wiki/Special:FilePath/Canva_Logo.svg",
     bg: "bg-[#F8F8F8]",
     category: "creative",
@@ -245,6 +255,7 @@ const CREATIVE: Product[] = [
     price: "Mulai Rp 45.000",
     basePrice: 45000,
     hot: true,
+    outOfStock: false,
     logoUrl:
       "https://commons.wikimedia.org/wiki/Special:FilePath/Adobe_Creative_Cloud_rainbow_icon.svg",
     bg: "bg-[#F8F8F8]",
@@ -273,6 +284,7 @@ const CREATIVE: Product[] = [
     price: "Mulai Rp 10.000",
     basePrice: 10000,
     hot: true,
+    outOfStock: false,
     logoUrl: "https://upload.wikimedia.org/wikipedia/commons/0/0c/Capcut-icon.png",
     bg: "bg-[#F8F8F8]",
     category: "creative",
@@ -295,6 +307,7 @@ const CREATIVE: Product[] = [
     price: "Rp 20.000",
     basePrice: 20000,
     hot: true,
+    outOfStock: false,
     logoUrl: "https://upload.wikimedia.org/wikipedia/en/c/c3/Meitu.svg",
     bg: "bg-[#F8F8F8]",
     category: "creative",
@@ -313,6 +326,7 @@ const CREATIVE: Product[] = [
     price: "Rp 1.000",
     basePrice: 1000,
     hot: true,
+    outOfStock: false,
     logoUrl: "https://upload.wikimedia.org/wikipedia/en/c/c3/Meitu.svg",
     bg: "bg-[#F8F8F8]",
     category: "creative",
