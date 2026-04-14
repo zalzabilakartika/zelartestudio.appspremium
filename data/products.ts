@@ -150,7 +150,7 @@ const STREAMING: Product[] = [
   },
   {
     name: "Apple Music",
-    price: "Rp 10.000",
+    price: "Rp 10.000 ✦",
     basePrice: 10000,
     hot: false,
     outOfStock: false,
@@ -204,7 +204,7 @@ const PRODUCTIVITY: Product[] = [
   },
   {
     name: "Microsoft 365",
-    price: "Rp 10.000",
+    price: "Rp 10.000 ",
     basePrice: 10000,
     hot: false,
     outOfStock: false,
@@ -225,7 +225,27 @@ const PRODUCTIVITY: Product[] = [
       guarantee: "Full Garansi.",
     },
   },
-  
+  {
+    name: "Discord Nitro",
+    price: "Rp 18.000",
+    basePrice: 18000,
+    hot: true,
+    outOfStock: true,
+    logoUrl: "https://upload.wikimedia.org/wikipedia/fr/4/4f/Discord_Logo_sans_texte.svg",
+    bg: "bg-[#F8F8F8]",
+    category: "creative",
+    modal: {
+      subtitle: "Discord Nitro Code 2 Bulan ✦",
+      benefits: [
+        "Bentuk link redeem code resmi dari Discord.",
+        "Animated Avatar & Custom Banner.",
+        "Upload File 500MB & HD Share Screen up to 4K 60fps.",
+        "Termasuk gratis 2x Server Boosts."
+      ],
+      notes: ["Note: Pastikan kamu sudah login ke akun Discord di browser (Chrome/Safari/etc)."],
+      guarantee: "Full Garansi.",
+    }
+  }
 ];
 
 // ─── CREATIVE ───────────────────────────────────────────────────────────────────
@@ -321,27 +341,6 @@ const CREATIVE: Product[] = [
       guarantee: "Full Garansi.",
     },
   },
-  {
-    name: "Discord Nitro",
-    price: "Rp 18.000",
-    basePrice: 18000,
-    hot: true,
-    outOfStock: false,
-    logoUrl: "https://upload.wikimedia.org/wikipedia/fr/4/4f/Discord_Logo_sans_texte.svg",
-    bg: "bg-[#F8F8F8]",
-    category: "creative",
-    modal: {
-      subtitle: "Discord Nitro Code 2 Bulan ✦",
-      benefits: [
-        "Bentuk link redeem code resmi dari Discord.",
-        "Animated Avatar & Custom Banner.",
-        "Upload File 500MB & HD Share Screen up to 4K 60fps.",
-        "Termasuk gratis 2x Server Boosts."
-      ],
-      notes: ["Note: Pastikan kamu sudah login ke akun Discord di browser (Chrome/Safari/etc)."],
-      guarantee: "Full Garansi.",
-    },
-  }
 ];
 
 // ─── CATEGORY CONFIG ────────────────────────────────────────────────────────────
