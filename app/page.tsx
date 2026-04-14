@@ -181,8 +181,8 @@ export default function Home() {
               transition={{ duration: 1, delay: 0.2 }}
               className="text-center font-sans text-[0.60rem] md:text-xs font-semibold tracking-widest text-[#1A1A1A] dark:text-[#f8f8f8] mb-20 uppercase border-y border-[#1A1A1A]/10 dark:border-[#ffffff10] py-5 w-fit mx-auto px-8"
             >
-              PROSES OTOMATIS: Pesanan diproses setelah bukti pembayaran dikirim.
-              Estimasi: 1 - 120 menit.
+              MANUAL PROCESS : Pesanan dikirim setelah konfirmasi pembayaran via WhatsApp.
+              Estimasi antrean: 1 - 120 menit.
             </motion.div>
 
             <motion.div
@@ -198,17 +198,17 @@ export default function Home() {
                 {
                   icon: <ShoppingBag size={24} strokeWidth={0.5} />,
                   title: "1. Select",
-                  desc: "Pilih premium apps favoritmu dari katalog kami. Tentukan durasi subscription yang kamu inginkan.",
+                  desc: "Pilih premium apps favoritmu dari katalog kami dan tentukan durasi subscription yang sesuai dengan kebutuhanmu.",
                 },
                 {
                   icon: <CreditCard size={24} strokeWidth={0.5} />,
                   title: "2. Payment",
-                  desc: "Selesaikan transaksi via automated payment gateway. Proses instan tanpa perlu konfirmasi manual.",
+                  desc: "Selesaikan transaksi dengan aman via automated payment gateway. Proses instan tanpa perlu transfer manual.",
                 },
                 {
                   icon: <MessageSquare size={24} strokeWidth={0.5} />,
                   title: "3. Claim",
-                  desc: "Pembayaran terverifikasi secara real-time. Klik tautan WhatsApp untuk mengklaim akses akunmu.",
+                  desc: "Payment terverifikasi otomatis secara real-time. Klik tautan WhatsApp yang muncul untuk langsung mengklaim akses akunmu.",
                 },
               ].map((step, i) => (
                 <div
