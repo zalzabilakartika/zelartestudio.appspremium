@@ -360,12 +360,12 @@ export default function Home() {
             </motion.div>
           </div>
         </section>
-      </div>
 
-      {/* ========== FOOTER ========== */}
-      <footer className="w-full py-5 mt-5 text-center text-[0.55rem] tracking-[0.3em] font-sans uppercase text-[#1A1A1A]/40 dark:text-white/40 border-t border-[#1A1A1A]/10 dark:border-white/10">
-        © 2026 ZELARTE STUDIO
-      </footer>
+        {/* ========== FOOTER ========== */}
+        <footer className="w-full py-5 text-center text-[0.55rem] tracking-[0.3em] font-sans uppercase text-[#1A1A1A]/40 dark:text-white/40 border-t border-[#1A1A1A]/10 dark:border-white/10">
+          © 2026 ZELARTE STUDIO
+        </footer>
+      </div>
 
       {/* ========== PRODUCT DETAILS MODAL ========== */}
       <AnimatePresence>
