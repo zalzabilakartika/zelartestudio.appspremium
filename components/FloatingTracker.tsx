@@ -10,11 +10,25 @@ const navItems = [
 export default function FloatingTracker() {
   const [activeId, setActiveId] = useState("intro");
   const [theme, setTheme] = useState<"light" | "dark" | null>(null);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 100);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
+              entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setActiveId(entry.target.id);
           }
@@ -65,48 +79,47 @@ export default function FloatingTracker() {
 
   return (
     <>
-      {/* Desktop-only sidebar nav — completely hidden below md */}
-      <nav className="desktop-sidebar hidden md:flex fixed top-6 left-6 z-[90] w-32 flex-col items-start gap-8 transition-all duration-500 ease-out">
+      {/* Brand — pinned top-left, reveals on scroll */}
+      <div className={`desktop-sidebar hidden md:block fixed top-8 left-12 z-[90] transition-all duration-700 ease-in-out ${scrolled ? "opacity-100 pointer-events-auto translate-x-0" : "opacity-0 pointer-events-none -translate-x-3"}`}>
         <button
           onClick={() =>
             document.getElementById("intro")?.scrollIntoView({ behavior: "smooth" })
           }
           className="text-left group"
         >
-          <h2 className="font-sans text-[0.60rem] tracking-[0.25em] text-[#1A1A1A]/40 group-hover:text-[#1A1A1A] group-active:text-[#1A1A1A] dark:text-white/40 dark:group-hover:text-white uppercase font-medium transition-colors duration-300">
+          <h2 className="font-sans text-[0.60rem] tracking-[0.25em] text-[#1A1A1A]/40 group-hover:text-[#1A1A1A] dark:text-white/40 dark:group-hover:text-white uppercase font-medium transition-colors duration-300">
             Zelarte Studio
           </h2>
         </button>
+      </div>
 
-        <div className="flex flex-col items-start">
-          <ul className="flex flex-col gap-8">
-            {navItems.map(({ id, label }) => {
-              const isActive = activeId === id;
-              return (
-                <li key={id} className="relative flex items-center">
-                  <a
-                    href={`#${id}`}
-                    onClick={(e) => handleClick(e, id)}
-                    className={`flex items-center text-[0.60rem] font-sans tracking-[0.25em] uppercase transition-all duration-300 ease-out relative ${
-                      isActive
-                        ? "text-[#F472B6]"
-                        : "text-gray-400 dark:text-gray-300 dark:hover:text-white hover:text-[#1A1A1A] font-light"
-                    }`}
-                  >
-                    <span
-                      className={`transition-all duration-300 overflow-hidden inline-flex items-center justify-end ${
-                        isActive ? "w-4 mr-1 opacity-100" : "w-0 mr-0 opacity-0"
-                      }`}
-                    >
-                      —
-                    </span>
-                    {label}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+      {/* Nav links — vertically centered */}
+      <nav className={`desktop-sidebar hidden md:flex fixed top-1/2 -translate-y-1/2 left-12 z-[90] flex-col items-start gap-8 transition-all duration-700 ease-in-out ${scrolled ? "opacity-100 pointer-events-auto translate-x-0" : "opacity-0 pointer-events-none -translate-x-3"}`}>
+        {navItems.map(({ id, label }) => {
+          const isActive = activeId === id;
+          return (
+            <li key={id} className="relative flex items-center list-none">
+              <a
+                href={`#${id}`}
+                onClick={(e) => handleClick(e, id)}
+                className={`flex items-center text-[0.60rem] font-sans tracking-[0.25em] uppercase transition-all duration-300 ease-out relative ${
+                  isActive
+                    ? "text-[#F472B6]"
+                    : "text-gray-400 dark:text-gray-300 dark:hover:text-white hover:text-[#1A1A1A] font-light"
+                }`}
+              >
+                <span
+                  className={`transition-all duration-300 overflow-hidden inline-flex items-center justify-end ${
+                    isActive ? "w-4 mr-1 opacity-100" : "w-0 mr-0 opacity-0"
+                  }`}
+                >
+                  —
+                </span>
+                {label}
+              </a>
+            </li>
+          );
+        })}
       </nav>
 
       {/* Dark mode toggle — bottom-right on mobile, bottom-left on desktop */}
