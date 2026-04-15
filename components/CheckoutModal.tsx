@@ -416,7 +416,7 @@ export default function CheckoutModal({
                         Kode Unik
                       </span>
                       <span className="font-sans text-[0.62rem] tracking-[0.08em] text-[#1A1A1A]/70 dark:text-white/60">
-                        Rp {(amountDisplay - price).toLocaleString("id-ID")}
+                        @ {(amountDisplay - price).toLocaleString("id-ID")}
                       </span>
                     </div>
                   )}
