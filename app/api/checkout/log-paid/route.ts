@@ -300,31 +300,59 @@ async function logQrispyPaid(args: {
   return postToSheets(payload, args.webhookUrl);
 }
 
+const SHEETS_MAX_RETRIES = 3;
+const SHEETS_BASE_DELAY_MS = 800;
+
 async function postToSheets(
   payload: Record<string, unknown>,
   webhookUrl: string
 ): Promise<Response> {
-  let wh: globalThis.Response;
-  try {
-    wh = await fetch(webhookUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-  } catch (err) {
-    return Response.json(
-      { error: "Failed to reach Google Sheets webhook.", detail: String(err) },
-      { status: 502 }
+  const body = JSON.stringify(payload);
+  let lastError = "";
+
+  for (let attempt = 0; attempt <= SHEETS_MAX_RETRIES; attempt++) {
+    if (attempt > 0) {
+      const delay = SHEETS_BASE_DELAY_MS * 2 ** (attempt - 1);
+      await new Promise((r) => setTimeout(r, delay));
+    }
+
+    let wh: globalThis.Response;
+    try {
+      wh = await fetch(webhookUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body,
+      });
+    } catch (err) {
+      lastError = String(err);
+      console.warn(
+        `[log-paid] Sheets attempt ${attempt + 1}/${SHEETS_MAX_RETRIES + 1} network error: ${lastError}`
+      );
+      continue;
+    }
+
+    if (wh.ok) {
+      return Response.json({ ok: true });
+    }
+
+    lastError = await wh.text();
+    console.warn(
+      `[log-paid] Sheets attempt ${attempt + 1}/${SHEETS_MAX_RETRIES + 1} HTTP ${wh.status}: ${lastError}`
     );
+
+    if (wh.status >= 400 && wh.status < 500) {
+      return Response.json(
+        { error: "Sheets webhook rejected the request.", detail: lastError },
+        { status: 502 }
+      );
+    }
   }
 
-  if (!wh.ok) {
-    const detail = await wh.text();
-    return Response.json(
-      { error: "Sheets webhook returned an error.", detail },
-      { status: 502 }
-    );
-  }
-
-  return Response.json({ ok: true });
+  return Response.json(
+    {
+      error: "Failed to reach Google Sheets webhook after retries.",
+      detail: lastError,
+    },
+    { status: 502 }
+  );
 }

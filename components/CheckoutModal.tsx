@@ -195,20 +195,44 @@ export default function CheckoutModal({
     (id: string, provider: PaymentProvider) => {
       if (sheetsLoggedRef.current) return;
       sheetsLoggedRef.current = true;
-      void fetch("/api/checkout/log-paid", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          provider,
-          invoice_id: id,
-          product_name: productName,
-          customer_name: name.trim(),
-          customer_email: email.trim(),
-          customer_whatsapp: whatsapp.trim(),
-        }),
-      }).catch(() => {
-        sheetsLoggedRef.current = false;
+
+      const payload = JSON.stringify({
+        provider,
+        invoice_id: id,
+        product_name: productName,
+        customer_name: name.trim(),
+        customer_email: email.trim(),
+        customer_whatsapp: whatsapp.trim(),
       });
+
+      const maxRetries = 4;
+
+      const attempt = async (n: number): Promise<void> => {
+        try {
+          const res = await fetch("/api/checkout/log-paid", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: payload,
+            keepalive: true,
+          });
+
+          if (res.ok) return;
+
+          if (n < maxRetries) {
+            await new Promise((r) => setTimeout(r, 1500 * 2 ** n));
+            return attempt(n + 1);
+          }
+        } catch {
+          if (n < maxRetries) {
+            await new Promise((r) => setTimeout(r, 1500 * 2 ** n));
+            return attempt(n + 1);
+          }
+        }
+
+        sheetsLoggedRef.current = false;
+      };
+
+      void attempt(0);
     },
     [productName, name, email, whatsapp]
   );
