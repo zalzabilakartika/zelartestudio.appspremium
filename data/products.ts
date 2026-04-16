@@ -162,7 +162,7 @@ const STREAMING: Product[] = [
     hot: true,
     outOfStock: false,
     logoUrl:
-      "https://wikizilla.org/wiki/HBO_Max#/media/File:HBO_Max_logo.jpeg",
+      "https://wikizilla.org/w/images/4/4f/HBO_Max_logo.jpeg",
     bg: "bg-[#F8F8F8]",
     category: "streaming",
     modal: {
@@ -264,7 +264,7 @@ const PRODUCTIVITY: Product[] = [
     basePrice: 5000,
     hot: true,
     outOfStock: false,
-    logoUrl: "https://www.pngfind.com/pngs/m/405-4053595_respondents-about-diversity-targets-and-discovered-female-work.png", 
+    logoUrl: "https://st4.depositphotos.com/4362315/20405/v/600/depositphotos_204050920-stock-illustration-service-quality-opinion-poll-positive.jpg", 
     bg: "bg-[#F8F8F8]",
     category: "productivity",
     modal: {
