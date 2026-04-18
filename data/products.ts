@@ -21,8 +21,9 @@ export type Product = {
   outOfStock?: boolean;
   logoUrl: string;
   bg: string;
-  category: "streaming" | "productivity" | "creative";
+  category: "streaming" | "productivity" | "creative" | "essentials";
   variants?: ProductVariant[];
+  gallery?: string[];
   modal: ProductModalData;
 };
 
@@ -168,7 +169,7 @@ const STREAMING: Product[] = [
     hot: true,
     outOfStock: false,
     logoUrl:
-      "https://wikizilla.org/w/images/4/4f/HBO_Max_logo.jpeg",
+      "https://upload.wikimedia.org/wikipedia/commons/c/ce/Max_logo.svg",
     bg: "bg-[#F8F8F8]",
     category: "streaming",
     modal: {
@@ -200,7 +201,7 @@ const STREAMING: Product[] = [
         "Listen Offline & Lyrics.",
       ],
       notes: ["> System: Via Invite (Pakai akun pribadimu).",
-              "> Tidak tersedia refund setelah aktivasi berhasil."
+        "> Tidak tersedia refund setelah aktivasi berhasil."
       ],
       guarantee: "Full Garansi.",
     },
@@ -259,7 +260,7 @@ const PRODUCTIVITY: Product[] = [
         "Bisa perpanjangan tiap bulan di akun yang sama tanpa kenak limit.",
       ],
       notes: ["> System: Via Invite (Pakai akun pribadimu).",
-              "> Tidak tersedia refund setelah aktivasi berhasil."
+        "> Tidak tersedia refund setelah aktivasi berhasil."
       ],
       guarantee: "Full Garansi.",
     },
@@ -270,7 +271,7 @@ const PRODUCTIVITY: Product[] = [
     basePrice: 5000,
     hot: true,
     outOfStock: false,
-    logoUrl: "https://st4.depositphotos.com/4362315/20405/v/600/depositphotos_204050920-stock-illustration-service-quality-opinion-poll-positive.jpg", 
+    logoUrl: "https://st4.depositphotos.com/4362315/20405/v/600/depositphotos_204050920-stock-illustration-service-quality-opinion-poll-positive.jpg",
     bg: "bg-[#F8F8F8]",
     category: "productivity",
     modal: {
@@ -308,7 +309,7 @@ const PRODUCTIVITY: Product[] = [
         "Termasuk gratis 2x Server Boosts."
       ],
       notes: ["> Note: Pastikan kamu sudah login ke akun Discord di browser (Chrome/Safari/etc).",
-              "> Tidak tersedia refund setelah aktivasi berhasil."
+        "> Tidak tersedia refund setelah aktivasi berhasil."
       ],
       guarantee: "Full Garansi.",
     }
@@ -418,6 +419,7 @@ export const PRODUCT_CATEGORIES = [
   { key: "streaming" as const, label: "Streaming" },
   { key: "productivity" as const, label: "Productivity" },
   { key: "creative" as const, label: "Creative" },
+  { key: "essentials" as const, label: "Essentials" },
 ];
 
 export const PRODUCTS: Product[] = [...STREAMING, ...PRODUCTIVITY, ...CREATIVE];

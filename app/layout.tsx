@@ -2,17 +2,17 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
-const cormorant = Cormorant_Garamond({ 
-  subsets: ["latin"], weight: ["300", "400", "500", "600"], variable: '--font-serif' 
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"], weight: ["300", "400", "500", "600"], variable: '--font-serif'
 });
 
-const jakarta = Plus_Jakarta_Sans({ 
-  subsets: ["latin"], variable: '--font-sans' 
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"], variable: '--font-sans'
 });
 
 export const metadata: Metadata = {
   title: "Zelarte Studio",
-  description: "Ready For Your Premium Apps Today?",
+  description: "Ready For Your Digital Essentials Today?",
 };
 
 export default function RootLayout({

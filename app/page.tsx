@@ -15,6 +15,8 @@ import {
   CreditCard,
   MessageSquare,
   X,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import {
   PRODUCTS,
@@ -27,6 +29,7 @@ export default function Home() {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedVariantIdx, setSelectedVariantIdx] = useState(0);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [checkoutData, setCheckoutData] = useState<{
     name: string;
     price: number;
@@ -37,6 +40,7 @@ export default function Home() {
 
   const openProductModal = (prod: Product) => {
     setSelectedVariantIdx(0);
+    setCurrentImageIndex(0);
     setSelectedProduct(prod);
   };
 
@@ -92,15 +96,13 @@ export default function Home() {
           transition={{ duration: 1.4, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="text-center w-full px-4"
         >
-          <h1 className="font-serif text-[clamp(1.3rem,6.5vw,2.5rem)] md:text-5xl lg:text-[3vw] tracking-[0.10em] md:tracking-[0.15em] lg:tracking-[0.2em] xl:tracking-[0.25em] text-[#1A1A1A] dark:text-white font-light uppercase leading-[1.3] md:leading-[1.4]">
-            <span className="block whitespace-nowrap">READY FOR YOUR</span>
-            <span className="block whitespace-nowrap mt-1 md:mt-2">
-              PREMIUM APPS TODAY?
-            </span>
+          <h1 className="font-serif text-[5.5vw] sm:text-[4vw] md:text-5xl lg:text-6xl tracking-[0.05em] min-[375px]:tracking-[0.08em] md:tracking-[0.15em] lg:tracking-[0.2em] xl:tracking-[0.25em] text-[#1A1A1A] dark:text-white font-light uppercase leading-snug text-center flex flex-col items-center">
+            <span className="whitespace-nowrap">READY FOR YOUR</span>
+            <span className="whitespace-nowrap">DIGITAL ESSENTIALS TODAY?</span>
           </h1>
 
-          <p className="mt-8 md:mt-12 text-[0.55rem] md:text-[0.65rem] text-gray-400 dark:text-gray-300 tracking-[0.3em] font-sans uppercase">
-            Explore The Collection{" "}
+          <p className="mt-6 md:mt-12 text-[1.8vw] sm:text-[1.6vw] md:text-[0.65rem] text-gray-400 dark:text-gray-300 tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.3em] font-sans uppercase whitespace-nowrap text-center">
+            PREMIUM APPS | DIGITAL PLANNERS | STICKERS & DECO | BUDGETING{" "}
             <span className="ml-1 text-gray-300 dark:text-gray-400">✦</span>
           </p>
 
@@ -275,7 +277,7 @@ export default function Home() {
 
             <motion.div
               layout
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16"
+              className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-x-12 md:gap-y-16"
             >
               <AnimatePresence mode="popLayout">
                 {filteredProducts.map((prod) => (
@@ -286,7 +288,7 @@ export default function Home() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.4 }}
-                    className={`w-full h-[460px] flex flex-col bg-white dark:bg-[#111] border border-[#E5E7EB]/70 dark:border-[#333] transition-all duration-500 relative ${prod.outOfStock
+                    className={`w-full h-[320px] md:h-[460px] flex flex-col bg-white dark:bg-[#111] border border-[#E5E7EB]/70 dark:border-[#333] transition-all duration-500 relative ${prod.outOfStock
                       ? "opacity-60 grayscale pointer-events-none"
                       : "group"
                       }`}
@@ -294,36 +296,36 @@ export default function Home() {
                     {!prod.outOfStock && (
                       <button
                         onClick={() => openProductModal(prod)}
-                        className="absolute inset-0 w-full h-[300px] z-20 cursor-pointer"
+                        className="absolute inset-0 w-full h-[180px] md:h-[300px] z-20 cursor-pointer"
                       />
                     )}
 
                     <div
-                      className={`w-full h-[220px] relative shrink-0 flex items-center justify-center bg-[#F8F8F8] dark:bg-[#111] border-b border-[#E5E7EB]/50 dark:border-[#333] overflow-hidden`}
+                      className={`w-full h-[140px] md:h-[220px] relative shrink-0 flex items-center justify-center bg-[#F8F8F8] dark:bg-[#111] border-b border-[#E5E7EB]/50 dark:border-[#333] overflow-hidden`}
                     >
                       <img
                         src={prod.logoUrl}
                         alt={prod.name}
-                        className="w-[50%] h-[50%] object-contain transition-all duration-700 opacity-100 grayscale-0 md:opacity-70 md:grayscale md:group-hover:scale-105 md:group-hover:opacity-100 md:group-hover:grayscale-0"
+                        className="w-[60%] h-[60%] md:w-[50%] md:h-[50%] object-contain transition-all duration-700 opacity-100 grayscale-0 md:opacity-70 md:grayscale md:group-hover:scale-105 md:group-hover:opacity-100 md:group-hover:grayscale-0"
                         onError={(e) => {
                           e.currentTarget.style.display = "none";
                         }}
                       />
                       {prod.outOfStock && (
                         <div className="absolute inset-0 flex items-center justify-center bg-white/60 dark:bg-black/50">
-                          <span className="font-sans text-[0.65rem] tracking-[0.3em] font-semibold uppercase text-[#1A1A1A]/70 dark:text-white/70 border border-[#1A1A1A]/30 dark:border-white/30 px-5 py-2 bg-white/80 dark:bg-black/60 backdrop-blur-sm">
+                          <span className="font-sans text-[0.45rem] md:text-[0.65rem] tracking-[0.2em] md:tracking-[0.3em] font-semibold uppercase text-[#1A1A1A]/70 dark:text-white/70 border border-[#1A1A1A]/30 dark:border-white/30 px-3 py-1.5 md:px-5 md:py-2 bg-white/80 dark:bg-black/60 backdrop-blur-sm">
                             OUT OF STOCK
                           </span>
                         </div>
                       )}
                     </div>
 
-                    <div className="p-8 flex-1 flex flex-col items-center justify-between text-center relative z-10">
+                    <div className="p-3 md:p-8 flex-1 flex flex-col items-center justify-between text-center relative z-10">
                       <div>
-                        <h3 className="font-serif text-sm md:text-base tracking-[0.25em] mb-4 uppercase text-black dark:text-white font-medium">
+                        <h3 className="font-serif text-[0.55rem] min-[375px]:text-[0.65rem] md:text-base tracking-[0.1em] md:tracking-[0.25em] mb-1.5 md:mb-4 uppercase text-black dark:text-white font-medium">
                           {prod.name}
                         </h3>
-                        <div className="font-sans text-[0.65rem] md:text-xs mb-6 flex items-center justify-center gap-2 text-black dark:text-gray-300 tracking-[0.2em] uppercase font-medium">
+                        <div className="font-sans text-[0.5rem] md:text-xs mb-2 md:mb-6 flex items-center justify-center gap-1 md:gap-2 text-black dark:text-gray-300 tracking-[0.1em] md:tracking-[0.2em] uppercase font-medium">
                           {prod.outOfStock ? (
                             <span className="text-[#1A1A1A]/40 dark:text-white/40 line-through">
                               {prod.price}
@@ -341,11 +343,11 @@ export default function Home() {
                         </div>
                       </div>
 
-                      <div className="w-full flex-col flex items-center gap-5 mt-auto">
+                      <div className="w-full flex-col flex items-center gap-2 md:gap-5 mt-auto">
                         <button
                           disabled={prod.outOfStock}
                           onClick={() => !prod.outOfStock && openProductModal(prod)}
-                          className={`w-full py-3 border text-[0.65rem] tracking-[0.2em] font-medium transition-colors duration-500 uppercase ${prod.outOfStock
+                          className={`w-full py-2 md:py-3 border text-[0.45rem] min-[375px]:text-[0.5rem] md:text-[0.65rem] tracking-[0.1em] md:tracking-[0.2em] font-medium transition-colors duration-500 uppercase ${prod.outOfStock
                             ? "border-[#1A1A1A]/15 text-[#1A1A1A]/30 dark:border-white/15 dark:text-white/30 cursor-not-allowed"
                             : "border-[#1A1A1A] text-[#1A1A1A] dark:border-[#ffffff30] dark:text-white hover:bg-[#1A1A1A] dark:hover:bg-white/10 hover:text-white"
                             }`}
@@ -360,12 +362,12 @@ export default function Home() {
             </motion.div>
           </div>
         </section>
-
-        {/* ========== FOOTER ========== */}
-        <footer className="w-full py-5 text-center text-[0.55rem] tracking-[0.3em] font-sans uppercase text-[#1A1A1A]/40 dark:text-white/40 border-t border-[#1A1A1A]/10 dark:border-white/10">
-          © 2026 ZELARTE STUDIO
-        </footer>
       </div>
+
+      {/* ========== FOOTER ========== */}
+      <footer className="w-full py-5 mt-5 text-center text-[0.55rem] tracking-[0.3em] font-sans uppercase text-[#1A1A1A]/40 dark:text-white/40 border-t border-[#1A1A1A]/10 dark:border-white/10">
+        © 2026 ZELARTE STUDIO
+      </footer>
 
       {/* ========== PRODUCT DETAILS MODAL ========== */}
       <AnimatePresence>
@@ -396,12 +398,63 @@ export default function Home() {
                 <X strokeWidth={0.5} size={36} />
               </button>
 
-              <div className="w-full flex items-center justify-center border-b border-[#1A1A1A]/5 dark:border-[#333] py-12 bg-[#F8F8F8] dark:bg-[#111]">
-                <img
-                  src={selectedProduct.logoUrl}
-                  alt={selectedProduct.name}
-                  className="h-16 w-16 object-contain grayscale opacity-80"
-                />
+              <div className="w-full relative flex items-center justify-center border-b border-[#1A1A1A]/5 dark:border-[#333] bg-[#F8F8F8] dark:bg-[#111] overflow-hidden group min-h-[160px]">
+                {selectedProduct.gallery && selectedProduct.gallery.length > 0 ? (
+                  <>
+                    <img
+                      key={currentImageIndex}
+                      src={selectedProduct.gallery[currentImageIndex]}
+                      alt={`${selectedProduct.name} - slide ${currentImageIndex + 1}`}
+                      className="w-full h-auto max-h-[400px] object-cover transition-opacity duration-500"
+                    />
+
+                    {/* Navigation Arrows */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setCurrentImageIndex((prev) =>
+                          prev === 0 ? selectedProduct.gallery!.length - 1 : prev - 1
+                        );
+                      }}
+                      className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-full p-2 cursor-pointer hover:bg-white/20 transition-all opacity-0 group-hover:opacity-100 z-10"
+                    >
+                      <ChevronLeft size={20} />
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setCurrentImageIndex((prev) =>
+                          prev === selectedProduct.gallery!.length - 1 ? 0 : prev + 1
+                        );
+                      }}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-full p-2 cursor-pointer hover:bg-white/20 transition-all opacity-0 group-hover:opacity-100 z-10"
+                    >
+                      <ChevronRight size={20} />
+                    </button>
+
+                    {/* Dot Indicators */}
+                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                      {selectedProduct.gallery.map((_, idx) => (
+                        <div
+                          key={idx}
+                          className={`h-1.5 rounded-full transition-all duration-300 ${
+                            idx === currentImageIndex
+                              ? "w-4 bg-white"
+                              : "w-1.5 bg-white/30"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <div className="py-12">
+                    <img
+                      src={selectedProduct.logoUrl}
+                      alt={selectedProduct.name}
+                      className="h-16 w-16 object-contain grayscale opacity-80"
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="px-8 md:px-14 py-12">
