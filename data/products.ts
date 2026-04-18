@@ -31,14 +31,20 @@ export type Product = {
 const STREAMING: Product[] = [
   {
     name: "Netflix Premium UHD",
-    price: "Rp 35.000",
-    basePrice: 35000,
+    price: "Mulai Rp 5.000",
+    basePrice: 5000,
     hot: true,
     outOfStock: false,
     logoUrl:
       "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg",
     bg: "bg-[#F8F8F8]",
     category: "streaming",
+    variants: [
+      { label: "1 hari", price: 5000 },
+      { label: "3 hari", price: 8000 },
+      { label: "7 hari", price: 15000 },
+      { label: "1 bulan", price: 35000 },
+    ],
     modal: {
       subtitle: "Netflix Premium Sharing 1P1U ✦",
       benefits: [
@@ -48,8 +54,8 @@ const STREAMING: Product[] = [
         "Bisa diperpanjang tiap bulan tanpa ganti akun.",
       ],
       notes: [
-        "Bonus: Free YouTube & Music Premium.",
-        "Tidak tersedia refund setelah aktivasi berhasil."
+        "> Bonus: Free YouTube & Music Premium (Khusus 1 Bulan",
+        "> Tidak tersedia refund setelah aktivasi berhasil."
       ],
       guarantee: "Full Garansi.",
     },
@@ -76,9 +82,9 @@ const STREAMING: Product[] = [
         "BRI Liga 1, UCL, La Liga, UEL, UECL.",
       ],
       notes: [
-        "Screen: All Dev (2 active), Mobile/TV (1 active).",
-        "Tips: Paket TV bisa di HP (via APK khusus) atau Emulator PC.",
-        "Tidak tersedia refund setelah aktivasi berhasil."
+        "> Screen: All Dev (2 active), Mobile/TV (1 active).",
+        "> Tips: Paket TV bisa di HP (via APK khusus) atau Emulator PC.",
+        "> Tidak tersedia refund setelah aktivasi berhasil."
       ],
       warning: "TIDAK BISA UNTUK NONTON EPL (English Premier League).",
       guarantee: "Vidio All Dev/Mobile Full Garansi. Paket TV No Garansi.",
@@ -104,8 +110,8 @@ const STREAMING: Product[] = [
         "Download & Offline Play.",
       ],
       notes: [
-        "Privacy: Hanya berbagi benefit, riwayat tontonan tetap pribadi.",
-        "Tidak tersedia refund setelah aktivasi berhasil."
+        "> Privacy: Hanya berbagi benefit, riwayat tontonan tetap pribadi.",
+        "> Tidak tersedia refund setelah aktivasi berhasil."
       ],
       warning:
         "Tidak bisa tumpuk durasi. Order lagi bulan depan untuk perpanjang.",
@@ -193,8 +199,8 @@ const STREAMING: Product[] = [
         "Lebih dari 100 juta lagu tanpa iklan.",
         "Listen Offline & Lyrics.",
       ],
-      notes: ["System: Via Invite (Pakai akun pribadimu).",
-              "Tidak tersedia refund setelah aktivasi berhasil."
+      notes: ["> System: Via Invite (Pakai akun pribadimu).",
+              "> Tidak tersedia refund setelah aktivasi berhasil."
       ],
       guarantee: "Full Garansi.",
     },
@@ -226,9 +232,9 @@ const PRODUCTIVITY: Product[] = [
         "1000 AI Credits.",
       ],
       notes: [
-        "System: Via Invite (Pakai akun pribadimu).",
-        "Verif: Akses Gemini Pro wajib verifikasi usia 18+ (Akun Old biasanya aman).",
-        "Tidak tersedia refund setelah aktivasi berhasil."
+        "> System: Via Invite (Pakai akun pribadimu).",
+        "> Verif: Akses Gemini Pro wajib verifikasi usia 18+ (Akun Old biasanya aman).",
+        "> Tidak tersedia refund setelah aktivasi berhasil."
       ],
       guarantee: "Full Garansi.",
     },
@@ -252,8 +258,8 @@ const PRODUCTIVITY: Product[] = [
         "Unlock All Software on Windows/Mac/iOS/Android.",
         "Bisa perpanjangan tiap bulan di akun yang sama tanpa kenak limit.",
       ],
-      notes: ["System: Via Invite (Pakai akun pribadimu).",
-              "Tidak tersedia refund setelah aktivasi berhasil."
+      notes: ["> System: Via Invite (Pakai akun pribadimu).",
+              "> Tidak tersedia refund setelah aktivasi berhasil."
       ],
       guarantee: "Full Garansi.",
     },
@@ -277,9 +283,9 @@ const PRODUCTIVITY: Product[] = [
         "Membantu validitas data kuesioner kamu secara instan.",
       ],
       notes: [
-        "System: Direct Entry (Silahkan lampirkan link kuesioner & kriteria).",
-        "Data akun disesuaikan dengan profil target yang diinginkan.",
-        "Tidak tersedia refund setelah aktivasi berhasil."
+        "> System: Direct Entry (Silahkan lampirkan link kuesioner & kriteria).",
+        "> Data akun disesuaikan dengan profil target yang diinginkan.",
+        "> Tidak tersedia refund setelah aktivasi berhasil."
       ],
       guarantee: "Full Garansi.",
     },
@@ -301,8 +307,8 @@ const PRODUCTIVITY: Product[] = [
         "Upload File 500MB & HD Share Screen up to 4K 60fps.",
         "Termasuk gratis 2x Server Boosts."
       ],
-      notes: ["Note: Pastikan kamu sudah login ke akun Discord di browser (Chrome/Safari/etc).",
-              "Tidak tersedia refund setelah aktivasi berhasil."
+      notes: ["> Note: Pastikan kamu sudah login ke akun Discord di browser (Chrome/Safari/etc).",
+              "> Tidak tersedia refund setelah aktivasi berhasil."
       ],
       guarantee: "Full Garansi.",
     }
