@@ -270,10 +270,10 @@ export default function Home() {
             </motion.h2>
 
             {/* Category Tabs */}
-            <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4 mb-16">
+            <div className="flex flex-nowrap items-center md:justify-center gap-3 md:gap-4 mb-16 overflow-x-auto no-scrollbar scrollbar-hide whitespace-nowrap snap-x snap-mandatory px-4 py-2 md:px-0">
               <button
                 onClick={() => setActiveCategory("all")}
-                className={`px-6 py-2.5 rounded-full backdrop-blur-md transition-all duration-300 ease-out active:scale-95 text-[11px] md:text-xs tracking-widest uppercase font-sans border ${activeCategory === "all"
+                className={`px-4 py-2 md:px-6 md:py-2.5 snap-start shrink-0 rounded-full backdrop-blur-md transition-all duration-300 ease-out active:scale-95 text-[10px] md:text-xs tracking-widest uppercase font-sans border ${activeCategory === "all"
                   ? "bg-black text-white border-black font-semibold dark:bg-white dark:text-black dark:border-white dark:font-semibold"
                   : "bg-transparent border-gray-300 text-gray-500 dark:border-white/20 dark:text-white/60 hover:bg-black hover:text-white hover:border-black dark:hover:bg-white dark:hover:text-black dark:hover:border-white font-medium"
                   }`}
@@ -284,7 +284,7 @@ export default function Home() {
                 <button
                   key={cat.key}
                   onClick={() => setActiveCategory(cat.key)}
-                  className={`px-6 py-2.5 rounded-full backdrop-blur-md transition-all duration-300 ease-out active:scale-95 text-[11px] md:text-xs tracking-widest uppercase font-sans border ${activeCategory === cat.key
+                  className={`px-4 py-2 md:px-6 md:py-2.5 snap-start shrink-0 rounded-full backdrop-blur-md transition-all duration-300 ease-out active:scale-95 text-[10px] md:text-xs tracking-widest uppercase font-sans border ${activeCategory === cat.key
                     ? "bg-black text-white border-black font-semibold dark:bg-white dark:text-black dark:border-white dark:font-semibold"
                     : "bg-transparent border-gray-300 text-gray-500 dark:border-white/20 dark:text-white/60 hover:bg-black hover:text-white hover:border-black dark:hover:bg-white dark:hover:text-black dark:hover:border-white font-medium"
                     }`}
