@@ -103,7 +103,7 @@ export default function Home() {
 
           <p className="mt-6 md:mt-12 text-[1.8vw] sm:text-[1.6vw] md:text-[0.65rem] text-gray-400 dark:text-gray-300 tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.3em] font-sans uppercase whitespace-nowrap text-center">
             PREMIUM APPS | DIGITAL PLANNERS | STICKERS & DECO | BUDGETING{" "}
-            <span className="ml-1 text-gray-300 dark:text-gray-400">✦</span>
+
           </p>
 
           <div className="flex flex-col md:flex-row items-center justify-center gap-6 mt-16 md:mt-24">
@@ -437,11 +437,10 @@ export default function Home() {
                       {selectedProduct.gallery.map((_, idx) => (
                         <div
                           key={idx}
-                          className={`h-1.5 rounded-full transition-all duration-300 ${
-                            idx === currentImageIndex
+                          className={`h-1.5 rounded-full transition-all duration-300 ${idx === currentImageIndex
                               ? "w-4 bg-white"
                               : "w-1.5 bg-white/30"
-                          }`}
+                            }`}
                         />
                       ))}
                     </div>

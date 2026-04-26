@@ -47,7 +47,7 @@ const STREAMING: Product[] = [
       { label: "1 bulan", price: 35000 },
     ],
     modal: {
-      subtitle: "Netflix Premium Sharing 1P1U ✦",
+      subtitle: "Netflix Premium Sharing 1P1U ",
       benefits: [
         "Login 1 Device.",
         "Plan Premium UHD 4K.",
@@ -76,7 +76,7 @@ const STREAMING: Product[] = [
       { label: "Android TV 12 Bln", price: 25000 },
     ],
     modal: {
-      subtitle: "Premier Platinum Private ✦",
+      subtitle: "Premier Platinum Private",
       benefits: [
         "Vidio Original, Acara TV",
         "Film & Series Hollywood, Korea, Anime, Thai, dll.",
@@ -103,7 +103,7 @@ const STREAMING: Product[] = [
     bg: "bg-[#F8F8F8]",
     category: "streaming",
     modal: {
-      subtitle: "Youtube Family Member ✦",
+      subtitle: "Youtube Family Member",
       benefits: [
         "Via Invite (Pakai akun pribadimu).",
         "YouTube Premium & YouTube Music.",
@@ -130,7 +130,7 @@ const STREAMING: Product[] = [
     bg: "bg-[#F8F8F8]",
     category: "streaming",
     modal: {
-      subtitle: "Prime Video Private ✦",
+      subtitle: "Prime Video Private",
       benefits: [
         "Private Account dari kami (Bukan Sharing).",
         "Kualitas Video 1080p HD.",
@@ -151,7 +151,7 @@ const STREAMING: Product[] = [
     bg: "bg-[#F8F8F8]",
     category: "streaming",
     modal: {
-      subtitle: "Disney+ Hotstar Sharing ✦",
+      subtitle: "Disney+ Hotstar Sharing",
       benefits: [
         "Akun sharing dari kami (Bukan Private).",
         "Login 1 device only.",
@@ -173,7 +173,7 @@ const STREAMING: Product[] = [
     bg: "bg-[#F8F8F8]",
     category: "streaming",
     modal: {
-      subtitle: "HBO Max Private 1 Bulan✦",
+      subtitle: "HBO Max Private 1 Bulan",
       benefits: [
         "Paket Standard (Private).",
         "Login 2 device (HP & TV/PC).",
@@ -185,7 +185,7 @@ const STREAMING: Product[] = [
   },
   {
     name: "Apple Music",
-    price: "Rp 10.000 ✦",
+    price: "Rp 10.000",
     basePrice: 10000,
     hot: false,
     outOfStock: false,
@@ -194,7 +194,7 @@ const STREAMING: Product[] = [
     bg: "bg-[#F8F8F8]",
     category: "streaming",
     modal: {
-      subtitle: "Family Member ✦",
+      subtitle: "Family Member",
       benefits: [
         "Audio Lossless & Dolby Atmos.",
         "Lebih dari 100 juta lagu tanpa iklan.",
@@ -222,7 +222,7 @@ const PRODUCTIVITY: Product[] = [
     bg: "bg-[#F8F8F8]",
     category: "productivity",
     modal: {
-      subtitle: "Familiy Member ✦",
+      subtitle: "Familiy Member",
       benefits: [
         "YouTube & Music Premium Included.",
         "5TB Storage (Photos, Drive, Gmail).",
@@ -251,7 +251,7 @@ const PRODUCTIVITY: Product[] = [
     bg: "bg-[#F8F8F8]",
     category: "productivity",
     modal: {
-      subtitle: "Family Member ✦",
+      subtitle: "Family Member",
       benefits: [
         "1 TB Storage OneDrive & Outlook.",
         "Copilot 365 (Word, Excel, PPT, Outlook, Edge).",
@@ -275,7 +275,7 @@ const PRODUCTIVITY: Product[] = [
     bg: "bg-[#F8F8F8]",
     category: "productivity",
     modal: {
-      subtitle: "Respondents Account ✦",
+      subtitle: "Respondents Account",
       benefits: [
         "Sesuai kriteria/permintaan (Umur, Pekerjaan, Domisili).",
         "Sangat cocok untuk kebutuhan data Skripsi, Tesis, & Market Research.",
@@ -301,7 +301,7 @@ const PRODUCTIVITY: Product[] = [
     bg: "bg-[#F8F8F8]",
     category: "productivity",
     modal: {
-      subtitle: "Discord Nitro Code 2 Bulan ✦",
+      subtitle: "Discord Nitro Code 2 Bulan",
       benefits: [
         "Bentuk link redeem code resmi dari Discord.",
         "Animated Avatar & Custom Banner.",
@@ -329,7 +329,7 @@ const CREATIVE: Product[] = [
     bg: "bg-[#F8F8F8]",
     category: "creative",
     modal: {
-      subtitle: "Member Pro ✦",
+      subtitle: "Member Pro",
       benefits: [
         "Privasi aman, team hanya berbagi features, tidak berbagi desain by default",
         "Akses semua fitur & aset Pro premium.",
@@ -353,7 +353,7 @@ const CREATIVE: Product[] = [
       { label: "4 Bulan", price: 140000 },
     ],
     modal: {
-      subtitle: "Private Account ✦",
+      subtitle: "Private Account",
       benefits: [
         "100% Original & Aktivasi Cepat.",
         "Photo & Design: Photoshop, Lightroom, Illustrator.",
@@ -381,7 +381,7 @@ const CREATIVE: Product[] = [
       { label: "1 Bulan", price: 20000 },
     ],
     modal: {
-      subtitle: "Capcut Pro Private ✦",
+      subtitle: "Capcut Pro Private",
       benefits: [
         "Akses semua fitur, efek, & font Pro.",
         "Android/Desktop bisa login 2-3 device",
@@ -401,7 +401,7 @@ const CREATIVE: Product[] = [
     bg: "bg-[#F8F8F8]",
     category: "creative",
     modal: {
-      subtitle: "Meitu Private 21 Days ✦",
+      subtitle: "Meitu Private 21 Days",
       benefits: [
         "Akun Private dari kami",
         "Login 1 device",
