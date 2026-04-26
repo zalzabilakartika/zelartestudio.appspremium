@@ -303,7 +303,7 @@ const PRODUCTIVITY: Product[] = [
     name: "Apple Music",
     price: "Rp 10.000",
     originalPrice: 10000,
-    hot: false,
+    hot: true,
     outOfStock: false,
     logoUrl:
       "https://upload.wikimedia.org/wikipedia/commons/5/5f/Apple_Music_icon.svg",

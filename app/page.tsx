@@ -167,32 +167,32 @@ export default function Home() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="grid grid-cols-2 lg:grid-cols-4 gap-px mb-12 bg-[#1A1A1A]/10 dark:bg-white/10 border border-[#1A1A1A]/10 dark:border-white/10"
+              className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 p-8 mb-12 rounded-[2rem] bg-white dark:bg-white/[0.02] backdrop-blur-md border border-black/5 dark:border-white/10"
             >
               {[
                 {
-                  icon: <Clock size={14} strokeWidth={1} />,
+                  icon: <Clock size={18} strokeWidth={1.5} />,
                   text: "11.00 AM — 09.00 PM",
                 },
                 {
-                  icon: <Wallet size={14} strokeWidth={1} />,
+                  icon: <Wallet size={18} strokeWidth={1.5} />,
                   text: "Pemakaian / Resell",
                 },
                 {
-                  icon: <Zap size={14} strokeWidth={1} />,
+                  icon: <Zap size={18} strokeWidth={1.5} />,
                   text: "1 - 120 Menit Process",
                 },
                 {
-                  icon: <ShieldCheck size={14} strokeWidth={1} />,
+                  icon: <ShieldCheck size={18} strokeWidth={1.5} />,
                   text: "Full Guarantee (SnK)",
                 },
               ].map((note, i) => (
                 <div
                   key={i}
-                  className="p-5 text-[0.65rem] md:text-xs flex flex-col items-center text-center gap-3 text-[#1A1A1A] dark:text-[#F8F8F8] tracking-wider font-light bg-[#F8F8F8] dark:bg-[#111]"
+                  className="flex flex-col items-center justify-center text-center gap-3 text-gray-500 dark:text-white/70 font-sans text-[10px] md:text-[11px] tracking-widest uppercase"
                 >
-                  <span className="opacity-50">{note.icon}</span>
-                  {note.text}
+                  <span className="text-[#1A1A1A]/40 dark:text-white/50">{note.icon}</span>
+                  <span className="leading-relaxed">{note.text}</span>
                 </div>
               ))}
             </motion.div>
@@ -213,10 +213,8 @@ export default function Home() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 1, delay: 0.4 }}
-              className="flex flex-col md:flex-row gap-12 justify-between items-start relative"
+              className="flex flex-col md:flex-row gap-12 md:gap-16 justify-between items-start relative"
             >
-              <div className="hidden md:block absolute top-[28px] left-[15%] right-[15%] h-px bg-[#1A1A1A]/10 -z-10"></div>
-
               {[
                 {
                   icon: <ShoppingBag size={24} strokeWidth={0.5} />,
@@ -238,8 +236,8 @@ export default function Home() {
                   key={i}
                   className="flex-1 flex flex-col items-center text-center z-10 w-full relative group"
                 >
-                  <div className="w-16 h-16 rounded-full bg-[#F8F8F8] dark:bg-[#111] border border-[#1A1A1A]/10 dark:border-[#ffffff10] flex items-center justify-center mb-8 transition-transform duration-500 hover:scale-105">
-                    <span className="text-[#1A1A1A] dark:text-[#f8f8f8] opacity-60">
+                  <div className="w-16 h-16 rounded-full bg-white shadow-sm border border-black/5 dark:bg-white/[0.05] dark:backdrop-blur-md dark:border-white/10 flex items-center justify-center mb-8 transition-transform duration-500 hover:scale-105">
+                    <span className="text-gray-900 dark:text-white opacity-80">
                       {step.icon}
                     </span>
                   </div>
@@ -309,9 +307,9 @@ export default function Home() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.4 }}
-                    className={`w-full aspect-[2/3] md:aspect-auto h-full md:h-[460px] flex flex-col bg-white dark:bg-white/[0.02] backdrop-blur-md border border-black/10 dark:border-white/10 rounded-2xl md:rounded-3xl overflow-hidden transition-all duration-500 relative ${prod.outOfStock
+                    className={`w-full aspect-[2/3] md:aspect-auto h-full md:h-[460px] flex flex-col bg-white/70 dark:bg-white/[0.03] backdrop-blur-md dark:backdrop-blur-xl border border-black/5 dark:border-white/10 rounded-2xl md:rounded-3xl shadow-sm overflow-hidden transition-all duration-500 ease-out relative ${prod.outOfStock
                       ? "opacity-60 grayscale pointer-events-none"
-                      : "group"
+                      : "group hover:-translate-y-2 hover:shadow-xl hover:bg-white/90 dark:hover:bg-white/[0.08] hover:border-black/10 dark:hover:border-white/30"
                       }`}
                   >
                     {!prod.outOfStock && (
@@ -380,9 +378,9 @@ export default function Home() {
                         <button
                           disabled={prod.outOfStock}
                           onClick={() => !prod.outOfStock && openProductModal(prod)}
-                          className={`w-[85%] md:w-[80%] mx-auto py-2 px-4 md:py-3 border rounded-full text-[10px] md:text-[0.65rem] tracking-[0.1em] md:tracking-[0.2em] font-medium transition-all duration-300 uppercase ${prod.outOfStock
-                            ? "border-black/20 dark:border-white/20 text-gray-400 dark:text-white/30 cursor-not-allowed bg-transparent"
-                            : "bg-transparent border-gray-300 dark:border-white/20 text-gray-900 dark:text-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
+                          className={`w-[85%] md:w-[80%] mx-auto py-2 px-4 md:py-3 border rounded-full text-[10px] md:text-[0.65rem] tracking-[0.1em] md:tracking-[0.2em] transition-all duration-300 uppercase ${prod.outOfStock
+                            ? "border-black/20 dark:border-white/20 text-gray-400 dark:text-white/30 cursor-not-allowed bg-transparent font-medium"
+                            : "bg-transparent border-gray-300 dark:border-white/20 text-gray-600 dark:text-white/70 font-medium group-hover:text-black dark:group-hover:text-white group-hover:font-semibold group-hover:border-black/30 dark:group-hover:border-white/40 hover:!bg-black hover:!text-white dark:hover:!bg-white dark:hover:!text-black"
                             }`}
                         >
                           {prod.outOfStock ? "OUT OF STOCK" : "VIEW DETAILS"}
@@ -422,7 +420,7 @@ export default function Home() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full max-w-xl bg-white dark:bg-[#111] border border-[#1A1A1A]/10 dark:border-[#333] shadow-[0_40px_100px_rgba(0,0,0,0.05)] dark:shadow-[0_40px_100px_rgba(255,255,255,0.05)] p-0 max-h-[90vh] overflow-y-auto no-scrollbar flex flex-col"
+              className="relative w-full max-w-xl rounded-t-[2.5rem] rounded-b-[2rem] bg-white dark:bg-[#111] border border-[#1A1A1A]/10 dark:border-[#333] shadow-[0_40px_100px_rgba(0,0,0,0.05)] dark:shadow-[0_40px_100px_rgba(255,255,255,0.05)] p-0 max-h-[90vh] overflow-y-auto no-scrollbar flex flex-col"
             >
               <button
                 onClick={() => setSelectedProduct(null)}
@@ -431,7 +429,7 @@ export default function Home() {
                 <X strokeWidth={0.5} size={36} />
               </button>
 
-              <div className="w-full relative flex items-center justify-center border-b border-[#1A1A1A]/5 dark:border-[#333] bg-[#F8F8F8] dark:bg-[#111] overflow-hidden group min-h-[160px]">
+              <div className="w-full relative flex items-center justify-center bg-white dark:bg-white/[0.02] backdrop-blur-md overflow-hidden group min-h-[160px]">
                 {selectedProduct.gallery && selectedProduct.gallery.length > 0 ? (
                   <>
                     <img
@@ -479,12 +477,14 @@ export default function Home() {
                     </div>
                   </>
                 ) : (
-                  <div className="py-12">
-                    <img
-                      src={selectedProduct.logoUrl}
-                      alt={selectedProduct.name}
-                      className="h-16 w-16 object-contain grayscale opacity-80"
-                    />
+                  <div className="pt-14 pb-8 flex items-center justify-center">
+                    <div className="p-5 rounded-2xl bg-black/[0.03] dark:bg-white/[0.03] border border-black/5 dark:border-white/10">
+                      <img
+                        src={selectedProduct.logoUrl}
+                        alt={selectedProduct.name}
+                        className="h-14 w-14 md:h-16 md:w-16 object-contain grayscale opacity-80"
+                      />
+                    </div>
                   </div>
                 )}
               </div>
@@ -509,7 +509,7 @@ export default function Home() {
                       {selectedProduct.modal.packages.map((pkg, idx) => (
                         <div
                           key={idx}
-                          className="font-sans font-light text-[0.8rem] md:text-sm text-[#1A1A1A] dark:text-[#f8f8f8] bg-[#FBFBFB] dark:bg-[#1a1a1a] border border-[#1A1A1A]/10 dark:border-[#333] px-5 py-4"
+                          className="font-sans font-light text-[0.8rem] md:text-sm text-gray-900 dark:text-white rounded-2xl border border-black/10 dark:border-white/10 bg-black/[0.02] dark:bg-white/[0.02] backdrop-blur-md px-5 py-4"
                         >
                           {pkg}
                         </div>
@@ -534,7 +534,7 @@ export default function Home() {
 
                 {selectedProduct.modal.notes &&
                   selectedProduct.modal.notes.length > 0 && (
-                    <div className="border border-[#1A1A1A]/10 dark:border-[#333] px-6 py-5 mb-10 bg-[#FBFBFB] dark:bg-[#1a1a1a]">
+                    <div className="rounded-2xl border border-black/10 dark:border-white/10 px-6 py-5 mb-10 bg-black/[0.02] dark:bg-white/[0.02] backdrop-blur-md">
                       {selectedProduct.modal.notes.map((note, idx) => (
                         <div
                           key={idx}
@@ -559,7 +559,7 @@ export default function Home() {
 
                 {selectedProduct.variants &&
                   selectedProduct.variants.length > 0 && (
-                    <div className="mb-8">
+                    <div className="mb-12">
                       <p className="font-serif text-[0.60rem] tracking-[0.25em] uppercase text-[#1A1A1A]/50 dark:text-[#d4d4d4] mb-5">
                         SELECT OPTION
                       </p>
@@ -568,9 +568,9 @@ export default function Home() {
                           <button
                             key={idx}
                             onClick={() => setSelectedVariantIdx(idx)}
-                            className={`px-5 py-2.5 text-[0.58rem] tracking-[0.2em] font-sans font-medium uppercase border transition-colors duration-200 ${selectedVariantIdx === idx
-                              ? "bg-[#1A1A1A] text-white border-[#1A1A1A] dark:bg-white dark:text-black dark:border-white"
-                              : "bg-white text-[#1A1A1A] dark:bg-[#111] dark:text-[#f8f8f8] border-[#1A1A1A]/30 dark:border-[#333] hover:border-[#1A1A1A] dark:hover:border-white/50"
+                            className={`px-6 py-2.5 rounded-full text-[0.58rem] tracking-[0.2em] font-sans uppercase border transition-colors duration-300 ease-in-out ${selectedVariantIdx === idx
+                              ? "bg-black text-white border-black font-semibold dark:bg-white dark:text-black dark:border-white dark:font-semibold"
+                              : "bg-transparent border-gray-300 text-gray-500 dark:border-white/20 dark:text-white/60 hover:bg-black/5 dark:hover:bg-white/10 font-medium"
                               }`}
                           >
                             {v.label}
@@ -580,8 +580,8 @@ export default function Home() {
                     </div>
                   )}
 
-                <div className="border-y border-[#1A1A1A]/10 dark:border-[#333] py-6 mb-8 text-center">
-                  <p className="font-sans text-[0.48rem] tracking-[0.35em] text-[#1A1A1A]/35 dark:text-[#d4d4d4] uppercase mb-2">
+                <div className="border-y border-[#1A1A1A]/10 dark:border-white/10 py-8 mb-10 text-center">
+                  <p className="font-sans font-semibold text-[0.55rem] tracking-[0.35em] text-[#1A1A1A]/40 dark:text-white/40 uppercase mb-3">
                     TOTAL
                   </p>
                   <motion.div
@@ -593,15 +593,15 @@ export default function Home() {
                   >
                     {selectedProduct.discountPrice && !selectedProduct.variants ? (
                       <>
-                        <p className="font-serif text-xl md:text-2xl tracking-[0.08em] text-[#1A1A1A]/40 dark:text-white/40 font-light line-through">
+                        <p className="font-sans font-medium text-xl md:text-2xl tracking-widest text-[#1A1A1A]/40 dark:text-white/40 line-through">
                           Rp {selectedProduct.originalPrice.toLocaleString("id-ID")}
                         </p>
-                        <p className="font-serif text-3xl md:text-4xl tracking-[0.08em] text-rose-500 dark:text-rose-300 font-light">
+                        <p className="font-sans font-semibold text-3xl md:text-4xl tracking-widest text-rose-500 dark:text-rose-400">
                           Rp {currentVariantPrice.toLocaleString("id-ID")}
                         </p>
                       </>
                     ) : (
-                      <p className="font-serif text-3xl md:text-4xl tracking-[0.08em] text-[#1A1A1A] dark:text-white font-light">
+                      <p className="font-sans font-semibold text-3xl md:text-4xl tracking-widest text-gray-900 dark:text-white">
                         Rp {currentVariantPrice.toLocaleString("id-ID")}
                       </p>
                     )}
@@ -618,9 +618,9 @@ export default function Home() {
                     });
                     setSelectedProduct(null);
                   }}
-                  className={`w-full py-4 text-[0.60rem] tracking-[0.3em] font-sans font-medium uppercase transition-colors duration-300 mb-10 ${selectedProduct.outOfStock
-                    ? "bg-[#1A1A1A]/20 dark:bg-white/20 text-[#1A1A1A]/40 dark:text-white/40 cursor-not-allowed"
-                    : "bg-[#1A1A1A] dark:bg-white text-white dark:text-black hover:bg-black/80 dark:hover:bg-white/90"
+                  className={`w-full py-4 rounded-full text-[0.60rem] tracking-[0.3em] font-sans font-semibold uppercase transition-all duration-300 active:scale-95 mb-10 ${selectedProduct.outOfStock
+                    ? "bg-black/10 dark:bg-white/10 text-black/40 dark:text-white/40 cursor-not-allowed"
+                    : "bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
                     }`}
                 >
                   {selectedProduct.outOfStock ? "OUT OF STOCK" : "CONFIRM PAYMENT"}

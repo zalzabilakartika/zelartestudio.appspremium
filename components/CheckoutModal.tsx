@@ -21,35 +21,17 @@ function FloatingInput({
   onChange,
   type = "text",
 }: FloatingInputProps) {
-  const [isFocused, setIsFocused] = useState(false);
-  const isFloating = isFocused || value.length > 0;
-
   return (
-    <div className="relative pb-1 mb-8">
-      <label
-        className={`absolute left-0 font-sans tracking-[0.2em] uppercase transition-all duration-300 pointer-events-none ${isFloating
-          ? "top-0 text-[0.48rem] text-[#1A1A1A]/50 dark:text-white/50"
-          : "top-4 text-[0.62rem] text-[#1A1A1A]/35 dark:text-white/35"
-          }`}
-      >
+    <div className="flex flex-col mb-6">
+      <label className="font-sans text-[10px] tracking-widest uppercase text-gray-500 dark:text-white/50 mb-1 ml-1">
         {label}
       </label>
-
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-        className="w-full bg-transparent border-none outline-none font-sans text-sm text-[#1A1A1A] dark:text-white tracking-wide pt-5 pb-2"
+        className="w-full bg-black/[0.03] dark:bg-white/[0.03] rounded-xl border-none px-4 py-3 outline-none font-sans text-sm text-gray-900 dark:text-white tracking-wide focus:ring-1 focus:ring-black/20 dark:focus:ring-white/20 transition-all"
       />
-
-      <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-[#1A1A1A]/15 dark:bg-white/15">
-        <div
-          className={`h-full bg-[#1A1A1A] dark:bg-white transition-transform duration-300 origin-left ${isFocused ? "scale-x-100" : "scale-x-0"
-            }`}
-        />
-      </div>
     </div>
   );
 }
@@ -316,7 +298,7 @@ export default function CheckoutModal({
       />
 
       <motion.div
-        className="relative w-full max-w-md bg-white dark:bg-[#111] border border-[#1A1A1A]/10 dark:border-[#333] shadow-[0_40px_100px_rgba(0,0,0,0.06)] dark:shadow-[0_40px_100px_rgba(255,255,255,0.04)] max-h-[90vh] overflow-y-auto"
+        className="relative w-full max-w-md rounded-[2rem] bg-white dark:bg-[#111] border border-black/5 dark:border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.06)] dark:shadow-[0_40px_100px_rgba(255,255,255,0.04)] max-h-[90vh] overflow-y-auto"
         style={
           {
             scrollbarWidth: "none",
@@ -349,7 +331,7 @@ export default function CheckoutModal({
               <p className="font-sans text-[0.48rem] tracking-[0.3em] text-[#1A1A1A]/40 dark:text-white/40 uppercase mb-2">
                 Checkout
               </p>
-              <h2 className="font-serif font-light text-base tracking-[0.1em] text-[#1A1A1A] dark:text-white uppercase leading-relaxed">
+              <h2 className="font-sans font-semibold text-sm md:text-base tracking-widest text-[#1A1A1A] dark:text-white uppercase leading-tight">
                 {productName}
               </h2>
               <p className="font-sans text-[0.65rem] tracking-[0.2em] text-[#1A1A1A]/60 dark:text-white/50 mt-1 uppercase mb-10">
@@ -383,7 +365,7 @@ export default function CheckoutModal({
               <button
                 onClick={handleGenerateInvoice}
                 disabled={isLoading}
-                className="w-full py-4 bg-[#1A1A1A] dark:bg-white text-white dark:text-black text-[0.60rem] tracking-[0.3em] font-sans font-medium uppercase hover:bg-black/80 dark:hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center gap-3 mt-4"
+                className="w-full py-4 rounded-full active:scale-95 bg-black dark:bg-white text-white dark:text-black text-[0.60rem] tracking-[0.3em] font-sans font-medium uppercase hover:bg-gray-800 dark:hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center gap-3 mt-4"
               >
                 {isLoading ? (
                   <>
@@ -535,29 +517,71 @@ export default function CheckoutModal({
               animate="animate"
               exit="exit"
               transition={{ duration: 0.3 }}
-              className="px-8 md:px-12 pt-12 pb-10 text-center"
+              className="px-6 md:px-10 pt-10 pb-8 flex flex-col items-center"
             >
+              {/* Tactile Check Icon Header & Title */}
               <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 200,
-                  damping: 20,
-                  delay: 0.1,
-                }}
-                className="w-16 h-16 border border-[#1A1A1A]/20 dark:border-white/20 rounded-full flex items-center justify-center mx-auto mb-8"
+                whileTap={{ scale: 0.95 }}
+                className="flex flex-col items-center text-center mb-6 cursor-pointer transition-all"
               >
-                <Check size={24} strokeWidth={1} className="text-[#1A1A1A] dark:text-white" />
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.1 }}
+                  className="w-14 h-14 border border-green-500/20 bg-green-500/10 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4"
+                >
+                  <Check size={28} strokeWidth={2} />
+                </motion.div>
+
+                <h2 className="font-sans font-bold text-xl md:text-2xl tracking-tight text-[#1A1A1A] dark:text-white mb-1">
+                  Konfirmasi Pembayaran Berhasil
+                </h2>
+                <p className="font-sans text-sm text-[#1A1A1A]/70 dark:text-white/70">
+                  Transaction ID: {invoiceNumber ?? payId}
+                </p>
               </motion.div>
 
-              <h2 className="font-serif font-light text-2xl tracking-[0.15em] text-[#1A1A1A] dark:text-white uppercase mb-2">
-                Payment Verified.
-              </h2>
-              <p className="font-sans text-[0.60rem] tracking-[0.2em] text-[#1A1A1A]/50 dark:text-white/50 uppercase mb-10">
-                Your order is being processed.
-              </p>
+              {/* Glass Receipt Container */}
+              <div className="w-full rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] backdrop-blur-md border border-black/10 dark:border-white/10 p-6 md:p-8 flex flex-col items-center text-center">
+                
+                {/* Payment Method Section */}
+                <div className="mb-8 w-full flex flex-col items-center">
+                  <p className="font-sans text-[11px] uppercase tracking-widest text-[#1A1A1A]/50 dark:text-white/50 mb-2">
+                    Metode Pembayaran
+                  </p>
+                  {/* SeaBank Logo & Details */}
+                  <div className="mb-3 font-sans font-bold text-2xl tracking-tight text-[#f26522]">
+                    SeaBank
+                  </div>
+                  <p className="font-sans text-xl md:text-2xl font-bold text-[#1A1A1A] dark:text-white mb-1">
+                    201-1688-466
+                  </p>
+                  <p className="font-sans text-sm text-[#1A1A1A]/70 dark:text-white/70">
+                    DIKA
+                  </p>
+                </div>
 
+                {/* Prominent Price Tag */}
+                <div className="w-full border-t border-black/5 dark:border-white/10 pt-6 mb-6">
+                  <p className="font-sans text-[11px] uppercase tracking-widest text-[#1A1A1A]/50 dark:text-white/50 mb-3">
+                    Total Pembayaran
+                  </p>
+                  <p className="font-sans text-4xl md:text-5xl font-black text-[#1A1A1A] dark:text-white tracking-tight">
+                    Rp {amountDisplay.toLocaleString("id-ID")}
+                  </p>
+                </div>
+
+                {/* Instructions / Notes */}
+                <div className="w-full bg-[#1A1A1A]/5 dark:bg-white/5 rounded-xl p-4 text-left">
+                  <ul className="list-disc list-inside font-sans text-xs text-[#1A1A1A]/80 dark:text-white/80 leading-relaxed space-y-1">
+                    <li>Pesanan Anda sedang diproses oleh sistem.</li>
+                    <li>Simpan resi ini sebagai bukti pembayaran yang sah.</li>
+                    <li>Hubungi admin via WhatsApp untuk bantuan lebih lanjut.</li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* Check Status / WA Button */}
               <a
                 href={`https://wa.me/6285353669369?text=${encodeURIComponent(
                   "Halo Admin Zelarte, saya sudah membayar " +
@@ -568,10 +592,10 @@ export default function CheckoutModal({
                 )}`}
                 target="_blank"
                 rel="noreferrer"
-                className="w-full py-4 bg-[#1A1A1A] dark:bg-white text-white dark:text-black text-[0.60rem] tracking-[0.3em] font-sans font-medium uppercase hover:bg-black/80 dark:hover:bg-white/90 transition-all duration-300 flex items-center justify-center gap-3"
+                className="mt-6 md:mt-8 w-[80%] py-3 rounded-full bg-transparent border border-[#1A1A1A]/20 dark:border-white/20 text-[#1A1A1A] dark:text-white text-[10px] tracking-widest font-sans uppercase transition-colors duration-500 ease-in-out hover:bg-[#1A1A1A] hover:text-white dark:hover:bg-white dark:hover:text-black flex items-center justify-center gap-2 mx-auto"
               >
-                <MessageCircle size={12} strokeWidth={1.5} />
-                Claim Account Via WA
+                <MessageCircle size={14} strokeWidth={1.5} />
+                Check Status
               </a>
             </motion.div>
           )}
