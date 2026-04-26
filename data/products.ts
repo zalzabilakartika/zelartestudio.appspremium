@@ -66,7 +66,7 @@ const STREAMING: Product[] = [
     name: "Vidio Premier Platinum",
     price: "Mulai Rp 25.000",
     originalPrice: 48000,
-    hot: true,
+    hot: false,
     outOfStock: false,
     logoUrl: "https://id.wikipedia.org/wiki/Special:FilePath/Logo_Vidio.png",
     bg: "bg-[#F8F8F8]",
@@ -170,7 +170,7 @@ const STREAMING: Product[] = [
     name: "HBO Max",
     price: "Rp 20.000",
     originalPrice: 20000,
-    hot: true,
+    hot: false,
     outOfStock: false,
     logoUrl:
       "https://upload.wikimedia.org/wikipedia/commons/c/ce/Max_logo.svg",
@@ -187,31 +187,7 @@ const STREAMING: Product[] = [
       notes: ["Tidak tersedia refund setelah aktivasi berhasil."],
       guarantee: "Full Garansi.",
     },
-  },
-  {
-    name: "Apple Music",
-    price: "Rp 10.000",
-    originalPrice: 10000,
-    hot: false,
-    outOfStock: false,
-    logoUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/5/5f/Apple_Music_icon.svg",
-    bg: "bg-[#F8F8F8]",
-    category: "streaming",
-    modal: {
-      subtitle: "Family Member",
-      benefits: [
-        "Durasi 1 Bulan.",
-        "Audio Lossless & Dolby Atmos.",
-        "Lebih dari 100 juta lagu tanpa iklan.",
-        "Listen Offline & Lyrics.",
-      ],
-      notes: ["> System: Via Invite (Pakai akun pribadimu).",
-        "> Tidak tersedia refund setelah aktivasi berhasil."
-      ],
-      guarantee: "Full Garansi.",
-    },
-  },
+  }
 ];
 
 // ─── PRODUCTIVITY ───────────────────────────────────────────────────────────────
@@ -277,7 +253,7 @@ const PRODUCTIVITY: Product[] = [
     name: "Target Responden",
     price: "Rp 5.000 ",
     originalPrice: 5000,
-    hot: true,
+    hot: false,
     outOfStock: false,
     logoUrl: "https://st4.depositphotos.com/4362315/20405/v/600/depositphotos_204050920-stock-illustration-service-quality-opinion-poll-positive.jpg",
     bg: "bg-[#F8F8F8]",
@@ -303,7 +279,7 @@ const PRODUCTIVITY: Product[] = [
     name: "Discord Nitro",
     price: "Rp 18.000",
     originalPrice: 18000,
-    hot: true,
+    hot: false,
     outOfStock: true,
     logoUrl: "https://upload.wikimedia.org/wikipedia/fr/4/4f/Discord_Logo_sans_texte.svg",
     bg: "bg-[#F8F8F8]",
@@ -322,6 +298,30 @@ const PRODUCTIVITY: Product[] = [
       ],
       guarantee: "Full Garansi.",
     }
+  },
+  {
+    name: "Apple Music",
+    price: "Rp 10.000",
+    originalPrice: 10000,
+    hot: false,
+    outOfStock: false,
+    logoUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/5/5f/Apple_Music_icon.svg",
+    bg: "bg-[#F8F8F8]",
+    category: "productivity",
+    modal: {
+      subtitle: "Family Member",
+      benefits: [
+        "Durasi 1 Bulan.",
+        "Audio Lossless & Dolby Atmos.",
+        "Lebih dari 100 juta lagu tanpa iklan.",
+        "Listen Offline & Lyrics.",
+      ],
+      notes: ["> System: Via Invite (Pakai akun pribadimu).",
+        "> Tidak tersedia refund setelah aktivasi berhasil."
+      ],
+      guarantee: "Full Garansi.",
+    },
   }
 ];
 
@@ -352,7 +352,7 @@ const CREATIVE: Product[] = [
     name: "Adobe Creative Cloud",
     price: "Mulai Rp 45.000",
     originalPrice: 45000,
-    hot: true,
+    hot: false,
     outOfStock: false,
     logoUrl:
       "https://commons.wikimedia.org/wiki/Special:FilePath/Adobe_Creative_Cloud_rainbow_icon.svg",
@@ -405,7 +405,7 @@ const CREATIVE: Product[] = [
     name: "Meitu Private Account",
     price: "Rp 20.000",
     originalPrice: 20000,
-    hot: true,
+    hot: false,
     outOfStock: false,
     logoUrl: "https://upload.wikimedia.org/wikipedia/en/c/c3/Meitu.svg",
     bg: "bg-[#F8F8F8]",

@@ -109,7 +109,7 @@ export default function Home() {
       {/* ========== ENTRANCE (PHASE 1) ========== */}
       <section
         id="intro"
-        className="min-h-[100dvh] flex flex-col items-center justify-center relative px-6 pt-28 md:pt-0"
+        className="flex flex-col items-center justify-center w-full min-h-[calc(100dvh-96px)] relative px-6"
       >
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -134,7 +134,7 @@ export default function Home() {
                   .getElementById("rules")
                   ?.scrollIntoView({ behavior: "smooth" })
               }
-              className="px-10 py-3 text-[0.65rem] tracking-[0.25em] font-medium uppercase border transition-colors duration-500 border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white dark:border-white/20 dark:text-white dark:hover:bg-white/10 cursor-pointer"
+              className="px-10 py-3.5 rounded-full border border-gray-900 text-gray-900 bg-transparent dark:border-white/50 dark:text-white dark:bg-transparent transition-all duration-300 ease-out active:scale-95 hover:bg-gray-900 hover:text-white active:bg-gray-900 active:text-white dark:hover:bg-white dark:hover:text-black dark:active:bg-white dark:active:text-black text-xs md:text-sm tracking-[0.2em] uppercase font-medium cursor-pointer"
             >
               EXPLORE
             </button>
@@ -145,7 +145,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      <div className="relative z-10 bg-[#F8F8F8] dark:bg-[#090909] shadow-[0_-20px_60px_rgba(0,0,0,0.03)] dark:shadow-[0_-20px_60px_rgba(255,255,255,0.04)]">
+      <div className="relative z-10 bg-transparent">
         {/* ========== THE GUIDE (PHASE 2 & 3) ========== */}
         <section
           id="rules"
@@ -275,9 +275,9 @@ export default function Home() {
             <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4 mb-16">
               <button
                 onClick={() => setActiveCategory("all")}
-                className={`px-5 py-2 text-[0.55rem] md:text-[0.60rem] tracking-[0.25em] font-sans font-medium uppercase border transition-all duration-300 ${activeCategory === "all"
-                  ? "bg-[#1A1A1A] text-white border-[#1A1A1A] dark:bg-white dark:text-black dark:border-white"
-                  : "bg-transparent text-[#1A1A1A]/60 dark:text-white/60 border-[#1A1A1A]/15 dark:border-white/15 hover:border-[#1A1A1A]/40 dark:hover:border-white/40"
+                className={`px-6 py-2.5 rounded-full backdrop-blur-md transition-all duration-300 ease-out active:scale-95 text-[11px] md:text-xs tracking-widest uppercase font-sans border ${activeCategory === "all"
+                  ? "bg-black text-white border-black font-semibold dark:bg-white dark:text-black dark:border-white dark:font-semibold"
+                  : "bg-transparent border-gray-300 text-gray-500 dark:border-white/20 dark:text-white/60 hover:bg-black hover:text-white hover:border-black dark:hover:bg-white dark:hover:text-black dark:hover:border-white font-medium"
                   }`}
               >
                 All
@@ -286,9 +286,9 @@ export default function Home() {
                 <button
                   key={cat.key}
                   onClick={() => setActiveCategory(cat.key)}
-                  className={`px-5 py-2 text-[0.55rem] md:text-[0.60rem] tracking-[0.25em] font-sans font-medium uppercase border transition-all duration-300 ${activeCategory === cat.key
-                    ? "bg-[#1A1A1A] text-white border-[#1A1A1A] dark:bg-white dark:text-black dark:border-white"
-                    : "bg-transparent text-[#1A1A1A]/60 dark:text-white/60 border-[#1A1A1A]/15 dark:border-white/15 hover:border-[#1A1A1A]/40 dark:hover:border-white/40"
+                  className={`px-6 py-2.5 rounded-full backdrop-blur-md transition-all duration-300 ease-out active:scale-95 text-[11px] md:text-xs tracking-widest uppercase font-sans border ${activeCategory === cat.key
+                    ? "bg-black text-white border-black font-semibold dark:bg-white dark:text-black dark:border-white dark:font-semibold"
+                    : "bg-transparent border-gray-300 text-gray-500 dark:border-white/20 dark:text-white/60 hover:bg-black hover:text-white hover:border-black dark:hover:bg-white dark:hover:text-black dark:hover:border-white font-medium"
                     }`}
                 >
                   {cat.label}
@@ -309,7 +309,7 @@ export default function Home() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.4 }}
-                    className={`w-full h-[320px] md:h-[460px] flex flex-col bg-white dark:bg-[#111] border border-[#E5E7EB]/70 dark:border-[#333] transition-all duration-500 relative ${prod.outOfStock
+                    className={`w-full aspect-[2/3] md:aspect-auto h-full md:h-[460px] flex flex-col bg-white dark:bg-white/[0.02] backdrop-blur-md border border-black/10 dark:border-white/10 rounded-2xl md:rounded-3xl overflow-hidden transition-all duration-500 relative ${prod.outOfStock
                       ? "opacity-60 grayscale pointer-events-none"
                       : "group"
                       }`}
@@ -317,12 +317,18 @@ export default function Home() {
                     {!prod.outOfStock && (
                       <button
                         onClick={() => openProductModal(prod)}
-                        className="absolute inset-0 w-full h-[180px] md:h-[300px] z-20 cursor-pointer"
+                        className="absolute inset-0 w-full h-1/2 md:h-[300px] z-20 cursor-pointer"
                       />
                     )}
 
+                    {prod.hot && (
+                      <div className="absolute top-0 right-0 bg-gradient-to-r from-orange-500 to-red-500 text-white text-[8px] md:text-[9px] font-bold px-2 py-1 md:px-3 md:py-1.5 rounded-bl-lg rounded-tr-2xl md:rounded-tr-3xl z-30 pointer-events-none">
+                        🔥 HOT!
+                      </div>
+                    )}
+
                     <div
-                      className={`w-full h-[140px] md:h-[220px] relative shrink-0 flex items-center justify-center bg-[#F8F8F8] dark:bg-[#111] border-b border-[#E5E7EB]/50 dark:border-[#333] overflow-hidden`}
+                      className={`w-full h-1/2 md:h-[220px] p-6 md:pt-10 md:px-8 md:pb-0 relative shrink-0 flex items-center justify-center bg-transparent border-b border-transparent overflow-hidden`}
                     >
                       <img
                         src={prod.logoUrl}
@@ -341,42 +347,42 @@ export default function Home() {
                       )}
                     </div>
 
-                    <div className="p-3 md:p-8 flex-1 flex flex-col items-center justify-between text-center relative z-10">
-                      <div>
-                        <h3 className="font-serif text-[0.55rem] min-[375px]:text-[0.65rem] md:text-base tracking-[0.1em] md:tracking-[0.25em] mb-1.5 md:mb-4 uppercase text-black dark:text-white font-medium">
+                    <div className="px-3 pb-5 md:pb-6 md:px-8 flex-1 flex flex-col items-center text-center relative z-10">
+                      <div className="md:mt-10">
+                        <h3 className="font-sans text-[13px] md:text-base leading-tight md:leading-normal tracking-[0.05em] md:tracking-[0.05em] mb-0.5 md:mb-4 normal-case text-gray-900 dark:text-white font-semibold">
                           {prod.name}
                         </h3>
-                        <div className="font-sans text-[0.5rem] md:text-xs mb-2 md:mb-6 flex flex-wrap items-center justify-center gap-1.5 md:gap-2 text-black dark:text-gray-300 tracking-[0.1em] md:tracking-[0.2em] uppercase font-medium">
+                        <div className="font-sans text-[10px] md:text-xs leading-none md:leading-normal mt-1 mb-2 md:mb-6 flex flex-wrap items-center justify-center gap-1 md:gap-2 text-gray-600 dark:text-white/80 tracking-[0.1em] uppercase font-normal md:font-medium">
                           {prod.outOfStock ? (
                             <span className="text-[#1A1A1A]/40 dark:text-white/40 line-through">
-                              {prod.price}
+                              {prod.price.replace(/Mulai\s*/gi, "")}
                             </span>
                           ) : (
                             <>
                               {prod.discountPrice ? (
-                                <div className="flex items-center gap-2">
-                                  <span className="text-[#1A1A1A]/40 dark:text-white/40 line-through">
-                                    {prod.price}
+                                <div className="flex items-center gap-1.5">
+                                  <span className="text-[9px] text-gray-500/50 dark:text-white/40 line-through">
+                                    {prod.price.replace(/Mulai\s*/gi, "")}
                                   </span>
-                                  <span className="text-rose-500 dark:text-rose-300">
-                                    {prod.price.includes("Mulai") ? "Mulai " : ""}Rp {prod.discountPrice.toLocaleString("id-ID")}
+                                  <span className="text-rose-500 dark:text-rose-300 font-medium">
+                                    Rp {prod.discountPrice.toLocaleString("id-ID")}
                                   </span>
                                 </div>
                               ) : (
-                                <span>{prod.price}</span>
+                                <span>{prod.price.replace(/Mulai\s*/gi, "")}</span>
                               )}
                             </>
                           )}
                         </div>
                       </div>
 
-                      <div className="w-full flex-col flex items-center gap-2 md:gap-5 mt-auto">
+                      <div className="w-full flex-col flex items-center justify-center gap-2 md:gap-5 mt-auto">
                         <button
                           disabled={prod.outOfStock}
                           onClick={() => !prod.outOfStock && openProductModal(prod)}
-                          className={`w-full py-2 md:py-3 border text-[0.45rem] min-[375px]:text-[0.5rem] md:text-[0.65rem] tracking-[0.1em] md:tracking-[0.2em] font-medium transition-colors duration-500 uppercase ${prod.outOfStock
-                            ? "border-[#1A1A1A]/15 text-[#1A1A1A]/30 dark:border-white/15 dark:text-white/30 cursor-not-allowed"
-                            : "border-[#1A1A1A] text-[#1A1A1A] dark:border-[#ffffff30] dark:text-white hover:bg-[#1A1A1A] dark:hover:bg-white/10 hover:text-white"
+                          className={`w-[85%] md:w-[80%] mx-auto py-2 px-4 md:py-3 border rounded-full text-[10px] md:text-[0.65rem] tracking-[0.1em] md:tracking-[0.2em] font-medium transition-all duration-300 uppercase ${prod.outOfStock
+                            ? "border-black/20 dark:border-white/20 text-gray-400 dark:text-white/30 cursor-not-allowed bg-transparent"
+                            : "bg-transparent border-gray-300 dark:border-white/20 text-gray-900 dark:text-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
                             }`}
                         >
                           {prod.outOfStock ? "OUT OF STOCK" : "VIEW DETAILS"}

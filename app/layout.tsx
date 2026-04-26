@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <body
-        className={`${cormorant.variable} ${jakarta.variable} antialiased selection:bg-[#1A1A1A] selection:text-white`}
+        className={`${cormorant.variable} ${jakarta.variable} antialiased selection:bg-[#1A1A1A] selection:text-white bg-white dark:bg-[#0A0A0A] min-h-screen`}
         suppressHydrationWarning
       >
         {/* Inline script: sets dark class before hydration to prevent flash & mismatch */}
