@@ -58,8 +58,8 @@ export default function Home() {
   const currentVariantPrice = selectedProduct
     ? selectedProduct.variants
       ? (selectedProduct.variants[selectedVariantIdx]?.price ??
-        selectedProduct.basePrice)
-      : selectedProduct.basePrice
+        selectedProduct.originalPrice)
+      : (selectedProduct.discountPrice ?? selectedProduct.originalPrice)
     : 0;
 
   const currentProductName = selectedProduct
@@ -69,21 +69,42 @@ export default function Home() {
     : "";
 
   return (
-    <main className="relative min-h-screen overflow-x-hidden">
+    <main className="relative min-h-screen overflow-clip flex flex-col">
       <SplashMist />
       <FloatingTracker />
 
-      {/* ========== MOBILE STICKY HEADER ========== */}
-      <header className="md:hidden fixed top-0 left-0 w-full z-[100] bg-[#F8F8F8]/80 backdrop-blur-md dark:bg-[#090909]/80 border-b border-[#1A1A1A]/10 dark:border-white/10">
-        <div className="h-16 flex items-center justify-center">
-          <button
-            onClick={() => document.getElementById('intro')?.scrollIntoView({ behavior: 'smooth' })}
-            className="font-sans text-[0.60rem] tracking-[0.3em] text-[#1A1A1A]/70 dark:text-white/70 uppercase font-medium"
-          >
-            ZELARTE STUDIO
-          </button>
+      {/* ========== STICKY TOP BARS ========== */}
+      <div className="sticky top-0 z-[100] w-full flex flex-col">
+        {/* Announcement Bar */}
+        <div className="w-full overflow-hidden h-8 bg-[#FDFBF7]/80 dark:bg-black/40 backdrop-blur-md border-b border-rose-200/20 flex items-center">
+           <div className="animate-marquee whitespace-nowrap flex w-max">
+             {[...Array(2)].map((_, idx) => (
+               <div key={idx} className="flex gap-4 items-center pr-4">
+                 <span className="text-[10px] md:text-xs tracking-widest uppercase text-[#1A1A1A]/80 dark:text-white/80 font-medium">PAYDAY SALE 5.5 IS COMING! EXCLUSIVE DIGITAL DEALS AHEAD.</span>
+                 <span className="text-[10px] md:text-xs tracking-widest uppercase text-[#1A1A1A]/80 dark:text-white/80 font-medium">-</span>
+                 <span className="text-[10px] md:text-xs tracking-widest uppercase text-[#1A1A1A]/80 dark:text-white/80 font-medium">PAYDAY SALE 5.5 IS COMING! EXCLUSIVE DIGITAL DEALS AHEAD.</span>
+                 <span className="text-[10px] md:text-xs tracking-widest uppercase text-[#1A1A1A]/80 dark:text-white/80 font-medium">-</span>
+                 <span className="text-[10px] md:text-xs tracking-widest uppercase text-[#1A1A1A]/80 dark:text-white/80 font-medium">PAYDAY SALE 5.5 IS COMING! EXCLUSIVE DIGITAL DEALS AHEAD.</span>
+                 <span className="text-[10px] md:text-xs tracking-widest uppercase text-[#1A1A1A]/80 dark:text-white/80 font-medium">-</span>
+                 <span className="text-[10px] md:text-xs tracking-widest uppercase text-[#1A1A1A]/80 dark:text-white/80 font-medium">PAYDAY SALE 5.5 IS COMING! EXCLUSIVE DIGITAL DEALS AHEAD.</span>
+                 <span className="text-[10px] md:text-xs tracking-widest uppercase text-[#1A1A1A]/80 dark:text-white/80 font-medium">-</span>
+               </div>
+             ))}
+           </div>
         </div>
-      </header>
+
+        {/* ========== MOBILE HEADER ========== */}
+        <header className="md:hidden w-full bg-[#F8F8F8]/80 backdrop-blur-md dark:bg-[#090909]/80 border-b border-[#1A1A1A]/10 dark:border-white/10">
+          <div className="h-16 flex items-center justify-center">
+            <button
+              onClick={() => document.getElementById('intro')?.scrollIntoView({ behavior: 'smooth' })}
+              className="font-sans text-[0.60rem] tracking-[0.3em] text-[#1A1A1A]/70 dark:text-white/70 uppercase font-medium"
+            >
+              ZELARTE STUDIO
+            </button>
+          </div>
+        </header>
+      </div>
 
       {/* ========== ENTRANCE (PHASE 1) ========== */}
       <section
@@ -325,18 +346,24 @@ export default function Home() {
                         <h3 className="font-serif text-[0.55rem] min-[375px]:text-[0.65rem] md:text-base tracking-[0.1em] md:tracking-[0.25em] mb-1.5 md:mb-4 uppercase text-black dark:text-white font-medium">
                           {prod.name}
                         </h3>
-                        <div className="font-sans text-[0.5rem] md:text-xs mb-2 md:mb-6 flex items-center justify-center gap-1 md:gap-2 text-black dark:text-gray-300 tracking-[0.1em] md:tracking-[0.2em] uppercase font-medium">
+                        <div className="font-sans text-[0.5rem] md:text-xs mb-2 md:mb-6 flex flex-wrap items-center justify-center gap-1.5 md:gap-2 text-black dark:text-gray-300 tracking-[0.1em] md:tracking-[0.2em] uppercase font-medium">
                           {prod.outOfStock ? (
                             <span className="text-[#1A1A1A]/40 dark:text-white/40 line-through">
                               {prod.price}
                             </span>
                           ) : (
                             <>
-                              {prod.price}{" "}
-                              {prod.hot && (
-                                <span className="text-black dark:text-gray-300 text-[0.60rem]">
-                                  ✦
-                                </span>
+                              {prod.discountPrice ? (
+                                <div className="flex items-center gap-2">
+                                  <span className="text-[#1A1A1A]/40 dark:text-white/40 line-through">
+                                    {prod.price}
+                                  </span>
+                                  <span className="text-rose-500 dark:text-rose-300">
+                                    {prod.price.includes("Mulai") ? "Mulai " : ""}Rp {prod.discountPrice.toLocaleString("id-ID")}
+                                  </span>
+                                </div>
+                              ) : (
+                                <span>{prod.price}</span>
                               )}
                             </>
                           )}
@@ -462,7 +489,7 @@ export default function Home() {
                     {selectedProduct.name}
                   </h2>
                   <div className="font-sans text-[0.65rem] text-[#1A1A1A]/50 dark:text-[#d4d4d4] tracking-[0.25em] uppercase font-medium">
-                    {selectedProduct.modal.subtitle.replace(" ✦", "")}
+                    {selectedProduct.modal.subtitle}
                   </div>
                 </div>
 
@@ -551,15 +578,28 @@ export default function Home() {
                   <p className="font-sans text-[0.48rem] tracking-[0.35em] text-[#1A1A1A]/35 dark:text-[#d4d4d4] uppercase mb-2">
                     TOTAL
                   </p>
-                  <motion.p
+                  <motion.div
                     key={currentVariantPrice}
                     initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.25 }}
-                    className="font-serif text-3xl md:text-4xl tracking-[0.08em] text-[#1A1A1A] dark:text-white font-light"
+                    className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-4"
                   >
-                    Rp {currentVariantPrice.toLocaleString("id-ID")}
-                  </motion.p>
+                    {selectedProduct.discountPrice && !selectedProduct.variants ? (
+                      <>
+                        <p className="font-serif text-xl md:text-2xl tracking-[0.08em] text-[#1A1A1A]/40 dark:text-white/40 font-light line-through">
+                          Rp {selectedProduct.originalPrice.toLocaleString("id-ID")}
+                        </p>
+                        <p className="font-serif text-3xl md:text-4xl tracking-[0.08em] text-rose-500 dark:text-rose-300 font-light">
+                          Rp {currentVariantPrice.toLocaleString("id-ID")}
+                        </p>
+                      </>
+                    ) : (
+                      <p className="font-serif text-3xl md:text-4xl tracking-[0.08em] text-[#1A1A1A] dark:text-white font-light">
+                        Rp {currentVariantPrice.toLocaleString("id-ID")}
+                      </p>
+                    )}
+                  </motion.div>
                 </div>
 
                 <button

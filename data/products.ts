@@ -16,7 +16,8 @@ export type ProductVariant = {
 export type Product = {
   name: string;
   price: string;
-  basePrice: number;
+  originalPrice: number;
+  discountPrice?: number;
   hot: boolean;
   outOfStock?: boolean;
   logoUrl: string;
@@ -33,7 +34,7 @@ const STREAMING: Product[] = [
   {
     name: "Netflix Premium UHD",
     price: "Mulai Rp 5.000",
-    basePrice: 5000,
+    originalPrice: 5000,
     hot: true,
     outOfStock: false,
     logoUrl:
@@ -64,21 +65,21 @@ const STREAMING: Product[] = [
   {
     name: "Vidio Premier Platinum",
     price: "Mulai Rp 25.000",
-    basePrice: 48000,
+    originalPrice: 48000,
     hot: true,
     outOfStock: false,
     logoUrl: "https://id.wikipedia.org/wiki/Special:FilePath/Logo_Vidio.png",
     bg: "bg-[#F8F8F8]",
     category: "streaming",
     variants: [
-      { label: "All Device", price: 48000 },
-      { label: "Mobile / Tab", price: 30000 },
+      { label: "All Device 1 Bln", price: 48000 },
+      { label: "Mobile / Tab 1 Bln", price: 30000 },
       { label: "Android TV 12 Bln", price: 25000 },
     ],
     modal: {
       subtitle: "Premier Platinum Private",
       benefits: [
-        "Vidio Original, Acara TV",
+        "Vidio Original, Acaa TV",
         "Film & Series Hollywood, Korea, Anime, Thai, dll.",
         "BRI Liga 1, UCL, La Liga, UEL, UECL.",
       ],
@@ -95,7 +96,7 @@ const STREAMING: Product[] = [
   {
     name: "YouTube & Music Premium",
     price: "Rp 10.000",
-    basePrice: 10000,
+    originalPrice: 10000,
     hot: true,
     outOfStock: false,
     logoUrl:
@@ -105,6 +106,7 @@ const STREAMING: Product[] = [
     modal: {
       subtitle: "Youtube Family Member",
       benefits: [
+        "Durasi 1 Bulan.",
         "Via Invite (Pakai akun pribadimu).",
         "YouTube Premium & YouTube Music.",
         "Bebas iklan & Background Play.",
@@ -122,7 +124,7 @@ const STREAMING: Product[] = [
   {
     name: "Amazon Prime Video",
     price: "Rp 10.000",
-    basePrice: 10000,
+    originalPrice: 10000,
     hot: false,
     outOfStock: false,
     logoUrl:
@@ -132,6 +134,7 @@ const STREAMING: Product[] = [
     modal: {
       subtitle: "Prime Video Private",
       benefits: [
+        "Durasi 1 Bulan.",
         "Private Account dari kami (Bukan Sharing).",
         "Kualitas Video 1080p HD.",
         "Akses Series & Movie Eksklusif.",
@@ -143,7 +146,7 @@ const STREAMING: Product[] = [
   {
     name: "Disney+ Hotstar",
     price: "Rp 28.000",
-    basePrice: 28000,
+    originalPrice: 28000,
     hot: false,
     outOfStock: false,
     logoUrl:
@@ -153,6 +156,7 @@ const STREAMING: Product[] = [
     modal: {
       subtitle: "Disney+ Hotstar Sharing",
       benefits: [
+        "Durasi 1 Bulan.",
         "Akun sharing dari kami (Bukan Private).",
         "Login 1 device only.",
         "Plan Premium 4K UHD.",
@@ -165,7 +169,7 @@ const STREAMING: Product[] = [
   {
     name: "HBO Max",
     price: "Rp 20.000",
-    basePrice: 20000,
+    originalPrice: 20000,
     hot: true,
     outOfStock: false,
     logoUrl:
@@ -175,6 +179,7 @@ const STREAMING: Product[] = [
     modal: {
       subtitle: "HBO Max Private 1 Bulan",
       benefits: [
+        "Durasi 1 Bulan.",
         "Paket Standard (Private).",
         "Login 2 device (HP & TV/PC).",
         "Akses semua tayangan HBO Max (termasuk HBO Originals)."
@@ -186,7 +191,7 @@ const STREAMING: Product[] = [
   {
     name: "Apple Music",
     price: "Rp 10.000",
-    basePrice: 10000,
+    originalPrice: 10000,
     hot: false,
     outOfStock: false,
     logoUrl:
@@ -196,6 +201,7 @@ const STREAMING: Product[] = [
     modal: {
       subtitle: "Family Member",
       benefits: [
+        "Durasi 1 Bulan.",
         "Audio Lossless & Dolby Atmos.",
         "Lebih dari 100 juta lagu tanpa iklan.",
         "Listen Offline & Lyrics.",
@@ -214,7 +220,7 @@ const PRODUCTIVITY: Product[] = [
   {
     name: "Google One - AI Pro",
     price: "Rp 28.000",
-    basePrice: 28000,
+    originalPrice: 28000,
     hot: true,
     outOfStock: false,
     logoUrl:
@@ -224,6 +230,7 @@ const PRODUCTIVITY: Product[] = [
     modal: {
       subtitle: "Familiy Member",
       benefits: [
+        "Durasi 1 Bulan.",
         "YouTube & Music Premium Included.",
         "5TB Storage (Photos, Drive, Gmail).",
         "Access to Gemini 3 Pro | Veo 3.1 | Lyria.",
@@ -243,7 +250,7 @@ const PRODUCTIVITY: Product[] = [
   {
     name: "Microsoft 365",
     price: "Rp 10.000 ",
-    basePrice: 10000,
+    originalPrice: 10000,
     hot: false,
     outOfStock: false,
     logoUrl:
@@ -253,6 +260,7 @@ const PRODUCTIVITY: Product[] = [
     modal: {
       subtitle: "Family Member",
       benefits: [
+        "Durasi 1 Bulan.",
         "1 TB Storage OneDrive & Outlook.",
         "Copilot 365 (Word, Excel, PPT, Outlook, Edge).",
         "Word, PowerPoint, OneNote, Designer, Clipchamp.",
@@ -268,7 +276,7 @@ const PRODUCTIVITY: Product[] = [
   {
     name: "Target Responden",
     price: "Rp 5.000 ",
-    basePrice: 5000,
+    originalPrice: 5000,
     hot: true,
     outOfStock: false,
     logoUrl: "https://st4.depositphotos.com/4362315/20405/v/600/depositphotos_204050920-stock-illustration-service-quality-opinion-poll-positive.jpg",
@@ -294,7 +302,7 @@ const PRODUCTIVITY: Product[] = [
   {
     name: "Discord Nitro",
     price: "Rp 18.000",
-    basePrice: 18000,
+    originalPrice: 18000,
     hot: true,
     outOfStock: true,
     logoUrl: "https://upload.wikimedia.org/wikipedia/fr/4/4f/Discord_Logo_sans_texte.svg",
@@ -303,6 +311,7 @@ const PRODUCTIVITY: Product[] = [
     modal: {
       subtitle: "Discord Nitro Code 2 Bulan",
       benefits: [
+        "Durasi 1 Bulan.",
         "Bentuk link redeem code resmi dari Discord.",
         "Animated Avatar & Custom Banner.",
         "Upload File 500MB & HD Share Screen up to 4K 60fps.",
@@ -322,7 +331,7 @@ const CREATIVE: Product[] = [
   {
     name: "Canva Pro",
     price: "Rp 3.000",
-    basePrice: 3000,
+    originalPrice: 3000,
     hot: true,
     outOfStock: false,
     logoUrl: "https://en.wikipedia.org/wiki/Special:FilePath/Canva_Logo.svg",
@@ -331,6 +340,7 @@ const CREATIVE: Product[] = [
     modal: {
       subtitle: "Member Pro",
       benefits: [
+        "Durasi 1 Bulan.",
         "Privasi aman, team hanya berbagi features, tidak berbagi desain by default",
         "Akses semua fitur & aset Pro premium.",
       ],
@@ -341,7 +351,7 @@ const CREATIVE: Product[] = [
   {
     name: "Adobe Creative Cloud",
     price: "Mulai Rp 45.000",
-    basePrice: 45000,
+    originalPrice: 45000,
     hot: true,
     outOfStock: false,
     logoUrl:
@@ -370,7 +380,7 @@ const CREATIVE: Product[] = [
   {
     name: "CapCut Pro",
     price: "Mulai Rp 10.000",
-    basePrice: 10000,
+    originalPrice: 10000,
     hot: true,
     outOfStock: false,
     logoUrl: "https://upload.wikimedia.org/wikipedia/commons/0/0c/Capcut-icon.png",
@@ -394,7 +404,7 @@ const CREATIVE: Product[] = [
   {
     name: "Meitu Private Account",
     price: "Rp 20.000",
-    basePrice: 20000,
+    originalPrice: 20000,
     hot: true,
     outOfStock: false,
     logoUrl: "https://upload.wikimedia.org/wikipedia/en/c/c3/Meitu.svg",
